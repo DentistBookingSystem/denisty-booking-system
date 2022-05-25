@@ -1,0 +1,66 @@
+#signForm {
+  border: solid 2px;
+  border-radius: 10px;
+  padding: 10px;
+  padding-bottom: 20px;
+  background-color: white;
+  box-shadow: 4px 4px rgb(3, 70, 91);
+}
+
+.form-sign {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.row-sign {
+  display: flex;
+  margin: 5px;
+  border-bottom: solid 2px;
+}
+
+.row-sign label {
+  min-width: 150px;
+}
+.row-sign input {
+  min-width: 300px;
+  border: 2px solid;
+  padding: 2px;
+}
+
+.error {
+  color: red;
+  margin-left: 2px;
+}
+
+.btn {
+  padding-top: 10px;
+  text-align: center;
+}
+
+.btn button {
+  padding: 5px 15px;
+  background-color: aqua;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.btn button:hover {
+  box-shadow: 2px 2px;
+  padding: 7px 17px;
+}
+
+.form-header {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid;
+  margin-bottom: 10px;
+}
+
+.form-header h2 {
+  margin: auto 2px;
+  color: rgb(9, 196, 196);
+}
+.form-header img {
+  width: 70px;
+}
