@@ -17,6 +17,10 @@
   color: white;
 }
 
+button {
+  cursor: pointer;
+}
+
 .App-link {
   color: #09d3ac;
 }
@@ -41,4 +45,17 @@
   margin: auto;
   color: #222;
   font: normal normal normal 1rem/1.6 Nunito Sans, Helvetica, Arial, sans-serif;
+}
+
+.chatBox {
+  position: fixed;
+  right: 5%;
+  bottom: 10%;
+  font-size: 50px;
+  color: blue;
+  cursor: pointer;
+}
+
+.chatBox:hover {
+  font-size: 60px;
 }

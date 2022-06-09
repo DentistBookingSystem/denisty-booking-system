@@ -12,21 +12,23 @@ export default class Service extends Component {
   }
 
   componentDidMount() {
-    ServiceTypeList.getSericeType().then((Response) =>
-      this.setState({ serviceType: Response.data })
-    );
-    console.log("ok");
+    ServiceTypeList.getSericeType()
+      .then((Response) => {
+        this.setState({ serviceType: Response.data.serviceTypeList });
+        console.log("ServiceTypr/Service.js: " + Response.data.serviceTypeList);
+      })
+      .catch((error) => console.log("Error: " + error));
+    console.log("ServiceType: \n" + this.state.serviceType);
   }
   render() {
     return (
-      <div class="dropdown">
-        <button class="nut_dropdown">Dịch vụ</button>
-        <div class="noidung_dropdown">
-          {this.state.serviceType.map((serviceType) => (
-            <Link to={"/serviceType_" + serviceType.id}>
-              {serviceType.name}
+      <div className="dropdown">
+        <button className="nut_dropdown">Dịch vụ</button>
+        <div className="noidung_dropdown">
+          {this.state.serviceType.map((item) => (
+            <Link to={`/serviceType/${item.id}`} key={item.id}>
+              {item.name}
             </Link>
-            // <a href="#">{serviceType.name}</a>
           ))}
         </div>
       </div>

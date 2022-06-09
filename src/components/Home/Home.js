@@ -10,6 +10,8 @@ import img3 from "../../assets/images/OIP (1).jpg";
 import img4 from "../../assets/images/OIP (2).jpg";
 import img5 from "../../assets/images/OIP (3).jpg";
 import img6 from "../../assets/images/banner-nieng-rang-dep-chuan-chat-rieng-pc2.webp";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 
 const collection = [
   { src: img1, caption: "Caption one" },
@@ -56,7 +58,7 @@ export default class Home extends Component {
                 giá trị cốt lõi: Tận tâm, trung thực , kỷ luật, máu lửa, học hỏi
               </p>
             </div>
-            <img src={doctorPicture} />
+            <img src={doctorPicture} alt="" />
             <p className="img-decs">
               Hơn 150 Bác sĩ Nha Khoa Rade uy tín hàng đầu, điều trị nhẹ nhàng,
               chính xác, tận tâm, luôn cập nhập nhập kiến thức từ nền y tế tiến
@@ -77,7 +79,10 @@ export default class Home extends Component {
               thống quản lý khoa học, chặt chẽ với mục tiêu cao là nâng cao chất
               lượng, mang lại sự hài lòng cho khách hàng trên toàn hệ thống.
             </p>
-            <img src="https://znews-photo.zingcdn.me/w1920/Uploaded/wyhktpu/2021_01_11/unnamed_5_.jpg" />
+            <img
+              src="https://znews-photo.zingcdn.me/w1920/Uploaded/wyhktpu/2021_01_11/unnamed_5_.jpg"
+              alt=""
+            />
             <p>
               GCR là chứng nhận chất lượng quốc tế chuyên về lĩnh vực y tế và
               chăm sóc sức khỏe. Nha Khoa Kim đã chứng minh được những giá trị

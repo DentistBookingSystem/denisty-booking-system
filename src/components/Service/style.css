@@ -1,0 +1,149 @@
+.service-detail-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.side-bar {
+  margin: 10px 20px 10px 0;
+  flex-basis: 30%;
+  padding: 10px 0;
+  background-color: rgb(9, 196, 196);
+  border: 2px solid black;
+  /* position: fixed; */
+}
+
+.side-bar > div > p {
+  padding: 10px;
+}
+
+.side-bar li button {
+  padding: 20px;
+  width: 80%;
+  margin: 10px 0;
+}
+
+.side-bar li button:hover {
+  background-color: bisque;
+}
+
+.service-detail {
+  flex-basis: 70%;
+  margin: 20px 0;
+}
+
+.desc {
+  text-align: left;
+}
+
+.desc > div > h2 {
+  text-align: center;
+}
+
+.price {
+  margin: 10px 0;
+  opacity: 0.7;
+}
+
+.btn-appointmentService {
+  width: 100%;
+}
+.btn-appointmentService button {
+  padding: 10px 20px;
+  font-size: 25px;
+  background-color: rgb(9, 196, 196);
+  border-radius: 20px;
+  margin: auto;
+  cursor: pointer;
+}
+.btn-appointmentService button:hover {
+  padding: 8px 18px;
+  border: 2px solid black;
+}
+
+/* ==================================================== */
+/* ==========FeedBack===================== */
+#feedback {
+  border: 1px solid rgba(128, 128, 128, 0.719);
+  border-radius: 7px;
+  min-height: 100px;
+  box-shadow: 1px 1px rgba(128, 128, 128, 0.337);
+  margin: 20px 5px;
+}
+
+.header-feedback {
+  text-align: left;
+  margin: 10px 20px;
+  font-family: monospace;
+  font-size: 15px;
+  border-top: 0.5px solid rgba(128, 128, 128, 0.551);
+  padding-top: 5px;
+}
+
+.feedback-item {
+  border-bottom: 0.5px solid rgba(128, 128, 128, 0.337);
+  margin: 5px 14px;
+}
+
+.content-feedback,
+.cus_name {
+  text-align: left;
+  margin: 2px;
+}
+
+.cus_name {
+  font-weight: bolder;
+}
+
+.input-feedback {
+  text-align: left;
+  margin: 15px;
+  display: flex;
+}
+
+.time-feedback {
+  text-align: right;
+  padding: 10px;
+  color: rgba(128, 128, 128, 0.559);
+}
+
+.input-feedback textarea {
+  padding: 8px;
+  width: 100%;
+  min-height: 100px;
+  flex-basis: 1;
+  border: 1px solid rgba(128, 128, 128, 0.738);
+}
+
+.btn-feedback button {
+  background-color: rgb(9, 196, 196);
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.btn-feedback button:hover {
+  border: 1.5px solid black;
+  padding: 8.5px;
+}
+
+.btn-view-more {
+  width: 100%;
+}
+
+.view-more {
+  background-color: rgba(255, 255, 255, 0);
+  color: blue;
+  padding: 5px;
+}
+.view-more p {
+  margin-right: 2px;
+}
+
+.view-more:hover {
+  color: rgba(0, 0, 255, 0.5);
+}
+
+#view-more-hide {
+  display: none;
+}

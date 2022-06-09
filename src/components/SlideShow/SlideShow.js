@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Popup from "reactjs-popup";
+import ChooseBranchPopUp from "../chooseBranchPopUp/ChooseBranchPopUp";
 import "./style.css";
+import { Outlet, Link } from "react-router-dom";
 
 export default class SlideShow extends React.Component {
   constructor(props) {
@@ -161,8 +164,11 @@ export default class SlideShow extends React.Component {
             );
           })}
           <div className="btn-appointment">
-            <button>APPOINTMENT</button>
+            <Popup modal trigger={<button>Đặt lịch</button>}>
+              <ChooseBranchPopUp />
+            </Popup>
           </div>
+
           <span className="prev" onClick={this.backward}>
             ❮
           </span>

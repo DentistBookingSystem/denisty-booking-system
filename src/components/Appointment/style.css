@@ -1,0 +1,285 @@
+.header-appointment {
+  color: rgb(9, 196, 196);
+  padding: 20px;
+  font-family: Georgia, serif;
+  font-size: 30px;
+  text-shadow: 5px 2px 4px grey;
+}
+
+#border-right {
+  border-right: 1px solid black;
+}
+
+#border-bottom {
+  border-bottom: 1px solid black;
+}
+.appointment {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.side-left {
+  background-color: antiquewhite;
+  flex-basis: 1;
+  /* display: flex; */
+  /* flex-direction: row; */
+  width: 50%;
+  padding: 20px;
+  justify-content: center;
+}
+
+.title-right,
+.title-left {
+  padding: 10px;
+  padding-top: 0;
+}
+
+li {
+  list-style: none;
+}
+
+.title ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  border: 1px solid black;
+}
+
+.service-type-item {
+  flex-basis: 30%;
+  border-right: 1px solid black;
+  padding: 20px;
+}
+
+.service-item {
+  flex-basis: 70%;
+  padding: 20px;
+}
+
+.action-add {
+  flex-basis: 5%;
+  padding: 20px;
+}
+
+.service-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border: 1px solid black;
+  border-top: none;
+}
+
+.service-type-item-small {
+  margin: 5px 0;
+}
+
+.service-type-item-small button {
+  background-color: wheat;
+  width: 100%;
+  padding: 20px;
+  /* text-decoration: underline black solid; */
+  /* border-bottom: 1px solid gray; */
+}
+
+.service-item-small {
+  margin: 5px 0;
+}
+
+.service-item-small button {
+  background-color: wheat;
+  width: 100%;
+  padding: 20px;
+  /* border-bottom: 1px solid gray; */
+}
+
+.service-type-item-small button p {
+  padding: 2px;
+  border-bottom: 1px solid gray;
+  display: run-in;
+}
+
+.side-right {
+  background-color: rgb(9, 196, 196);
+  flex-basis: 1;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 20px;
+}
+
+.title-info {
+  padding: 20px;
+  /* border: 1px solid black; */
+  font-size: 20px;
+}
+
+.service-selected {
+  border: 1px solid black;
+}
+
+.detail {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: auto 0;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.432);
+}
+
+.detail p {
+  text-align: left;
+}
+
+.detail button {
+  flex-basis: 10%;
+  padding: 5px;
+  border-radius: 70px;
+}
+
+.detail button:hover {
+  color: white;
+  background-color: rgb(249, 39, 7);
+}
+
+.address-cus h4 {
+  margin: 10px 0;
+  text-align: left;
+  padding-left: 20px;
+  color: rgba(94, 85, 85, 0.714);
+}
+
+.address-cus h5 {
+  margin: 10px 0;
+  text-align: left;
+  padding-left: 40px;
+  color: rgba(94, 85, 85, 0.714);
+}
+
+.address-cus > div {
+  display: flex;
+  flex-direction: row;
+}
+
+.address-cus > div > label {
+  min-width: 200px;
+  text-align: left;
+  padding: 5px;
+  padding-left: 50px;
+  margin: auto 0;
+}
+
+.address-cus > div > select {
+  width: 200px;
+  margin: 5px 0;
+  padding: 10px;
+}
+
+.branchAddr {
+  text-align: left;
+  padding: 10px;
+  width: 300px;
+}
+
+.doctor-select {
+  margin: 10px;
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.doctor-select h5 {
+  margin: 10px;
+  padding-left: 20px;
+  color: rgba(94, 85, 85, 0.714);
+}
+
+.doctor-select select {
+  padding: 10px;
+  width: 200px;
+  margin-left: 40px;
+}
+
+.time h4 {
+  margin: 10px 0;
+  text-align: left;
+  padding-left: 20px;
+  color: rgba(94, 85, 85, 0.867);
+}
+
+.time input {
+  padding: 10px;
+  font-size: 15 px;
+}
+
+.appointmet-btn {
+  margin: 10px;
+}
+
+.appointmet-btn button {
+  padding: 10px;
+  width: 30%;
+  border-radius: 50px;
+  font-size: 16px;
+  background-color: rgb(221, 245, 9);
+  border: 1px solid black;
+}
+
+.appointmet-btn button:hover {
+  box-shadow: 3px 3px gray;
+}
+
+.table-right {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.service {
+  flex-basis: 60%;
+}
+
+.doctor {
+  flex-basis: 30%;
+}
+
+.remove {
+  flex-basis: 10%;
+}
+
+.address {
+  margin-top: 10px;
+  text-align: left;
+  padding-left: 20px;
+  color: rgba(94, 85, 85, 0.867);
+}
+
+.address p {
+  padding-left: 20px;
+  color: black;
+}
+
+.sdt,
+.cus-name {
+  margin-top: 10px;
+  text-align: left;
+  padding-left: 20px;
+  color: rgba(94, 85, 85, 0.867);
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+.sdt h4,
+.cus-name h4 {
+  min-width: 130px;
+}
+
+.sdt input,
+.cus-name input {
+  padding: 2px;
+  min-width: 300px;
+}

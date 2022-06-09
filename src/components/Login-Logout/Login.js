@@ -8,11 +8,8 @@ class LoginForm extends React.Component {
     this.state = {
       phone: "",
       password: "",
+      validMsg: {},
     };
-  }
-
-  shouldComponentUpdate() {
-    return false;
   }
 
   onChangeHandle(e) {
@@ -23,13 +20,47 @@ class LoginForm extends React.Component {
     });
   }
 
+  validateAll() {
+    let error = {};
+    console.log(this.state.phone);
+    if (this.state.phone.length < 10 || this.state.phone.length > 11) {
+      console.log("phone-err");
+      error.phone = "Please input your phone!!!";
+    }
+    if (this.state.password.length === 0) {
+      error.password = "Please input your password";
+    }
+    this.setState({
+      validMsg: error,
+    });
+  }
+
   onSubmitHandle(e) {
-    // e.preventDefault();
-    alert(this.state.phone + this.state.password);
-    AccountLogin.login(this.state.phone, this.state.password).then(
-      () => alert("login thành công"),
-      (Error) => alert("error rồi")
-    );
+    this.validateAll();
+    let err = this.state.validMsg;
+    if (err) {
+      AccountLogin.login(this.state.phone, this.state.password)
+        .then((response) => {
+          localStorage.setItem("phone", response.data.phone);
+          localStorage.setItem("accessToken", response.data.accessToken);
+          localStorage.setItem("role", response.data.role);
+          // console.log(localStorage.getItem("phone"));
+          console.log("AccessToken : " + localStorage.getItem("accessToken"));
+          // console.log(localStorage.getItem("role"));
+          localStorage.setItem("statusLogin", true);
+          // console.log(localStorage.getItem("statusLogin"));
+          alert("Login thành công");
+          window.location.reload();
+        })
+        .catch((e) => {
+          localStorage.setItem("statusLogin", false);
+          alert("Login không thành công");
+          this.setState({
+            password: "",
+          });
+        });
+      // AccountLogin.getBranch();
+    }
   }
 
   render() {
@@ -40,6 +71,7 @@ class LoginForm extends React.Component {
           <form onSubmit={() => this.onSubmitHandle()}>
             <div className="row">
               <label>Số điện thoại</label>
+              <p style={{ color: `red` }}>{this.state.validMsg.phone}</p>
               <input
                 type="text"
                 placeholder="Nhập số điện thoại"
@@ -49,15 +81,19 @@ class LoginForm extends React.Component {
             </div>
             <div className="row">
               <label>Nhập mật khẩu</label>
+              <p style={{ color: `red` }}>{this.state.validMsg.password}</p>
               <input
                 type="password"
                 placeholder="Nhập mật khẩu"
                 name="password"
+                value={this.state.password}
                 onChange={(e) => this.onChangeHandle(e)}
               />
             </div>
             <div id="button" className="row">
-              <button type="submit">Login</button>
+              <button type="button" onClick={() => this.onSubmitHandle()}>
+                Login
+              </button>
             </div>
           </form>
           <div id="alternativeLogin">

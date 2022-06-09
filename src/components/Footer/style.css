@@ -1,4 +1,5 @@
 #footer {
   padding: 20px;
   background-color: rgb(9, 196, 196);
+  border-top: 2px solid black;
 }

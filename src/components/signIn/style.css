@@ -28,6 +28,12 @@
   padding: 2px;
 }
 
+.optional {
+  min-width: 300px;
+  border: 2px solid;
+  padding: 2px;
+}
+
 .error {
   color: red;
   margin-left: 2px;
