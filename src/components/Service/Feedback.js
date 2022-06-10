@@ -3,36 +3,54 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style.css";
 import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import ServiceList from "../../getData/ServiceList";
 var today = new Date();
 export default function Feedback(props) {
   const [content_feedback, setContent_feedback] = useState("");
   const [icon, setIcon] = useState(faCaretDown);
   const [yourFeedBack, setYourFeedBack] = useState([]);
-  const [feed, setFeed] = useState([
-    {
-      name: "name 1",
-      content:
-        "Các designer của Copperplate chỉ dùng font này cho header hoặc title vì nó chỉ có kiểu chữ in hoa. Kiểu chữ trở này trở nên nổi tiếng sau khi Ai là triệu phú biến phông chữ này thành thương hiệu của mình.",
-      time: "11/11/2020",
-    },
-    {
-      name: "name 2",
-      content:
-        "Các designer của Copperplate chỉ dùng font này cho header hoặc title vì nó chỉ có kiểu chữ in hoa. Kiểu chữ trở này trở nên nổi tiếng sau khi Ai là triệu phú biến phông chữ này thành thương hiệu của mình.",
-    },
-    {
-      name: "name 3",
-      content:
-        "Các designer của Copperplate chỉ dùng font này cho header hoặc title vì nó chỉ có kiểu chữ in hoa. Kiểu chữ trở này trở nên nổi tiếng sau khi Ai là triệu phú biến phông chữ này thành thương hiệu của mình.",
-    },
-  ]);
+  const [feedback, setFeedback] = useState([]);
+  const [FeedbackOfService, setFeedbackOfService] = useState([]);
+  const [listServiceAndFeedback, setlistServiceAndFeedback] = useState([]);
 
-  useEffect(
-    (props) => {
-      // console.log(props.id);
-    },
-    [feed]
-  );
+  useEffect(() => {
+    var id = localStorage.getItem("serviceid");
+    ServiceList.getSericeType(1)
+      .then((Response) => {
+        setlistServiceAndFeedback(Response.data);
+
+        // console.log("số id" + Response.data.at(0).service.id);
+        listServiceAndFeedback.map((item) => {
+          console.log(item.service.id);
+          // if (item.service.id === 4) {
+          //   console.log("okkoko");
+          //   setFeedbackOfService(item.feedbackList);
+          // }
+        });
+        // FeedbackOfService.map((item) => {
+        //   setFeedback(
+        //     [].concat(feedback, {
+        //       name: item.account.name,
+        //       content: item.content,
+        //       time: item.time,
+        //     })
+        //   );
+        // });
+      })
+      .then(() => {
+        console.log("a" + listServiceAndFeedback);
+        console.log("b" + listServiceAndFeedback.at(0));
+        listServiceAndFeedback.map((item) => {
+          console.log(item.service.id);
+          // if (item.service.id === 4) {
+          //   console.log("okkoko");
+          //   setFeedbackOfService(item.feedbackList);
+          // }
+        });
+        // console.log(feedback);
+      });
+  }, [feedback]);
 
   const Add_Feedback = () => (
     <div className="btn-feedback" style={{ textAlign: `center` }}>
@@ -70,7 +88,7 @@ export default function Feedback(props) {
   };
   return (
     <div id="feedback">
-      {/* -----------------------------  Your feed back------------------------ */}
+      {/* -----------------------------  Your listServiceAndFeedback back------------------------ */}
       <div style={{ margin: `10px 20px` }}>
         <h4>Bình luận của bạn</h4>
       </div>
@@ -87,18 +105,18 @@ export default function Feedback(props) {
         </div>
         <Add_Feedback />
       </form>
-      {/* -----------------------------  Your feed back------------------------ */}
+      {/* -----------------------------  Your listServiceAndFeedback back------------------------ */}
       <div className="header-feedback">
-        <h3>Đánh giá chất lượng ({feed.length})</h3>
+        <h3>Đánh giá chất lượng ({feedback.length})</h3>
       </div>
 
       {/*------------------------ Feedback content ----------------------*/}
-      {feed.map((item, index) => {
+      {feedback.map((item, index) => {
         {
           if (index < 2) {
             return (
               <ShowFeedBackDetail
-                name={`${index + 1} - ${item.name}`}
+                name={`${index + 1} - ${item.account.name}`}
                 content={item.content}
                 time={item.time}
               />
@@ -122,7 +140,7 @@ export default function Feedback(props) {
         </button>
       </div>
       <div id="view-more-hide">
-        {feed.map((item, index) => {
+        {listServiceAndFeedback.map((item, index) => {
           {
             if (index >= 2) {
               return (

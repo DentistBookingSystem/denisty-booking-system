@@ -53,10 +53,10 @@ export default class Appointment extends Component {
   }
   ShowServiceSelected() {
     return this.state.serviceID.map((item, index) => (
-      <ul key={item.id} className="detail">
+      <ul key={item.service.id} className="detail">
         <li id="border-right" className="service">
           <p>
-            {item.id}-{item.name}
+            {item.service.id}-{item.service.name}
           </p>
         </li>
         <li id="border-right" className="doctor">
@@ -76,7 +76,7 @@ export default class Appointment extends Component {
           </select>
         </li>
         <li className="remove">
-          <button value={item.id} onClick={(e) => this.removeItem(e)}>
+          <button value={item.service.id} onClick={(e) => this.removeItem(e)}>
             <i className="fa-solid fa-xmark"></i>
           </button>
         </li>
@@ -89,7 +89,7 @@ export default class Appointment extends Component {
     var items = [];
     var serviveIDSelected = [];
     this.state.serviceID.map((item) => {
-      if (!(item.id === parseInt(valueRemove))) {
+      if (!(item.service.id === parseInt(valueRemove))) {
         items = [...items, item];
       }
     });
@@ -220,16 +220,25 @@ export default class Appointment extends Component {
 
   componentDidMount() {
     const API_INPUT_BRANCH = "http://localhost:8080/rade/appointment";
-    const data = axios
-      .post(API_INPUT_BRANCH, localStorage.getItem("branch"))
+    axios
+      .get(API_INPUT_BRANCH + "/" + localStorage.getItem("branch"))
       .then((res) => {
         this.setState({
           serviceTypeArr: res.data.serviceTypeList,
           branch: res.data.branch,
           doctorArr: res.data.doctorByBranchList,
         });
-      })
-      .catch((err) => console.log("Error-Appointment: " + err));
+      });
+    // const data = axios
+    //   .post(API_INPUT_BRANCH, localStorage.getItem("branch"))
+    //   .then((res) => {
+    //     this.setState({
+    //       serviceTypeArr: res.data.serviceTypeList,
+    //       branch: res.data.branch,
+    //       doctorArr: res.data.doctorByBranchList,
+    //     });
+    //   })
+    //   .catch((err) => console.log("Error-Appointment: " + err));
   }
 
   ShowAddress() {
@@ -322,15 +331,15 @@ export default class Appointment extends Component {
                 </li>
                 <li style={{ padding: 0 }} className="service-item">
                   {this.state.serviceArr.map((item) => (
-                    <li key={item.id} className="service-item-small">
+                    <li key={item.service.id} className="service-item-small">
                       <button
-                        name={item.id}
-                        value={item.name}
+                        name={item.service.id}
+                        value={item.service.name}
                         onClick={(e) => {
                           if (this.state.numServiceSelected < 3) {
                             let flag = false;
                             this.state.serviceID.map((item) => {
-                              if (item.name === e.currentTarget.value) {
+                              if (item.service.name === e.currentTarget.value) {
                                 flag = true;
                               }
                             });
@@ -340,7 +349,7 @@ export default class Appointment extends Component {
                                 doctorID: [...this.state.doctorID, 0],
                                 serviceID_List: [
                                   ...this.state.serviceID_List,
-                                  item.id,
+                                  item.service.id,
                                 ],
                                 numServiceSelected:
                                   this.state.numServiceSelected + 1,
@@ -351,7 +360,7 @@ export default class Appointment extends Component {
                           }
                         }}
                       >
-                        <p>{item.name}</p>
+                        <p>{item.service.name}</p>
                       </button>
                     </li>
                   ))}

@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import logo from "../../logo/logo1.jpg";
 import "./style.css";
 import isEmpty from "validator/lib/isEmpty";
+import axios from "axios";
 
+const API_GET_PROVINCE = "http://localhost:8080/rade/province";
 const districts = [
   {
     id: "pro1",
@@ -91,6 +93,7 @@ const schema = yup.object().shape({
 
 export default function SignIn() {
   const [districtArr, setDistrictArr] = useState([]);
+  const [provinceArr, setProvinceArr] = useState([]);
   const [districtID, setDistrictID] = useState("");
   const [province, setProvice] = useState(provinces[0].id);
   const [gender, setGender] = useState("");
@@ -101,6 +104,20 @@ export default function SignIn() {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
+  useEffect(() => {
+    axios
+      .get(API_GET_PROVINCE)
+      .then((res) => {
+        setProvinceArr(res.data);
+        console.log("gán :");
+        console.log(res);
+      })
+      .catch()
+      .then(() => {
+        console.log("provinceArr");
+        console.log(provinceArr);
+      });
+  }, []);
   const onLoginSubmit = (data) => {
     // const data = {
     //   full_name: "Nguyen Quoc Bao",
@@ -229,10 +246,9 @@ export default function SignIn() {
             placeholder="Nhập tỉnh"
           >
             <option value="">Chọn tỉnh/thành phố</option>
-            {provinces.map((option) => (
+            {/* {province.map((option) => (
               <option value={option.id}>{option.value}</option>
-            ))}
-            <option value="other-option">Địa chỉ khác</option>
+            ))} */}
           </select>
           <p className="error">{validationMsg.province}</p>
         </div>
