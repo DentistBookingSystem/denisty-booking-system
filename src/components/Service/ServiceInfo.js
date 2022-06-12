@@ -3,49 +3,41 @@ import { useParams } from "react-router-dom";
 import Popup from "reactjs-popup";
 import ServiceList from "../../getData/ServiceList";
 import ChooseBranchPopUp from "../chooseBranchPopUp/ChooseBranchPopUp";
-import Feedback from "./Feedback";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
+
+// import Feedback from "./Feedback";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
 var today = new Date();
-var i = 0;
 export default function ServiceInfo(props) {
   const [serviceList, setServiceList] = useState([]);
-  const [serviceSelected, setServiceSelected] = useState();
+  const [serviceSelected, setServiceSelected] = useState([]);
 
   const [content_feedback, setContent_feedback] = useState("");
-  const [icon, setIcon] = useState(faCaretDown);
   const [yourFeedBack, setYourFeedBack] = useState([]);
   const [feedback, setFeedback] = useState([]);
 
   const { id } = useParams();
+
   useEffect(() => {
     ServiceList.getSericeType(id).then((Response) => {
       setServiceList(Response.data);
-      setServiceSelected(Response.data.at(0).service);
     });
     // return setServiceSelected([serviceList.at(0)]);
   }, [id, serviceSelected]);
 
-  const getServiceSelected = (e) => {};
+  // const getServiceSelected = (e) => {};
   const MapServiceDetail = () => {
-    // console.log(serviceList.at(0));
-    // if (i === 0) {
-    //   setServiceSelected([serviceList.at(0)]);
-    //   i++;
-    // }
     return (
-      <ul>
-        {/* <p>{serviceList.at(0).service.id}</p> */}
+      <ul style={{ padding: `0px` }}>
         {serviceList.map((item) => {
-          // setServiceSelected([serviceList.at(0)]);
           return (
             <li>
               <button
                 id={item.service.id}
                 value={item.service.id}
                 onClick={(e) => {
-                  setServiceSelected(item.service);
+                  setServiceSelected([item]);
                 }}
               >
                 {item.service.name}
@@ -58,39 +50,73 @@ export default function ServiceInfo(props) {
   };
 
   const ShowServiceDetail = () => {
-    return (
-      <div className="service-detail">
-        <div className="desc">
-          {/* {serviceSelected.map((item) => {
-            // setFeedback([...feedback, item.feedbackList]);
-            setFeedback(item.feedbackList);
-            console.log(item.feedbackList);
-            // console.log(item.feedbackList.at(0));
-            // console.log(item.feedbackList.at(0).content);
-            // console.log(item.feedbackList.at(0).time);
-            // console.log(item.feedbackList.at(0).account.full_name);
-            return ( */}
-          <div>
-            <h2>{serviceSelected.name}</h2>
-            <p>{serviceSelected.description}</p>
-            <img
-              src={`https://drive.google.com/uc?id=${serviceSelected.url}`}
-            ></img>
-            <div
-              className="btn-appointmentService"
-              style={{ textAlign: `center` }}
-            >
-              <Popup modal trigger={<button>Đặt lịch</button>}>
-                <ChooseBranchPopUp />
-              </Popup>
+    var lengthServiceSElected = serviceSelected.length;
+    var tmp = serviceList.at(0);
+    if (lengthServiceSElected === 0) {
+      console.log("tmp");
+      console.log(tmp);
+      if (typeof tmp !== "undefined" && tmp != null) {
+        console.log("khác null");
+        setFeedback(tmp.feedbackList);
+        return (
+          <div className="service-detail">
+            <div className="desc">
+              <div>
+                <h2 style={{ textAlign: `left` }}>{tmp.service.name}</h2>
+                <div
+                  style={{
+                    width: `100%`,
+                    textAlign: `center`,
+                    margin: `10px 10px`,
+                  }}
+                >
+                  <img
+                    src={`https://drive.google.com/uc?id=${tmp.service.url}`}
+                    className="img-service"
+                  ></img>
+                </div>
+                <p>{tmp.service.description}</p>
+
+                <div
+                  className="btn-appointmentService"
+                  style={{ textAlign: `center` }}
+                ></div>
+                <ShowFeed />
+              </div>
             </div>
-            <ShowFeed />
           </div>
-          {/* );
-          })} */}
+        );
+      }
+    } else {
+      return (
+        <div className="service-detail">
+          <div className="desc">
+            {serviceSelected.map((item) => {
+              setFeedback(item.feedbackList);
+              console.log(item.feedbackList);
+              return (
+                <div>
+                  <h2>{item.service.name}</h2>
+                  <p>{item.service.description}</p>
+                  <img
+                    src={`https://drive.google.com/uc?id=${item.service.url}`}
+                  ></img>
+                  <div
+                    className="btn-appointmentService"
+                    style={{ textAlign: `center` }}
+                  >
+                    <Popup modal trigger={<button>Đặt lịch</button>}>
+                      <ChooseBranchPopUp />
+                    </Popup>
+                  </div>
+                  <ShowFeed />
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   };
 
   // =======================
@@ -118,38 +144,20 @@ export default function ServiceInfo(props) {
     </div>
   );
 
-  // const changeDisplay = (e) => {
-  //   var display = document.getElementById("view-more-hide").style.display;
-  //   if (document.getElementById("view-more-hide").style.display === "block") {
-  //     document.getElementById("view-more-hide").style.display = "none";
-  //     document.getElementById("view-more").innerHTML = "Xem thêm";
-  //     setIcon(faCaretDown);
-  //   } else {
-  //     document.getElementById("view-more-hide").style.display = "block";
-  //     document.getElementById("view-more").innerHTML = "Thu gọn";
-  //     setIcon(faCaretUp);
-  //   }
-  // };
-
   const MapFeedback = () => {
-    console.log(feedback.length);
-    if (feedback.length === 0) {
-      return feedback.map((item, index) => {
-        {
-          // if (index < 2) {
-          return (
-            <ShowFeedBackDetail
-              name={`${index + 1} - ${item.account.full_name}`}
-              content={item.content}
-              time={item.time}
-            />
-          );
-        }
-        // }
-      });
-    } else {
-      return console.log("sai rồi kìa ");
-    }
+    return feedback.map((item, index) => {
+      {
+        // if (index < 2) {
+        return (
+          <ShowFeedBackDetail
+            name={`${index + 1} - ${item.account.full_name}`}
+            content={item.content}
+            time={item.time}
+          />
+        );
+      }
+      // }
+    });
   };
 
   const ShowFeed = () => (
@@ -218,7 +226,7 @@ export default function ServiceInfo(props) {
     <div className="service-detail-container">
       <div className="side-bar">
         <div>
-          <p>Các dịch vụ</p>
+          <h4>Các dịch vụ</h4>
         </div>
         <MapServiceDetail />
       </div>

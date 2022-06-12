@@ -7,9 +7,14 @@ import { Link } from "react-router-dom";
 import SignIn from "../signIn/SignIn";
 import Service from "../ServiceType/Service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell, faUser } from "@fortawesome/free-regular-svg-icons";
+import {
+  faBell,
+  faUser,
+  faCalendarDays,
+} from "@fortawesome/free-regular-svg-icons";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import Notification from "../Notification/Notification";
+import { color } from "@mui/system";
 // import Sign_in from "../signIn/Sign_in";
 
 export default function Nav(props) {
@@ -27,7 +32,7 @@ export default function Nav(props) {
         <div className="nav">
           <div className="logo">
             <img src={logo} alt="logo" />
-            <p>Rade-Nha khoa hoàn mỹ</p>
+            <p>Nha khoa RADE</p>
           </div>
           <FirstNav />
           {localStorage.getItem("statusLogin") === "true" ? (
@@ -45,7 +50,7 @@ const FirstNav = () => {
   return (
     <nav>
       <ul className="first-nav">
-        <li className="nav-item" onClick={() => this.changeStyle()}>
+        <li className="nav-item">
           <Link to="/home" style={{ textDecoration: "none" }}>
             <button>Trang chủ</button>
           </Link>
@@ -63,10 +68,25 @@ const FirstNav = () => {
 const SecondNavLogin = () => (
   <ul className="second-nav">
     <Link to="" className="nav-item" style={{ textDecoration: "none" }}>
+      <button
+        className="btn-datlich"
+        style={{
+          backgroundColor: `#0b0b90 `,
+          color: `white`,
+          borderRadius: `10px`,
+          border: `2px solid #0b0b90`,
+        }}
+      >
+        Đặt lịch
+      </button>
+    </Link>
+    <Link to="" className="nav-item" style={{ textDecoration: "none" }}>
       <Notification />
     </Link>
     <Link className="nav-item" to="/history" style={{ textDecoration: "none" }}>
-      <button>History</button>
+      <button>
+        <FontAwesomeIcon icon={faCalendarDays} />
+      </button>
     </Link>
     <Link className="nav-item" to="/profile" style={{ textDecoration: "none" }}>
       <button>

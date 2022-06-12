@@ -13,6 +13,8 @@ import { useEffect } from "react";
 import Logout from "./components/Login-Logout/Logout";
 import Profile from "./components/Profile/Profile";
 import History from "./components/History/History";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import { Button } from "bootstrap";
 const handleOnclik = () => {
   pushAppointment.postData();
 };
@@ -42,9 +44,6 @@ function App() {
         </div>
         <Footer />
       </Router>
-      {/* <div>
-        <button onClick={() => handleOnclik()}>Appointment</button>
-      </div> */}
       <div className="chatBox">
         <a href="https://l.messenger.com/l.php?u=http%3A%2F%2Fm.me%2F107337128652951&h=AT1R4u7pSoC4rdF5yHZ0e7myOVni1br5HBNiSsmK2Q_dUr9sNSEFQ8OmWGoFkVXMES6BM0nPWCzLh-JVLevAEg2xzp4WzOuFfUpW39WgQkILbTDH8jxEMSz9r2upi75kUed7uQ">
           <FontAwesomeIcon icon={faFacebookMessenger} />

@@ -48,8 +48,6 @@ class LoginForm extends React.Component {
           console.log("AccessToken : " + localStorage.getItem("accessToken"));
           // console.log(localStorage.getItem("role"));
           localStorage.setItem("statusLogin", true);
-          // console.log(localStorage.getItem("statusLogin"));
-          alert("Login thành công");
           window.location.reload();
         })
         .catch((e) => {

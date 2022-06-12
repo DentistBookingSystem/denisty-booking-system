@@ -1,28 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Popup from "reactjs-popup";
-import ChooseBranchPopUp from "../chooseBranchPopUp/ChooseBranchPopUp";
 import "./style.css";
-import { Outlet, Link } from "react-router-dom";
 
 export default class SlideShow extends React.Component {
   constructor(props) {
     super(props);
 
-    /*
-     * State slideIndex dùng để xác định xem slide nào đang được active.
-     * Các ảnh sẽ được xếp chồng lên nhau, cái nào active thì hiển thị,
-     * Cái nào không active thì ẩn đi.
-     */
     this.state = {
       slideIndex: 0,
     };
 
-    /*
-     * Khi sử dụng, mình sẽ truyền thuộc tính ratio, giả sử là "3:2"
-     * Như vậy, tỉ lệ width/height là this.ratioWH = 3 / 2
-     * Mình sẽ điều chỉnh các ảnh sao cho về cùng 1 kích thước.
-     */
     const ratioWHArray = this.props.ratio.split(":");
     this.ratioWH = ratioWHArray[0] / ratioWHArray[1];
 
@@ -34,13 +21,6 @@ export default class SlideShow extends React.Component {
     this.runAutomatic = this.runAutomatic.bind(this);
   }
 
-  /*
-   * Tính chỉ số SlideIndex mới, với step là bước nhảy: +1 hoặc -1
-   * Giả sử, mình có 6 ảnh => các chỉ số lần lượt là: 0, 1, 2,...5
-   * Chú ý:
-   * Nếu đang ở chỉ số 5 mà đi về phía trước thì slideIndex = 0
-   * Nếu đang ở chỉ số 0 mà về sau thì slideIndex = 5
-   */
   getNewSlideIndex(step) {
     const slideIndex = this.state.slideIndex;
     const numberSlide = this.props.input.length;
@@ -154,20 +134,15 @@ export default class SlideShow extends React.Component {
                   this.state.slideIndex === index ? "active" : ""
                 }`}
               >
-                <div className="number-text">
+                {/* <div className="number-text">
                   {`${index + 1} / ${this.props.input.length}`}
-                </div>
+                </div> */}
                 <img className="image" src={image.src} alt={image.caption} />
 
                 <div className="caption-text">{image.caption}</div>
               </div>
             );
           })}
-          <div className="btn-appointment">
-            <Popup modal trigger={<button>Đặt lịch</button>}>
-              <ChooseBranchPopUp />
-            </Popup>
-          </div>
 
           <span className="prev" onClick={this.backward}>
             ❮

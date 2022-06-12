@@ -14,12 +14,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 
 const collection = [
-  { src: img1, caption: "Caption one" },
-  { src: img2, caption: "Caption two" },
-  { src: img3, caption: "Caption three" },
-  { src: img4, caption: "Caption four" },
-  { src: img5, caption: "Caption five" },
-  { src: img6, caption: "Caption six" },
+  { src: img1, caption: "Đội ngũ chuyên nghiệp" },
+  { src: img2, caption: "Chăm sóc tận tình" },
+  { src: img3, caption: "Làm việc nhanh gọn" },
+  { src: img4, caption: "Đội ngũ chuyên nghiệp" },
+  { src: img5, caption: "Chăm sóc tận tình" },
+  { src: img6, caption: "Làm việc nhanh gọn" },
 ];
 
 export default class Home extends Component {

@@ -15,8 +15,7 @@ html {
 }
 
 #loginform {
-  max-width: 500px;
-  min-width: 300px;
+  min-width: 500px;
   max-height: 700px;
   width: 30%;
   height: 60%;
@@ -24,13 +23,13 @@ html {
   background-color: #ffffff;
   border-radius: 25px;
   border: solid 1px;
+  padding: 0 100px;
 }
 
 #headerTitle {
   text-align: center;
   font-family: "open sans", sans-serif;
-  padding: 2rem 0;
-  margin: 0;
+  padding: 1rem 0;
   font-size: 2rem;
 }
 
@@ -38,17 +37,15 @@ html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 2rem;
-  max-width: 100%;
+  padding-top: 0.7rem;
 }
 
 .row input {
   width: 80%;
   box-sizing: border-box;
   border: none;
-  font-size: 1.3rem;
-  padding-left: 1.5rem;
-  padding-bottom: 1rem;
+  font-size: 1.8rem;
+  padding: 10px;
   box-shadow: inset 0px -3px 0px 0px rgba(187, 187, 187, 0.2);
   transition: box-shadow 0.2s ease-in;
 }
@@ -70,8 +67,7 @@ html {
 
 .row label {
   align-self: start;
-  padding-left: 4.5rem;
-  padding-bottom: 0.5rem;
+  padding-left: 4rem;
   color: rgba(187, 187, 187, 0.9);
 }
 
@@ -125,6 +121,5 @@ html {
 
 #alternativeLogin {
   text-align: center;
-  padding-top: 2rem;
-  margin-top: 1.5rem;
+  padding: 1rem;
 }

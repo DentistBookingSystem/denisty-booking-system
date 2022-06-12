@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import "./style.css";
 import ServiceTypeList from "../../getData/ServiceTypeList";
 import { Link } from "react-router-dom";
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Button } from "bootstrap";
 export default class Service extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +24,9 @@ export default class Service extends Component {
   render() {
     return (
       <div className="dropdown">
-        <button className="nut_dropdown">Dịch vụ</button>
+        <button className="nut_dropdown" style={{ width: `160px` }}>
+          Dịch vụ
+        </button>
         <div className="noidung_dropdown">
           {this.state.serviceType.map((item) => (
             <Link to={`/serviceType/${item.id}`} key={item.id}>
