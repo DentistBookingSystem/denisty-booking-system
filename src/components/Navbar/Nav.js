@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./styleNav.css";
 import logo from "../../logo/logo1.jpg";
 import LoginForm from "../Login-Logout/Login";
-import Popup from "reactjs-popup";
 import { Link } from "react-router-dom";
 import SignIn from "../signIn/SignIn";
 import Service from "../ServiceType/Service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Popup from "reactjs-popup";
+import ChooseBranchPopUp from "../chooseBranchPopUp/ChooseBranchPopUp";
 import {
   faBell,
   faUser,
@@ -14,7 +15,6 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import Notification from "../Notification/Notification";
-import { color } from "@mui/system";
 // import Sign_in from "../signIn/Sign_in";
 
 export default function Nav(props) {
@@ -67,8 +67,13 @@ const FirstNav = () => {
 
 const SecondNavLogin = () => (
   <ul className="second-nav">
-    <Link to="" className="nav-item" style={{ textDecoration: "none" }}>
+    <Link
+      to="/appointment"
+      className="nav-item"
+      style={{ textDecoration: "none" }}
+    >
       <button
+        type="button"
         className="btn-datlich"
         style={{
           backgroundColor: `#0b0b90 `,

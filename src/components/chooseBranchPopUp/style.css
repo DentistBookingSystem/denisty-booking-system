@@ -9,8 +9,8 @@
 .choose-branch-container {
   display: flex;
   flex-wrap: wrap;
-  width: 900px;
-  justify-content: space-between;
+  width: 80vw;
+  justify-content: flex-start;
 }
 
 .branch-hint {
@@ -19,7 +19,7 @@
 }
 
 .branch-item {
-  width: 400px;
+  width: 30%;
   /* background-color: aquamarine; */
   margin: 10px;
   padding: 10px;
@@ -32,8 +32,15 @@
 
 .branch-item button {
   /* background-color: aquamarine; */
-  padding: 10px;
+  padding: 5px;
+  margin-bottom: 0px;
+  background-color: white;
 }
+
+.branch-item button h4 {
+  font-size: 18px;
+}
+
 .branch-item button:hover {
   background-color: rgba(31, 211, 151, 0.285);
   color: white;
@@ -65,8 +72,4 @@
 
 .info-branch-right {
   flex-basis: 60%;
-}
-
-.popup-overlay {
-  background-color: rgba(128, 128, 128, 0.7);
 }

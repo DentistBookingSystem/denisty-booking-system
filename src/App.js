@@ -21,9 +21,9 @@ const handleOnclik = () => {
 
 function App() {
   useEffect(() => {
-    localStorage.setItem("phone", "");
-    localStorage.setItem("accessToken", "");
-    localStorage.setItem("statusLogin", false);
+    // localStorage.setItem("phone", "");
+    // localStorage.setItem("accessToken", "");
+    // localStorage.setItem("statusLogin", false);
   }, []);
   return (
     <div className="App">

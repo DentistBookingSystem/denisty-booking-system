@@ -2,8 +2,14 @@ import "./style.css";
 import React, { Component } from "react";
 import axios from "axios";
 import ServiceList from "../../getData/ServiceList";
+import ServiceTypeList from "../../getData/ServiceTypeList";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
+const API_INPUT_BRANCH = "http://localhost:8080/rade/patient/appointment";
+const slot = [1, 2, 3, 4, 5, 6];
+
 export default class Appointment extends Component {
   constructor(props) {
     super(props);
@@ -19,14 +25,43 @@ export default class Appointment extends Component {
       distritID: "",
       cusName: "",
       phone: phone,
-      time: "",
       date: "",
+      branchArr: [],
+      shift: 0,
       //
       validateMsg: {},
       numServiceSelected: 0,
+      displayChoose: true,
+      today: this.getCurrentDate(),
+      maxday: this.getMaxDate(),
+      slotSelected: [],
     };
     this.changeService = this.changeService.bind(this);
     this.MapDoctor = this.MapDoctor.bind(this);
+  }
+
+  getCurrentDate(separator = "") {
+    let newDate = new Date();
+    newDate.setDate(newDate.getDate() + 1);
+    let date = newDate.getDate();
+    let month = newDate.getMonth() + 1;
+    let year = newDate.getFullYear();
+
+    return `${year}${separator}-${
+      month < 10 ? `0${month}` : `${month}`
+    }-${separator}${date}`;
+  }
+
+  getMaxDate(separator = "") {
+    let newDate = new Date();
+    newDate.setDate(newDate.getDate() + 7);
+    let date = newDate.getDate();
+    let month = newDate.getMonth() + 1;
+    let year = newDate.getFullYear();
+
+    return `${year}${separator}-${
+      month < 10 ? `0${month}` : `${month}`
+    }-${separator}${date}`;
   }
 
   MapDoctor(index) {
@@ -44,40 +79,21 @@ export default class Appointment extends Component {
     );
   }
 
-  changDoctor(e, index) {
-    let i = index;
-    let items = [...this.state.doctorID];
-    let item = items[i];
-    item = e.currentTarget.value;
-    this.setState({ doctorID: items });
+  changDoctor(e) {
+    this.setState({
+      doctorID: e.currentTarget.value,
+    });
   }
   ShowServiceSelected() {
     return this.state.serviceID.map((item, index) => (
       <ul key={item.service.id} className="detail">
-        <li id="border-right" className="service">
-          <p>
-            {item.service.id}-{item.service.name}
-          </p>
+        <li className="service">
+          <p style={{ padding: ` 10px 20px` }}>{item.service.name}</p>
         </li>
-        <li id="border-right" className="doctor">
-          {/* <select onChange={(e, index) => this.changDoctor(e, index)}> */}
-          <select
-            onChange={(e) => {
-              let i = index;
-              let items = [...this.state.doctorID];
-              items[index] = e.currentTarget.value;
-              this.setState({
-                doctorID: items,
-              });
-            }}
-          >
-            <option value="0">Chọn bác sĩ</option>
-            {this.MapDoctor(index)}
-          </select>
-        </li>
+
         <li className="remove">
           <button value={item.service.id} onClick={(e) => this.removeItem(e)}>
-            <i className="fa-solid fa-xmark"></i>
+            <FontAwesomeIcon icon={faXmark} />
           </button>
         </li>
       </ul>
@@ -108,7 +124,6 @@ export default class Appointment extends Component {
   }
 
   handleBooking(e) {
-    console.log("token: " + token);
     var err = this.validateAll();
     console.log("đặt lịch");
     console.log(this.state);
@@ -116,14 +131,13 @@ export default class Appointment extends Component {
       const data = {
         appointmentDTO: {
           branch_id: this.state.branch.id,
-          name: this.state.cusName,
-          phone: this.state.phone,
+          doctor_id: this.state.doctorID,
           date: this.state.date,
-          time: this.state.time,
+          shift: this.state.shift,
         },
 
+        phone: phone,
         serviceIdList: this.state.serviceID_List,
-        doctorIdList: this.state.doctorID,
       };
       if (token.length === 0) {
         axios
@@ -141,7 +155,7 @@ export default class Appointment extends Component {
       } else {
         axios
           .post(
-            "http://localhost:8080/rade/appointment/make",
+            "http://localhost:8080/rade/patient/appointment/make",
             // JSON.stringify(data),
             data,
             {
@@ -174,12 +188,7 @@ export default class Appointment extends Component {
       msg.branchAddrID = "Vui lòng chọn địa chỉ bạn đến";
       flag = true;
     }
-    console.log("time: " + this.state.time);
-    if (this.state.time.length === 0) {
-      msg.time = "Vui lòng chọn thời gian bạn đến";
-      flag = true;
-    }
-    if (this.state.time.date === 0) {
+    if (this.state.date === 0) {
       msg.date = "Vui lòng chọn thời gian bạn đến";
       flag = true;
     }
@@ -218,31 +227,24 @@ export default class Appointment extends Component {
     return Math.floor((date - today) / (1000 * 60 * 60 * 24 * 7));
   }
 
-  componentDidMount() {
-    const API_INPUT_BRANCH = "http://localhost:8080/rade/appointment";
-    axios
-      .get(API_INPUT_BRANCH + "/" + localStorage.getItem("branch"))
-      .then((res) => {
-        this.setState({
-          serviceTypeArr: res.data.serviceTypeList,
-          branch: res.data.branch,
-          doctorArr: res.data.doctorByBranchList,
-        });
+  async componentDidMount() {
+    await ServiceTypeList.getSericeType().then((res) => {
+      this.setState({
+        branchArr: res.data.branchList,
       });
-    // const data = axios
-    //   .post(API_INPUT_BRANCH, localStorage.getItem("branch"))
-    //   .then((res) => {
-    //     this.setState({
-    //       serviceTypeArr: res.data.serviceTypeList,
-    //       branch: res.data.branch,
-    //       doctorArr: res.data.doctorByBranchList,
-    //     });
-    //   })
-    //   .catch((err) => console.log("Error-Appointment: " + err));
+    });
+    // console.log("this.state.branchArr");
+    // console.log(this.state.branchArr);
+    if (this.state.displayChoose === true) {
+      document.getElementById("popup").style.display = "block";
+      // document.getElementById("page").style.backgroundColor =
+      //   "rgba(94, 85, 85, 0.8)";
+    } else {
+      document.getElementById("popup").style.display = "none";
+    }
   }
 
   ShowAddress() {
-    const branch_id = localStorage.getItem("branch");
     return (
       <div className="address">
         <h4>Địa chỉ bạn chọn</h4>
@@ -252,56 +254,113 @@ export default class Appointment extends Component {
   }
 
   ShowInputNameAndPhone() {
-    if (phone.length === 0) {
-      return (
-        <>
-          <div className="cus-name">
-            <h4>Tên:</h4>
-            <input
-              type="text"
-              placeholder="Nhập tên"
-              onChange={(e) =>
-                this.setState({
-                  cusName: e.currentTarget.value,
-                })
-              }
-            ></input>
-            <div>
-              <p style={{ color: "red" }}>{this.state.validateMsg.cusName}</p>
-            </div>
-          </div>
-          <div className="sdt">
-            <h4>Số điện thoại:</h4>
-            <input
-              type="text"
-              placeholder="Nhập số điện thoại"
-              value={this.state.phone}
-              onChange={(e) =>
-                this.setState({
-                  phone: e.currentTarget.value,
-                })
-              }
-            ></input>
-            <div>
-              <p style={{ color: "red" }}>{this.state.validateMsg.phone}</p>
-            </div>
-          </div>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <div className="sdt">
-            <h4>Số điện thoại:</h4>
-            <input type="text" value={this.state.phone} readOnly></input>
-          </div>
-        </>
-      );
+    if (phone === null) {
+      return window.location.replace("/");
     }
   }
+
+  ChooseBranchPopUp = () => {
+    return (
+      <div id="popup" className="cover">
+        <div className="branch-container">
+          <div>
+            <h3 className="choose-branch-title">Chọn chi nhánh bạn muốn đến</h3>
+          </div>
+          <div className="branch-hint">
+            {this.state.branchArr.map((item) => (
+              <button
+                value={item.id}
+                className="branch-item"
+                onClick={(e) => this.HandleClick(e)}
+              >
+                <>
+                  <h4>{item.name}</h4>
+                  <div className="info-branch">
+                    <div className="info-branch-left">
+                      <div style={{ width: `100px`, height: `100px` }}>
+                        <img
+                          style={{ width: `100px`, margin: `auto` }}
+                          src={`https://drive.google.com/uc?id=${item.url}`}
+                          alt=""
+                        ></img>
+                      </div>
+                    </div>
+                    <div className="info-branch-right">
+                      <div className="addr">
+                        <p style={{ fontWeight: `bold` }}>Địa chỉ:</p>
+                        <p style={{ marginLeft: `15px` }}>
+                          {item.district.name}, {item.district.province.name}
+                        </p>
+                      </div>
+                      <div>
+                        <p style={{ fontWeight: `bold` }}>
+                          Thời gian làm việc:
+                        </p>
+                        <p style={{ marginLeft: `15px` }}>
+                          {item.open_time}-{item.close_time}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  async HandleClick(e) {
+    let id = e.currentTarget.value;
+    axios
+      .get(API_INPUT_BRANCH + "/" + id, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        this.setState({
+          serviceTypeArr: res.data.serviceTypeList,
+          branch: res.data.branch,
+          doctorArr: res.data.doctorByBranchList,
+        });
+      });
+    console.log(this.state.serviceTypeArr);
+    document.getElementById("popup").style.display = `none`;
+  }
+
+  getSlot() {
+    const API = "http://localhost:8080/rade/patient/appointment/check-doctor";
+    console.log(this.state.doctorID);
+    console.log(this.state.date);
+    const data = {
+      doctor_id: this.state.doctorID,
+      date: this.state.date,
+    };
+    axios
+      .post(API, JSON.stringify(data), {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(async (res) => {
+        console.log(res.data);
+        await this.setState({
+          slotSelected: res.data.shiftList,
+        });
+      });
+  }
+
   render() {
     return (
-      <>
+      <div>
+        <div id="page">
+          <this.ChooseBranchPopUp />
+        </div>
+
         <div className="header-appointment">
           <h2>Đặt lịch nha khoa - Rade</h2>
         </div>
@@ -346,7 +405,6 @@ export default class Appointment extends Component {
                             if (!flag) {
                               this.setState({
                                 serviceID: [...this.state.serviceID, item],
-                                doctorID: [...this.state.doctorID, 0],
                                 serviceID_List: [
                                   ...this.state.serviceID_List,
                                   item.service.id,
@@ -374,64 +432,96 @@ export default class Appointment extends Component {
             </div>
             {this.ShowInputNameAndPhone()}
             <div className="infor-appointment">
-              <div className="service-selected">
-                <ul id="border-bottom" className="table-right">
-                  <li className="service">
-                    <p id="border-right">Dịch vụ đã chọn</p>
-                  </li>
-                  <li id="border-right" className="doctor">
-                    Chọn bác sĩ
-                  </li>
-                  <li className="remove">Xóa</li>
-                </ul>
-
-                {this.ShowServiceSelected()}
-                <p style={{ color: "red" }}>
-                  {this.state.validateMsg.serviceID}
-                </p>
-                {this.state.numServiceSelected > 2 ? (
-                  <p style={{ color: "red" }}>Số lượng dịch vụ tối đa là 3</p>
-                ) : (
-                  <p></p>
-                )}
-                <p style={{ color: "red" }}>
-                  {this.state.validateMsg.numServiceSelected}
-                </p>
-              </div>
               {this.ShowAddress()}
+              <div className="doctor">
+                <div className="doctor-select">
+                  <h4>Chọn bác sĩ</h4>
+                  <select onChange={(e) => this.changDoctor(e)}>
+                    <option value={0}>Chọn bác sĩ</option>
+                    {this.MapDoctor()}
+                  </select>
+                </div>
+              </div>
               <div className="time">
                 <h4>
                   <p>Chọn thời gian bạn đến</p>
                   <p style={{ color: "red" }}>(*)</p>{" "}
                 </h4>
-                <input
-                  type="date"
-                  onChange={(e) => {
-                    this.setState({ date: e.currentTarget.valueAsDate });
-                    console.log(this.state.date);
+                <div
+                  style={{
+                    textAlign: "left",
+                    paddingLeft: `20px`,
+                    marginLeft: `20px`,
                   }}
-                />
-                <input
-                  type="time"
-                  onChange={(e) =>
-                    this.setState({
-                      time: e.currentTarget.value,
-                    })
-                  }
-                  min="00:00"
-                  max="23:59"
-                  step="60"
-                  value={this.state.tiem}
-                />
-                <p style={{ color: "red" }}>{this.state.validateMsg.time}</p>
+                >
+                  <input
+                    style={{ border: `1px solid black`, width: `200px` }}
+                    type="date"
+                    min={this.state.today}
+                    max={this.state.maxday}
+                    onChange={async (e) => {
+                      await this.setState({
+                        date: e.currentTarget.valueAsDate,
+                      });
+                      this.getSlot();
+                    }}
+                  />
+                </div>
+                <div className="slot" style={{ textAlign: `left` }}>
+                  <h4>Chọn giờ làm việc</h4>
+                  <select
+                    style={{ border: `1px solid black` }}
+                    onChange={async (e) => {
+                      await this.setState({
+                        shift: e.currentTarget.value,
+                      });
+                    }}
+                  >
+                    <option>Chọn phiên</option>
+                    {slot.map((item) => {
+                      if (this.state.slotSelected.indexOf(item) > -1) {
+                        return (
+                          <option key={item} value={item}>
+                            {item}
+                          </option>
+                        );
+                      }
+                    })}
+                  </select>
+                </div>
               </div>
+              <div className=" service">
+                <h4>Dịch vụ đã chọn ({this.state.serviceID.length})</h4>
+              </div>
+              {this.state.serviceID.length !== 0 ? (
+                <div className="service-selected">
+                  {/* <div id="border-bottom"></div> */}
+
+                  {this.ShowServiceSelected()}
+                  <p style={{ color: "red" }}>
+                    {this.state.validateMsg.serviceID}
+                  </p>
+                  {this.state.numServiceSelected > 2 ? (
+                    <p style={{ color: "red" }}>Số lượng dịch vụ tối đa là 3</p>
+                  ) : (
+                    <p></p>
+                  )}
+                  <p style={{ color: "red" }}>
+                    {this.state.validateMsg.numServiceSelected}
+                  </p>
+                </div>
+              ) : (
+                ""
+              )}
+
+              {/* <BookDrivingSlot /> */}
               <div className="appointmet-btn">
                 <button onClick={(e) => this.handleBooking(e)}>Đặt lịch</button>
               </div>
             </div>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }

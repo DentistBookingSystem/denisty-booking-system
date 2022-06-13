@@ -1,9 +1,14 @@
 .header-appointment {
-  color: rgb(9, 196, 196);
+  color: #131394;
   padding: 20px;
-  font-family: Georgia, serif;
-  font-size: 30px;
-  text-shadow: 5px 2px 4px grey;
+
+  /* text-shadow: 5px 2px 4px grey; */
+}
+
+h3,
+.header-appointment h2 {
+  font-size: 25px !important;
+  font-weight: bold !important;
 }
 
 #border-right {
@@ -14,18 +19,19 @@
   border-bottom: 1px solid black;
 }
 .appointment {
-  background-color: white;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   margin-bottom: 20px;
 }
 
 .side-left {
-  background-color: antiquewhite;
   flex-basis: 1;
-  /* display: flex; */
-  /* flex-direction: row; */
-  width: 50%;
+  width: 48%;
+  /* background-color: #c5f1f1; */
+  background-color: white;
+  border: 2px solid white;
+  box-shadow: 0 0 5px 5px rgba(128, 128, 128, 0.492);
+  border-radius: 15px;
   padding: 20px;
   justify-content: center;
 }
@@ -97,12 +103,16 @@ li {
 
 .service-type-item-small button p {
   padding: 2px;
-  border-bottom: 1px solid gray;
+  /* border-bottom: 1px solid gray; */
   display: run-in;
 }
 
 .side-right {
-  background-color: rgb(9, 196, 196);
+  width: 48%;
+  box-shadow: 0 0 5px 5px rgba(128, 128, 128, 0.492);
+  background-color: white;
+  border: 2px solid #c5f1f1;
+  border-radius: 15px;
   flex-basis: 1;
   display: flex;
   flex-direction: column;
@@ -118,6 +128,8 @@ li {
 
 .service-selected {
   border: 1px solid black;
+  margin: 20px;
+  margin-left: 40px;
 }
 
 .detail {
@@ -133,44 +145,20 @@ li {
 }
 
 .detail button {
+  margin-top: 5px;
   flex-basis: 10%;
   padding: 5px;
   border-radius: 70px;
+  background-color: white;
+  color: black;
 }
 
 .detail button:hover {
-  color: white;
-  background-color: rgb(249, 39, 7);
+  color: red;
+  /* background-color: rgb(249, 39, 7); */
 }
 
-.address-cus h4 {
-  margin: 10px 0;
-  text-align: left;
-  padding-left: 20px;
-  color: rgba(94, 85, 85, 0.714);
-}
-
-.address-cus h5 {
-  margin: 10px 0;
-  text-align: left;
-  padding-left: 40px;
-  color: rgba(94, 85, 85, 0.714);
-}
-
-.address-cus > div {
-  display: flex;
-  flex-direction: row;
-}
-
-.address-cus > div > label {
-  min-width: 200px;
-  text-align: left;
-  padding: 5px;
-  padding-left: 50px;
-  margin: auto 0;
-}
-
-.address-cus > div > select {
+select {
   width: 200px;
   margin: 5px 0;
   padding: 10px;
@@ -183,26 +171,22 @@ li {
 }
 
 .doctor-select {
-  margin: 10px;
   text-align: left;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-
-.doctor-select h5 {
-  margin: 10px;
-  padding-left: 20px;
-  color: rgba(94, 85, 85, 0.714);
 }
 
 .doctor-select select {
-  padding: 10px;
-  width: 200px;
+  text-align: left;
   margin-left: 40px;
+  width: 200px;
+  border: 1px solid black;
 }
 
+.service h4,
+.address h4,
+.doctor-select h4,
+.slot h4,
 .time h4 {
+  font-size: 25px;
   margin: 10px 0;
   text-align: left;
   padding-left: 20px;
@@ -214,6 +198,10 @@ li {
   font-size: 15 px;
 }
 
+.slot select {
+  margin-left: 40px;
+}
+
 .appointmet-btn {
   margin: 10px;
 }
@@ -221,14 +209,17 @@ li {
 .appointmet-btn button {
   padding: 10px;
   width: 30%;
-  border-radius: 50px;
-  font-size: 16px;
-  background-color: rgb(221, 245, 9);
-  border: 1px solid black;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 25px;
+  color: white;
+  background-color: rgb(11, 11, 144);
+  border: 2px solid rgb(11, 11, 144);
 }
 
 .appointmet-btn button:hover {
-  box-shadow: 3px 3px gray;
+  color: rgb(227, 151, 38) !important;
+  background-color: white !important;
 }
 
 .table-right {
@@ -239,21 +230,20 @@ li {
 }
 
 .service {
-  flex-basis: 60%;
-}
-
-.doctor {
-  flex-basis: 30%;
+  flex-basis: 90%;
 }
 
 .remove {
   flex-basis: 10%;
 }
 
+.remove button {
+  width: 20px;
+}
+
 .address {
   margin-top: 10px;
   text-align: left;
-  padding-left: 20px;
   color: rgba(94, 85, 85, 0.867);
 }
 
@@ -282,4 +272,97 @@ li {
 .cus-name input {
   padding: 2px;
   min-width: 300px;
+}
+
+/* ============================================= */
+.branch-container {
+  background-color: white;
+  padding: 40px;
+  border: 2px solid black;
+  border-radius: 20px;
+}
+
+.branch-hint,
+.choose-branch-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80vw;
+  justify-content: flex-start;
+}
+
+.branch-hint {
+  padding-bottom: 0;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.233);
+}
+
+.branch-item {
+  width: 30%;
+  /* background-color: aquamarine; */
+  margin: 10px;
+  padding: 10px;
+  padding-top: 0;
+  position: relative;
+  border: 1px solid black;
+  border-radius: 10px;
+  box-shadow: 1.5px 1.5px rgba(128, 128, 128, 0.7);
+}
+
+.branch-item button {
+  /* background-color: aquamarine; */
+  padding: 5px;
+  margin-bottom: 0px;
+  background-color: white;
+}
+
+.branch-item button h4 {
+  font-size: 18px;
+}
+
+.branch-item:hover {
+  background-color: rgba(31, 211, 151, 0.285);
+  color: white;
+}
+
+.hint {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: white;
+  padding: 2px;
+  color: rgb(223, 87, 14);
+}
+
+.choose-branch-title {
+  margin: 10px auto;
+  text-align: center;
+}
+
+.info-branch {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.info-branch-left {
+  flex-basis: 40%;
+}
+
+.info-branch-right {
+  flex-basis: 60%;
+}
+
+#page {
+  position: relative;
+}
+
+#popup {
+  position: absolute;
+  top: auto;
+  bottom: auto;
+}
+
+ul,
+p {
+  margin-bottom: 0px;
+  padding-left: 0px;
 }
