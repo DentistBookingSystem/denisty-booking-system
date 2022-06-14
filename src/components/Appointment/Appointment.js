@@ -35,6 +35,7 @@ export default class Appointment extends Component {
       today: this.getCurrentDate(),
       maxday: this.getMaxDate(),
       slotSelected: [],
+      address: "",
     };
     this.changeService = this.changeService.bind(this);
     this.MapDoctor = this.MapDoctor.bind(this);
@@ -248,7 +249,9 @@ export default class Appointment extends Component {
     return (
       <div className="address">
         <h4>Địa chỉ bạn chọn</h4>
-        <p>{this.state.branch.name}</p>
+        <p>
+          {this.state.branch.name} : {this.state.address}
+        </p>
       </div>
     );
   }
@@ -325,6 +328,10 @@ export default class Appointment extends Component {
           serviceTypeArr: res.data.serviceTypeList,
           branch: res.data.branch,
           doctorArr: res.data.doctorByBranchList,
+          address:
+            res.data.branch.district.name +
+            ", " +
+            res.data.branch.district.province.name,
         });
       });
     console.log(this.state.serviceTypeArr);

@@ -1,17 +1,13 @@
+import { compose } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Popup from "reactjs-popup";
 import ServiceList from "../../getData/ServiceList";
-import ChooseBranchPopUp from "../chooseBranchPopUp/ChooseBranchPopUp";
-
-// import Feedback from "./Feedback";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
 var today = new Date();
 export default function ServiceInfo(props) {
   const [serviceList, setServiceList] = useState([]);
   const [serviceSelected, setServiceSelected] = useState([]);
+  const [nameServiceType, setNameServiceType] = useState("");
 
   const [content_feedback, setContent_feedback] = useState("");
   const [yourFeedBack, setYourFeedBack] = useState([]);
@@ -19,9 +15,11 @@ export default function ServiceInfo(props) {
 
   const { id } = useParams();
 
-  useEffect(() => {
-    ServiceList.getSericeType(id).then((Response) => {
+  useEffect(async () => {
+    await ServiceList.getSericeType(id).then((Response) => {
       setServiceList(Response.data);
+      console.log("Response.data.service.serviceType.name");
+      setNameServiceType(Response.data.at(0).service.serviceType.name);
     });
     // return setServiceSelected([serviceList.at(0)]);
   }, [id, serviceSelected]);
@@ -77,10 +75,6 @@ export default function ServiceInfo(props) {
                 </div>
                 <p>{tmp.service.description}</p>
 
-                <div
-                  className="btn-appointmentService"
-                  style={{ textAlign: `center` }}
-                ></div>
                 <ShowFeed />
               </div>
             </div>
@@ -96,19 +90,21 @@ export default function ServiceInfo(props) {
               console.log(item.feedbackList);
               return (
                 <div>
-                  <h2>{item.service.name}</h2>
-                  <p>{item.service.description}</p>
-                  <img
-                    src={`https://drive.google.com/uc?id=${item.service.url}`}
-                  ></img>
+                  <h2 style={{ textAlign: `left` }}>{item.service.name}</h2>
                   <div
-                    className="btn-appointmentService"
-                    style={{ textAlign: `center` }}
+                    style={{
+                      width: `100%`,
+                      textAlign: `center`,
+                      margin: `10px 10px`,
+                    }}
                   >
-                    <Popup modal trigger={<button>Đặt lịch</button>}>
-                      <ChooseBranchPopUp />
-                    </Popup>
+                    <img
+                      src={`https://drive.google.com/uc?id=${item.service.url}`}
+                    ></img>
                   </div>
+
+                  <p>{item.service.description}</p>
+
                   <ShowFeed />
                 </div>
               );
@@ -187,37 +183,6 @@ export default function ServiceInfo(props) {
       {/*------------------------ Feedback content ----------------------*/}
       <MapFeedback />
 
-      {/* <div className="btn-view-more">
-        <button
-          className="view-more"
-          onClick={(e) => changeDisplay(e)}
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            margin: "auto",
-          }}
-        >
-          <p id="view-more">Xem thêm</p>
-          <FontAwesomeIcon icon={icon} />
-        </button>
-      </div> */}
-      {/* <div id="view-more-hide">
-        {feedback.map((item, index) => {
-          {
-            if (index >= 2) {
-              return (
-                <ShowFeedBackDetail
-                  name={`${index + 1} - ${item.name}`}
-                  content={item.content}
-                  time={item.time}
-                />
-              );
-            }
-          }
-        })} */}
-      {/* </div> */}
-
       {/*------------------------ Feedback content -------------------*/}
     </div>
   );
@@ -226,7 +191,7 @@ export default function ServiceInfo(props) {
     <div className="service-detail-container">
       <div className="side-bar">
         <div>
-          <h4>Các dịch vụ</h4>
+          <h4>{nameServiceType}</h4>
         </div>
         <MapServiceDetail />
       </div>

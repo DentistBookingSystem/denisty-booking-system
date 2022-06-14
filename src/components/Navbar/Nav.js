@@ -7,7 +7,6 @@ import SignIn from "../signIn/SignIn";
 import Service from "../ServiceType/Service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Popup from "reactjs-popup";
-import ChooseBranchPopUp from "../chooseBranchPopUp/ChooseBranchPopUp";
 import {
   faBell,
   faUser,

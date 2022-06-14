@@ -1,20 +1,28 @@
 .service-detail-container {
+  /* margin: 0 150px; */
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   width: 100%;
+  margin-right: 150px;
+  position: relative;
 }
 
 .side-bar {
+  height: 85vh;
+  width: 17vw;
+  left: 150px;
   margin-top: 20px;
   flex-basis: 30%;
-  height: fit-content;
   padding: 10px 0;
   background-color: #c5f1f1;
   border: 2px solid #c5f1f1;
   border-radius: 15px;
   box-shadow: 0 0 5px 5px rgba(128, 128, 128, 0.492);
-  /* position: fixed; */
+  overflow-y: auto;
+  position: fixed;
+  overflow-x: hidden;
+  height: fit-content;
 }
 
 .side-bar > div > p {
@@ -40,6 +48,7 @@
 .service-detail {
   flex-basis: 70%;
   margin: 10px 0;
+  margin-left: 20vw;
 }
 
 .desc {
@@ -49,6 +58,7 @@
 }
 
 .img-service {
+  margin: auto;
   width: 40vw;
 }
 
