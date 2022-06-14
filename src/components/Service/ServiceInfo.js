@@ -15,13 +15,11 @@ export default function ServiceInfo(props) {
 
   const { id } = useParams();
 
-  useEffect(async () => {
-    await ServiceList.getSericeType(id).then((Response) => {
+  useEffect(() => {
+    ServiceList.getSericeType(id).then((Response) => {
       setServiceList(Response.data);
-      console.log("Response.data.service.serviceType.name");
       setNameServiceType(Response.data.at(0).service.serviceType.name);
     });
-    // return setServiceSelected([serviceList.at(0)]);
   }, [id, serviceSelected]);
 
   // const getServiceSelected = (e) => {};

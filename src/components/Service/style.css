@@ -23,6 +23,7 @@
   position: fixed;
   overflow-x: hidden;
   height: fit-content;
+  max-height: 60vh;
 }
 
 .side-bar > div > p {
