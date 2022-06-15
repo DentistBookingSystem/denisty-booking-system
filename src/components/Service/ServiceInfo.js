@@ -1,17 +1,20 @@
 import { compose } from "@mui/system";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ServiceList from "../../getData/ServiceList";
 import "./style.css";
+
+const API_GET_FEEDBACK = "http://localhost:8080/rade/feedback";
+// var feedback = [];
 var today = new Date();
 export default function ServiceInfo(props) {
   const [serviceList, setServiceList] = useState([]);
   const [serviceSelected, setServiceSelected] = useState([]);
   const [nameServiceType, setNameServiceType] = useState("");
-
-  const [content_feedback, setContent_feedback] = useState("");
-  const [yourFeedBack, setYourFeedBack] = useState([]);
+  const [render, setReder] = useState("");
   const [feedback, setFeedback] = useState([]);
+  const [serviceIDSelected, setServiceIDSelected] = useState("");
 
   const { id } = useParams();
 
@@ -49,10 +52,8 @@ export default function ServiceInfo(props) {
     var lengthServiceSElected = serviceSelected.length;
     var tmp = serviceList.at(0);
     if (lengthServiceSElected === 0) {
-      console.log("tmp");
-      console.log(tmp);
       if (typeof tmp !== "undefined" && tmp != null) {
-        console.log("khác null");
+        setServiceIDSelected(tmp.service.id);
         setFeedback(tmp.feedbackList);
         return (
           <div className="service-detail">
@@ -84,8 +85,8 @@ export default function ServiceInfo(props) {
         <div className="service-detail">
           <div className="desc">
             {serviceSelected.map((item) => {
+              setServiceIDSelected(item.service.id);
               setFeedback(item.feedbackList);
-              console.log(item.feedbackList);
               return (
                 <div>
                   <h2 style={{ textAlign: `left` }}>{item.service.name}</h2>
@@ -115,36 +116,13 @@ export default function ServiceInfo(props) {
 
   // =======================
 
-  //feed back
-  const Add_Feedback = () => (
-    <div className="btn-feedback" style={{ textAlign: `center` }}>
-      <button
-        type="button"
-        onClick={() => {
-          yourFeedBack.push({
-            content: content_feedback,
-            time:
-              today.getDate() +
-              "/" +
-              (today.getMonth() + 1) +
-              "/" +
-              today.getFullYear(),
-          });
-          setContent_feedback("");
-        }}
-      >
-        Bình luận
-      </button>
-    </div>
-  );
-
   const MapFeedback = () => {
-    return feedback.map((item, index) => {
+    return feedback.map((item) => {
       {
         // if (index < 2) {
         return (
           <ShowFeedBackDetail
-            name={`${index + 1} - ${item.account.full_name}`}
+            name={item.account.full_name}
             content={item.content}
             time={item.time}
           />
@@ -154,34 +132,76 @@ export default function ServiceInfo(props) {
     });
   };
 
-  const ShowFeed = () => (
-    <div id="feedback">
-      {/* -----------------------------  Your listServiceAndFeedback back------------------------ */}
-      <div style={{ margin: `10px 20px` }}>
-        <h4>Bình luận của bạn</h4>
-      </div>
-      {yourFeedBack.map((item) => {
-        return <ShowFeedBackDetail content={item.content} time={item.time} />;
-      })}
-      <form>
-        <div className="input-feedback">
-          <textarea
-            placeholder="Viết bình luận của bạn"
-            value={content_feedback}
-            onChange={(e) => setContent_feedback(e.currentTarget.value)}
-          ></textarea>
+  const PageMovement = async () => {
+    var pageIndex = 1;
+    console.log(serviceIDSelected);
+    let data = {
+      service_id: serviceIDSelected,
+      page: pageIndex,
+    };
+
+    await axios.post(API_GET_FEEDBACK, data).then((res) => {
+      setFeedback(res.data);
+      console.log(res);
+    });
+    console.log("feedback");
+    console.log(feedback);
+    console.log(data);
+    return <div>abc</div>;
+  };
+
+  const ShowFeed = () => {
+    let value;
+    return (
+      <>
+        <div id="feedback">
+          <div className="header-feedback">
+            <h3>Đánh giá chất lượng</h3>
+          </div>
+          {/* -----------------------------  Your listServiceAndFeedback back------------------------ */}
+
+          <form>
+            <div className="input-feedback">
+              <textarea
+                placeholder="Viết bình luận của bạn"
+                value={value}
+                onChange={(e) => (value = e.currentTarget.value)}
+              ></textarea>
+            </div>
+            <div className="btn-feedback" style={{ textAlign: `center` }}>
+              <button
+                type="submit"
+                onClick={(e) => {
+                  value = "";
+                }}
+              >
+                Bình luận
+              </button>
+            </div>
+          </form>
+          {/* -----------------------------  Your listServiceAndFeedback back------------------------ */}
+
+          {/*------------------------ Feedback content ----------------------*/}
+          <MapFeedback />
+          {/* <PageMovement /> */}
+
+          {/*------------------------ Feedback content -------------------*/}
         </div>
-        <Add_Feedback />
-      </form>
-      {/* -----------------------------  Your listServiceAndFeedback back------------------------ */}
-      <div className="header-feedback">
-        <h3>Đánh giá chất lượng ({feedback.length})</h3>
+      </>
+    );
+  };
+
+  const ShowFeedBackDetail = (props) => (
+    <div className="feedback-item">
+      <div className="cus_name">
+        <p>{props.name}</p>
       </div>
-
-      {/*------------------------ Feedback content ----------------------*/}
-      <MapFeedback />
-
-      {/*------------------------ Feedback content -------------------*/}
+      <div className="content-feedback">
+        <p>{props.content}</p>
+      </div>
+      <div className="time-feedback">
+        <p>{props.time}</p>
+      </div>
     </div>
   );
   //==============================
@@ -198,17 +218,3 @@ export default function ServiceInfo(props) {
     </div>
   );
 }
-
-const ShowFeedBackDetail = (props) => (
-  <div className="feedback-item">
-    <div className="cus_name">
-      <p>{props.name}</p>
-    </div>
-    <div className="content-feedback">
-      <p>{props.content}</p>
-    </div>
-    <div className="time-feedback">
-      <p>{props.time}</p>
-    </div>
-  </div>
-);

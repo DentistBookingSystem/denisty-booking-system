@@ -36,7 +36,7 @@ export default class Home extends Component {
         </div>
         <div className="home">
           <div>
-            <h2>
+            <h2 style={{ fontSize: `25px` }}>
               Nha Khoa Rade- Nha khoa dẫn đầu với sự tận tâm, chuyên môn giỏi,
               thẩm mỹ cao
             </h2>
@@ -66,7 +66,7 @@ export default class Home extends Component {
             </p>
           </div>
           <div>
-            <h2>Tiêu chuẩn nha khoa Quốc tế </h2>
+            <h2 style={{ fontSize: `25px` }}>Tiêu chuẩn nha khoa Quốc tế </h2>
             <ul>
               <ol>Top 50 Nha khoa tốt nhất Thế Giới theo Tổ Chức Hoa Kỳ GCR</ol>
               <ol>

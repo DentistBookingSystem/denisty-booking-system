@@ -5,11 +5,38 @@ import ServiceList from "../../getData/ServiceList";
 import ServiceTypeList from "../../getData/ServiceTypeList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import Toast from "../Toast/Toast";
+import { Table, Row, Col, Container, Button } from "reactstrap";
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
 const API_INPUT_BRANCH = "http://localhost:8080/rade/patient/appointment";
-const slot = [1, 2, 3, 4, 5, 6];
-
+const slot = [
+  {
+    id: 1,
+    value: "7:00 - 9:00",
+  },
+  {
+    id: 2,
+    value: "9:00 - 11:00",
+  },
+  {
+    id: 3,
+    value: "11:00 - 13:00",
+  },
+  {
+    id: 4,
+    value: "13:00 - 15:00",
+  },
+  {
+    id: 5,
+    value: "15:00 - 17:00",
+  },
+  {
+    id: 6,
+    value: "17:00 - 19:00",
+  },
+];
+let msg = {};
 export default class Appointment extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +48,7 @@ export default class Appointment extends Component {
       branch: {},
       serviceID: [],
       serviceID_List: [],
-      doctorID: "",
+      doctorID: 0,
       distritID: "",
       cusName: "",
       phone: phone,
@@ -86,19 +113,110 @@ export default class Appointment extends Component {
     });
   }
   ShowServiceSelected() {
-    return this.state.serviceID.map((item, index) => (
-      <ul key={item.service.id} className="detail">
-        <li className="service">
-          <p style={{ padding: ` 10px 20px` }}>{item.service.name}</p>
-        </li>
+    return (
+      <>
+        <Table striped bordered hover style={{ fontSize: `18px` }}>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Dịch vụ đã chọn</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td className="p-0">
+                {this.state.serviceID.at(0) ? (
+                  <Row className="p-0 row-item-selected">
+                    <Col sm={9} className="p-0">
+                      {this.state.serviceID.at(0).service.name}
+                    </Col>
+                    <Col sm={2} className="p-0 remove">
+                      <button
+                        value={this.state.serviceID.at(0).service.id}
+                        style={{ backgroundColor: `rgba (255, 255, 255, 0).` }}
+                        onClick={(e) => this.removeItem(e)}
+                      >
+                        <FontAwesomeIcon icon={faXmark} />
+                      </button>
+                    </Col>
+                  </Row>
+                ) : (
+                  ""
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td className="p-0">
+                {this.state.serviceID.at(1) ? (
+                  <Row className="p-0 row-item-selected">
+                    <Col sm={9} className="p-0">
+                      {this.state.serviceID.at(1).service.name}
+                    </Col>
+                    <Col sm={2} className="p-0 remove">
+                      <button
+                        value={this.state.serviceID.at(1).service.id}
+                        style={{ backgroundColor: `rgba (255, 255, 255, 0).` }}
+                        onClick={(e) => this.removeItem(e)}
+                      >
+                        <FontAwesomeIcon icon={faXmark} />
+                      </button>
+                    </Col>
+                  </Row>
+                ) : (
+                  ""
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td className="p-0">
+                {this.state.serviceID.at(2) ? (
+                  <Row className="p-0 row-item-selected">
+                    <Col sm={9} className="p-0">
+                      {this.state.serviceID.at(2).service.name}
+                    </Col>
+                    <Col sm={2} className="p-0 remove">
+                      <button
+                        value={this.state.serviceID.at(2).service.id}
+                        onClick={(e) => this.removeItem(e)}
+                      >
+                        <FontAwesomeIcon icon={faXmark} />
+                      </button>
+                    </Col>
+                  </Row>
+                ) : (
+                  ""
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+        <p style={{ color: "red", textAlign: `center` }}>
+          {/* {msg.numServiceSelected} */}
+          {this.state.validateMsg.numServiceSelected}
+        </p>
+        <p style={{ color: "red", textAlign: `center` }}>{msg.serviceID}</p>
+      </>
+    );
+    // return this.state.serviceID.map((item, index) => (
+    //   <ul
+    //     style={{ borderRadius: `10px` }}
+    //     key={item.service.id}
+    //     className="detail"
+    //   >
+    //     <li className="service">
+    //       <p style={{ padding: ` 10px 20px` }}>{item.service.name}</p>
+    //     </li>
 
-        <li className="remove">
-          <button value={item.service.id} onClick={(e) => this.removeItem(e)}>
-            <FontAwesomeIcon icon={faXmark} />
-          </button>
-        </li>
-      </ul>
-    ));
+    //     <li className="remove">
+    //       <button value={item.service.id} onClick={(e) => this.removeItem(e)}>
+    //         <FontAwesomeIcon icon={faXmark} />
+    //       </button>
+    //     </li>
+    //   </ul>
+    // ));
   }
 
   removeItem(e) {
@@ -128,6 +246,7 @@ export default class Appointment extends Component {
     var err = this.validateAll();
     console.log("đặt lịch");
     console.log(this.state);
+    console.log(err);
     if (!err) {
       const data = {
         appointmentDTO: {
@@ -140,108 +259,80 @@ export default class Appointment extends Component {
         phone: phone,
         serviceIdList: this.state.serviceID_List,
       };
-      if (token.length === 0) {
-        axios
-          .post(
-            "http://localhost:8080/rade/appointment/make",
-            // JSON.stringify(data),
-            data
-          )
-          .then((res) => {
-            // console(res);
-            console.log("Đặt lịch thành công");
-            window.location.replace("/");
-          })
-          .catch(console.error());
-      } else {
-        axios
-          .post(
-            "http://localhost:8080/rade/patient/appointment/make",
-            // JSON.stringify(data),
-            data,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
-          .then((res) => {
-            // console(res);
-            console.log("Đặt lịch thành công");
-            window.location.replace("/");
-          })
-          .catch(console.error());
-      }
+
+      axios
+        .post(
+          "http://localhost:8080/rade/patient/appointment/make",
+          // JSON.stringify(data),
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          // console(res);
+          alert("Đặt lịch thành công");
+          console.log("Đặt lịch thành công");
+          window.location.replace("/");
+          return <Toast />;
+        })
+        .catch(console.error());
     } else {
+      // alert(this.state.validateMsg);
+      alert("Đặt lịch không thành công");
       console.log("Đặt lịch không thành công");
     }
   }
 
-  validateAll() {
-    let msg = {};
+  async validateAll() {
     let flag = false;
     if (this.state.serviceID.length === 0) {
       msg.serviceID = "Vui lòng chọn loại dịch vụ";
+      console.log(msg.serviceID);
       flag = true;
     }
-    if (!this.state.branch) {
-      msg.branchAddrID = "Vui lòng chọn địa chỉ bạn đến";
-      flag = true;
-    }
-    if (this.state.date === 0) {
+    if (this.state.date.length === 0) {
       msg.date = "Vui lòng chọn thời gian bạn đến";
-      flag = true;
-    }
-    var differ = this.compareDate(this.state.date);
-    if (differ < 0) {
-      console.log("time");
-      msg.time = "Vui lòng chọn lại ngày";
+      console.log(msg.date);
       flag = true;
     }
 
-    if (phone.length === 0) {
-      if (this.state.cusName.length === 0 || this.state.cusName.length > 30) {
-        msg.cusName = "Tên dài tối đa 30 kí tự";
-        flag = true;
-      }
-    }
-
-    if (this.state.phone.length < 10 || this.state.phone.length > 11) {
-      msg.phone = "Số điện thoại phải dài 10-11 số";
-      flag = true;
-    }
-
-    if (this.state.numServiceSelected > 3) {
+    if (this.state.serviceID.length > 3) {
       msg.numServiceSelected = "Số lượng dịch vụ tối đa là 3";
       flag = true;
     }
 
-    this.setState({
+    await this.setState({
       validateMsg: msg,
     });
+    console.log(msg);
+    // console.log("this.stage.validateMsg");
+    // console.log(this.stage.validateMsg);
+    console.log(flag);
     return flag;
   }
 
-  compareDate(date) {
-    var today = new Date();
-    return Math.floor((date - today) / (1000 * 60 * 60 * 24 * 7));
-  }
-
   async componentDidMount() {
-    await ServiceTypeList.getSericeType().then((res) => {
-      this.setState({
-        branchArr: res.data.branchList,
+    await ServiceTypeList.getSericeType()
+      .then((res) => {
+        this.setState({
+          branchArr: res.data.branchList,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    });
     // console.log("this.state.branchArr");
     // console.log(this.state.branchArr);
     if (this.state.displayChoose === true) {
       document.getElementById("popup").style.display = "block";
-      // document.getElementById("page").style.backgroundColor =
-      //   "rgba(94, 85, 85, 0.8)";
+      document.getElementById("page").style.width = "1920px";
     } else {
       document.getElementById("popup").style.display = "none";
+      document.getElementById("page").style.width = "0px";
     }
   }
 
@@ -249,7 +340,7 @@ export default class Appointment extends Component {
     return (
       <div className="address">
         <h4>Địa chỉ bạn chọn</h4>
-        <p>
+        <p style={{ marginLeft: `20px` }}>
           {this.state.branch.name} : {this.state.address}
         </p>
       </div>
@@ -336,6 +427,7 @@ export default class Appointment extends Component {
       });
     console.log(this.state.serviceTypeArr);
     document.getElementById("popup").style.display = `none`;
+    document.getElementById("page").style.display = `none`;
   }
 
   getSlot() {
@@ -345,6 +437,7 @@ export default class Appointment extends Component {
     const data = {
       doctor_id: this.state.doctorID,
       date: this.state.date,
+      branch_id: this.state.branch.id,
     };
     axios
       .post(API, JSON.stringify(data), {
@@ -363,7 +456,7 @@ export default class Appointment extends Component {
 
   render() {
     return (
-      <div>
+      <div id="appointment-page">
         <div id="page">
           <this.ChooseBranchPopUp />
         </div>
@@ -387,6 +480,7 @@ export default class Appointment extends Component {
                   {this.state.serviceTypeArr.map((item) => (
                     <li key={item.id} className="service-type-item-small">
                       <button
+                        style={{ borderRadius: `20px` }}
                         name={item.id}
                         onClick={(e) => this.changeService(e)}
                       >
@@ -399,10 +493,13 @@ export default class Appointment extends Component {
                   {this.state.serviceArr.map((item) => (
                     <li key={item.service.id} className="service-item-small">
                       <button
+                        style={{ borderRadius: `20px` }}
                         name={item.service.id}
                         value={item.service.name}
                         onClick={(e) => {
-                          if (this.state.numServiceSelected < 3) {
+                          msg.numServiceSelected = "";
+                          console.log(this.state.serviceID.length);
+                          if (this.state.serviceID.length < 3) {
                             let flag = false;
                             this.state.serviceID.map((item) => {
                               if (item.service.name === e.currentTarget.value) {
@@ -422,6 +519,12 @@ export default class Appointment extends Component {
                             } else {
                               alert("Dịch vụ này bạn đã chọn ");
                             }
+                          } else {
+                            msg.numServiceSelected =
+                              "Chỉ được chọn tối đa 3 dịch vụ";
+                            this.setState({
+                              validateMsg: msg,
+                            });
                           }
                         }}
                       >
@@ -437,23 +540,42 @@ export default class Appointment extends Component {
             <div className="title-right">
               <h3>Thông tin lịch hẹn</h3>
             </div>
-            {this.ShowInputNameAndPhone()}
+
+            {/* dịch vụ đã chọn */}
+            <div className=" service">
+              <h4>Dịch vụ đã chọn</h4>
+            </div>
+            <div className="service-selected">
+              {/* <div id="border-bottom"></div> */}
+
+              {this.ShowServiceSelected()}
+            </div>
+
+            {/* dịch vụ đã chọn */}
+
             <div className="infor-appointment">
               {this.ShowAddress()}
               <div className="doctor">
                 <div className="doctor-select">
                   <h4>Chọn bác sĩ</h4>
-                  <select onChange={(e) => this.changDoctor(e)}>
+                  <select
+                    style={{ borderRadius: `10px` }}
+                    onChange={(e) => this.changDoctor(e)}
+                  >
                     <option value={0}>Chọn bác sĩ</option>
                     {this.MapDoctor()}
                   </select>
+                  <span>
+                    <p>{msg.doctorID}</p>
+                  </span>
                 </div>
               </div>
+              {/* time */}
               <div className="time">
-                <h4>
-                  <p>Chọn thời gian bạn đến</p>
-                  <p style={{ color: "red" }}>(*)</p>{" "}
-                </h4>
+                <div style={{ display: `flex`, justifyContent: `flex-start` }}>
+                  <h4 style={{ fontSize: `25px` }}>Chọn thời gian bạn đến</h4>
+                  <h4 style={{ color: "red", paddingLeft: 0 }}>*</h4>{" "}
+                </div>
                 <div
                   style={{
                     textAlign: "left",
@@ -462,7 +584,11 @@ export default class Appointment extends Component {
                   }}
                 >
                   <input
-                    style={{ border: `1px solid black`, width: `200px` }}
+                    style={{
+                      border: `1px solid black`,
+                      width: `200px`,
+                      borderRadius: `10px`,
+                    }}
                     type="date"
                     min={this.state.today}
                     max={this.state.maxday}
@@ -473,23 +599,34 @@ export default class Appointment extends Component {
                       this.getSlot();
                     }}
                   />
+                  <span>
+                    <p
+                      style={{
+                        color: "red",
+                        textAlign: `left`,
+                      }}
+                    >
+                      {msg.date}
+                    </p>
+                  </span>
                 </div>
                 <div className="slot" style={{ textAlign: `left` }}>
                   <h4>Chọn giờ làm việc</h4>
                   <select
-                    style={{ border: `1px solid black` }}
+                    style={{ border: `1px solid black`, borderRadius: `10px` }}
                     onChange={async (e) => {
                       await this.setState({
                         shift: e.currentTarget.value,
                       });
                     }}
+                    defaultValue="Chọn giờ"
                   >
-                    <option>Chọn phiên</option>
+                    <option disabled>Chọn giờ</option>
                     {slot.map((item) => {
-                      if (this.state.slotSelected.indexOf(item) > -1) {
+                      if (this.state.slotSelected.indexOf(item.id) > -1) {
                         return (
-                          <option key={item} value={item}>
-                            {item}
+                          <option key={item.id} value={item.id}>
+                            {item.value}
                           </option>
                         );
                       }
@@ -497,33 +634,11 @@ export default class Appointment extends Component {
                   </select>
                 </div>
               </div>
-              <div className=" service">
-                <h4>Dịch vụ đã chọn ({this.state.serviceID.length})</h4>
-              </div>
-              {this.state.serviceID.length !== 0 ? (
-                <div className="service-selected">
-                  {/* <div id="border-bottom"></div> */}
-
-                  {this.ShowServiceSelected()}
-                  <p style={{ color: "red" }}>
-                    {this.state.validateMsg.serviceID}
-                  </p>
-                  {this.state.numServiceSelected > 2 ? (
-                    <p style={{ color: "red" }}>Số lượng dịch vụ tối đa là 3</p>
-                  ) : (
-                    <p></p>
-                  )}
-                  <p style={{ color: "red" }}>
-                    {this.state.validateMsg.numServiceSelected}
-                  </p>
-                </div>
-              ) : (
-                ""
-              )}
+              {/* time */}
 
               {/* <BookDrivingSlot /> */}
               <div className="appointmet-btn">
-                <button onClick={(e) => this.handleBooking(e)}>Đặt lịch</button>
+                <button onClick={(e) => this.handleBooking(e)}>Đặt</button>
               </div>
             </div>
           </div>

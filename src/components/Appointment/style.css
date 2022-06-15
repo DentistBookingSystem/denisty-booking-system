@@ -79,32 +79,45 @@ li {
 }
 
 .service-type-item-small {
-  margin: 5px 0;
+  margin: 5px 5px;
 }
 
 .service-type-item-small button {
-  background-color: wheat;
+  background-color: rgb(241, 239, 239);
   width: 100%;
   padding: 20px;
+  border: 2px solid rgb(241, 239, 239);
   /* text-decoration: underline black solid; */
   /* border-bottom: 1px solid gray; */
 }
 
+.service-type-item-small button:hover {
+  color: rgb(227, 151, 38) !important;
+  background-color: white !important;
+  border: 2px solid #0b0b90;
+}
+
 .service-item-small {
-  margin: 5px 0;
+  margin: 5px 5px;
 }
 
 .service-item-small button {
-  background-color: wheat;
+  background-color: rgb(241, 239, 239);
   width: 100%;
   padding: 20px;
+  border: 2px solid rgb(241, 239, 239);
   /* border-bottom: 1px solid gray; */
+}
+.service-item-small button:hover {
+  color: rgb(227, 151, 38) !important;
+  background-color: white !important;
+  border-color: #0b0b90;
 }
 
 .service-type-item-small button p {
-  padding: 2px;
+  /* padding: 2px; */
   /* border-bottom: 1px solid gray; */
-  display: run-in;
+  /* display: run-in; */
 }
 
 .side-right {
@@ -207,7 +220,7 @@ select {
 }
 
 .appointmet-btn button {
-  padding: 10px;
+  padding: 5px;
   width: 30%;
   border-radius: 10px;
   font-weight: bold;
@@ -229,16 +242,19 @@ select {
   justify-content: space-between;
 }
 
-.service {
-  flex-basis: 90%;
-}
-
-.remove {
-  flex-basis: 10%;
+.row-item-selected {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .remove button {
-  width: 20px;
+  background: rgba(255, 255, 255, 0) !important;
+  color: black !important;
+}
+
+.remove button:hover {
+  color: red !important;
 }
 
 .address {
@@ -278,8 +294,10 @@ select {
 .branch-container {
   background-color: white;
   padding: 40px;
-  border: 2px solid black;
-  border-radius: 20px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  box-shadow: 0 0 4px 4px rgba(128, 128, 128, 0.477);
+  z-index: 1;
 }
 
 .branch-hint,
@@ -352,17 +370,30 @@ select {
 }
 
 #page {
-  position: relative;
+  width: 1920px;
+  height: 1000px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(128, 128, 128, 0.305);
+  /* position: absolute; */
+  position: fixed;
 }
 
 #popup {
   position: absolute;
-  top: auto;
-  bottom: auto;
+  top: 150px;
+  left: 100px;
+  /* right: 100px; */
 }
 
 ul,
 p {
   margin-bottom: 0px;
   padding-left: 0px;
+}
+
+#appointment-page {
+  position: relative;
 }

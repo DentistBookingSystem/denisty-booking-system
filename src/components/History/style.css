@@ -1,63 +1,33 @@
-.history-header {
-  margin: 20px;
-}
-
+/* .table-bordered > :not(caption) > * > * {
+  border-color: black;
+} */
+/* th,
+td {
+  border-color: black !important;
+} */
 .table-history {
-  border: 2px solid black;
+  font-size: 18px;
+  vertical-align: middle;
+}
+.table-history tr,
+.table-history th,
+.table-history td {
+  border: 1px solid black;
 }
 
-.table-history ul {
-  display: flex;
-  flex-direction: column;
-}
-
-.table-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.table-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.col-1 {
-  border-bottom: 2px solid black;
-  border-right: 2px solid black;
-  flex-basis: 30%;
-  padding: 10px;
-  font-size: 20px;
-}
-
-.col-2 {
-  border-bottom: 2px solid black;
-  flex-basis: 70%;
-  padding: 10px;
-  font-size: 20px;
-}
-.col-2-item {
+.row-appointment-history {
+  text-align: left;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.col-2-item > div > button {
-  margin: auto 20px;
-  background-color: rgba(255, 255, 255, 0);
-  font-weight: bold;
-  font-size: 15px;
-  color: rgba(241, 6, 241, 0.966);
+.row-appointment-history button {
+  background: rgba(255, 255, 255, 0) !important;
+  color: #0b0b90;
+  font-size: 18px;
 }
 
-.icon {
-  color: green;
-}
-
-/* ================================= */
-.table-detail {
-  width: 1000px;
-  border: 2px solid black;
-  border-radius: 10px;
+.row-appointment-history button:hover {
+  color: orange;
 }
