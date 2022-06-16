@@ -1,5 +1,7 @@
 import "./style.css";
 import React, { Component } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import ServiceList from "../../getData/ServiceList";
 import ServiceTypeList from "../../getData/ServiceTypeList";
@@ -200,23 +202,6 @@ export default class Appointment extends Component {
         <p style={{ color: "red", textAlign: `center` }}>{msg.serviceID}</p>
       </>
     );
-    // return this.state.serviceID.map((item, index) => (
-    //   <ul
-    //     style={{ borderRadius: `10px` }}
-    //     key={item.service.id}
-    //     className="detail"
-    //   >
-    //     <li className="service">
-    //       <p style={{ padding: ` 10px 20px` }}>{item.service.name}</p>
-    //     </li>
-
-    //     <li className="remove">
-    //       <button value={item.service.id} onClick={(e) => this.removeItem(e)}>
-    //         <FontAwesomeIcon icon={faXmark} />
-    //       </button>
-    //     </li>
-    //   </ul>
-    // ));
   }
 
   removeItem(e) {
@@ -245,9 +230,9 @@ export default class Appointment extends Component {
   handleBooking(e) {
     var err = this.validateAll();
     console.log("đặt lịch");
-    console.log(this.state);
     console.log(err);
-    if (!err) {
+    if (err === false) {
+      console.log("data");
       const data = {
         appointmentDTO: {
           branch_id: this.state.branch.id,
@@ -259,6 +244,8 @@ export default class Appointment extends Component {
         phone: phone,
         serviceIdList: this.state.serviceID_List,
       };
+
+      console.log(data);
 
       axios
         .post(
@@ -274,20 +261,33 @@ export default class Appointment extends Component {
         )
         .then((res) => {
           // console(res);
-          alert("Đặt lịch thành công");
+          toast.success("Đặt lịch thành công", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 15000,
+          });
           console.log("Đặt lịch thành công");
-          window.location.replace("/");
+          window.location.replace("/history");
           return <Toast />;
         })
-        .catch(console.error());
+        .catch((error) => {
+          if (error.message.indexOf(406) > -1) {
+            alert("Bạn đã có lịch hẹn");
+            window.location.replace("/history");
+          }
+        });
     } else {
       // alert(this.state.validateMsg);
-      alert("Đặt lịch không thành công");
+      toast.error("Đặt lịch không thành công", {
+        // Set to 15sec
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 15000,
+      });
       console.log("Đặt lịch không thành công");
     }
   }
 
-  async validateAll() {
+  validateAll() {
+    msg = {};
     let flag = false;
     if (this.state.serviceID.length === 0) {
       msg.serviceID = "Vui lòng chọn loại dịch vụ";
@@ -305,13 +305,11 @@ export default class Appointment extends Component {
       flag = true;
     }
 
-    await this.setState({
+    this.setState({
       validateMsg: msg,
     });
-    console.log(msg);
     // console.log("this.stage.validateMsg");
     // console.log(this.stage.validateMsg);
-    console.log(flag);
     return flag;
   }
 
@@ -329,10 +327,10 @@ export default class Appointment extends Component {
     // console.log(this.state.branchArr);
     if (this.state.displayChoose === true) {
       document.getElementById("popup").style.display = "block";
-      document.getElementById("page").style.width = "1920px";
+      // document.getElementById("page").style.width = "1920px";
     } else {
       document.getElementById("popup").style.display = "none";
-      document.getElementById("page").style.width = "0px";
+      // document.getElementById("page").style.width = "0px";
     }
   }
 
@@ -424,6 +422,13 @@ export default class Appointment extends Component {
             ", " +
             res.data.branch.district.province.name,
         });
+      })
+      .catch((error) => {
+        console.log(error.message);
+        if (error.message.indexOf(401) > -1) {
+          localStorage.clear();
+          window.location.replace("/");
+        }
       });
     console.log(this.state.serviceTypeArr);
     document.getElementById("popup").style.display = `none`;

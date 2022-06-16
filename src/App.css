@@ -66,3 +66,7 @@ button {
 .chatBox:hover {
   font-size: 60px;
 }
+
+.row {
+  flex-direction: row !important;
+}
