@@ -1,109 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import logo from "../../logo/logo1.jpg";
 import "./style.css";
 import isEmpty from "validator/lib/isEmpty";
 import axios from "axios";
-
+import { Col, Row } from "reactstrap";
+const API_REGIS = "http://localhost:8080/rade/account/registration";
 const API_GET_PROVINCE = "http://localhost:8080/rade/province";
-const districts = [
-  {
-    id: "pro1",
-    value: "Quận 1",
-  },
-  {
-    id: "pro2",
-    value: "Quận 2",
-  },
-  {
-    id: "pro3",
-    value: "Quận 3",
-  },
-  {
-    id: "pro4",
-    value: "Quận 4",
-  },
-];
-
-const districts2 = [
-  {
-    id: "pro1",
-    value: "Quận 5",
-  },
-  {
-    id: "pro2",
-    value: "Quận 6",
-  },
-  {
-    id: "pro3",
-    value: "Quận 7",
-  },
-  {
-    id: "pro4",
-    value: "Quận 8",
-  },
-];
-
-const provinces = [
-  {
-    id: "p1",
-    value: "HCM",
-  },
-  {
-    id: "p2",
-    value: "HN",
-  },
-];
+const API_GET_DISTRICT = "http://localhost:8080/rade/district/";
 const genders = [
   {
-    id: "nam",
+    id: "1",
     value: "Nam",
   },
   {
-    id: "nu",
+    id: "2",
     value: "Nữ",
   },
 ];
-
-// tạo một validation schema với yup
-const schema = yup.object().shape({
-  phone: yup
-    .string()
-    .required("Vui lòng nhập phone")
-    .max(10, "Số điện thoại tối đa 10 ký tự"),
-  password: yup
-    .string()
-    .required("Vui lòng nhập mật khẩu")
-    .max(20, "mật khẩu tối đa 20 ký tự"),
-  confirm: yup
-    .string()
-    .required("Vui lòng nhập lại mật khẩu")
-    .max(20, "mật khẩu tối đa 20 ký tự"),
-  name: yup
-    .string()
-    .required("Vui lòng nhập Họ và Tên")
-    .max(20, "mật khẩu tối đa 20 ký tự"),
-  email: yup
-    .string()
-    .required("Vui lòng nhập email")
-    .max(20, "mật khẩu tối đa 20 ký tự"),
-});
-
 export default function SignIn() {
   const [districtArr, setDistrictArr] = useState([]);
   const [provinceArr, setProvinceArr] = useState([]);
-  const [districtID, setDistrictID] = useState("");
-  const [province, setProvice] = useState(provinces[0].id);
-  const [gender, setGender] = useState("");
+
   const [validationMsg, setValidationMsg] = useState("");
+
+  //data sign
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confrim, setConfirm] = useState("");
+  const [full_name, setName] = useState("");
+  const [gender, setGender] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  const [districtID, setDistrictID] = useState("");
+  const [province, setProvice] = useState("");
+  const [email, setEmail] = useState("");
+
   useEffect(() => {
     axios
       .get(API_GET_PROVINCE)
@@ -118,29 +48,38 @@ export default function SignIn() {
         console.log(provinceArr);
       });
   }, []);
-  const onLoginSubmit = (data) => {
-    // const data = {
-    //   full_name: "Nguyen Quoc Bao",
-    //   password: "12345",
-    //   date_of_birth: "05-05-2022",
-    //   gender: 1,
-    //   district_id: 1,
-    //   phone: "0948457079",
-    //   email: "Hhihhihihih",
-    // };
-    const isValid = validateAll();
-    if (!isValid) {
-      console.log(data);
-      console.log(districtID);
-      console.log(gender);
-      console.log(dateOfBirth);
-      console.log(province);
-    }
+
+  const clickSiginIn = () => {
+    validateAll();
+    const data = {
+      full_name: full_name,
+      password: password,
+      date_of_birth: dateOfBirth,
+      gender: gender,
+      district_id: districtID,
+      phone: phone,
+      email: email,
+    };
+    console.log(data);
+    axios.post(API_REGIS, data).then(() => {
+      console.log("thành công");
+      window.location.replace("/");
+    });
   };
 
   const validateAll = () => {
     const msg = {};
-    console.log(gender.trim().length);
+    if (phone.length > 11 || phone.length < 10) {
+      msg.phone = "Vui lòng nhập số điện thoại của bạn";
+    }
+    if (password.length === 0) {
+      msg.password = "Vui lòng nhập mật khẩu";
+    } else if (password !== confrim) {
+      msg.confrim = "Bạn phải nhập lại mất khẩu";
+    }
+    if (isEmpty(full_name)) {
+      msg.full_name = "Vui lòng nhập tên của bạn";
+    }
     if (isEmpty(gender)) {
       console.log("genderfalse");
       msg.gender = "Nhập giới tính của bạn";
@@ -154,19 +93,19 @@ export default function SignIn() {
     }
     const differ = compareDate(dateOfBirth);
     console.log(differ + " ngày sinh");
-    if (differ < 200) {
+    if (differ < 20) {
       msg.dateOfBirth = "Bạn không đủ tuổi";
     }
     setValidationMsg(msg);
+    console.log(validationMsg);
   };
 
   const handleChangePro = (e) => {
     setProvice(e.target.value);
-    if (province === "p1") {
-      setDistrictArr(districts);
-    } else {
-      setDistrictArr(districts2);
-    }
+    axios.get(API_GET_DISTRICT + e.target.value).then((res) => {
+      console.log(res.data);
+      setDistrictArr(res.data);
+    });
   };
 
   const compareDate = (dateOfBirth) => {
@@ -180,99 +119,183 @@ export default function SignIn() {
         <img src={logo} alt="logo" />
         <h2>Rade - Nha khoa hoàn mỹ</h2>
       </div>
-      <form onSubmit={handleSubmit(onLoginSubmit)}>
-        <div className="row-sign">
-          <label>Số điện thoại: </label>
-          <input
-            {...register("phone")}
-            placeholder="Nhập số điện thoại của bạn"
-          />
-          {errors.phone && <p className="error">{errors.phone?.message}</p>}
-        </div>
-        <div className="row-sign">
-          <label>Mật khẩu: </label>
-          <input {...register("password")} placeholder="Nhập mật khẩu" />
-          {errors.password && (
-            <p className="error">{errors.password?.message}</p>
-          )}
-        </div>
-        <div className="row-sign">
-          <label>Nhập lại mật khẩu: </label>
-          <input {...register("confirm")} placeholder="Nhập lại mật khẩu" />
-          {errors.confirm && <p className="error">{errors.confirm?.message}</p>}
-        </div>
-        <div className="row-sign">
-          <label>Tên: </label>
-          <input {...register("name")} placeholder="Nhập tên của bạn" />
-          {errors.name && <p className="error">{errors.name?.message}</p>}
-        </div>
-        {/* Giới tính */}
-        <div className="row-sign">
-          <label>Giới tính: </label>
-          <select
-            name="gender"
-            className="optional"
-            onChange={(e) => setGender(e.target.value)}
-          >
-            <option value="">Chọn giới tính</option>
-            {genders.map((option) => (
-              <option value={option.id}>{option.value}</option>
-            ))}
-          </select>
-          <span>
-            <p className="error">{validationMsg.gender}</p>
-          </span>
-        </div>
-        {/* Ngày sinh */}
-        <div className="row-sign">
-          <label>Ngày sinh: </label>
-          <input
-            type="date"
-            onChange={(e) => setDateOfBirth(e.target.valueAsDate)}
-          />
-          <p className="error">{validationMsg.dateOfBirth}</p>
-        </div>
-        <div className="row-sign">
-          <label>Email: </label>
-          <input {...register("email")} placeholder="Nhập email của bạn" />
-          {errors.email && <p className="error">{errors.email?.message}</p>}
-        </div>
+      <div className="form-sign">
+        <Row className="content-sign">
+          <Col>
+            {/* phone */}
+            <Row>
+              <Col sm={5}>Số điện thoại</Col>
+              <Col sm={7}>
+                <input
+                  name="phone"
+                  value={phone}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                  }}
+                />
+              </Col>
+            </Row>
+            <span style={{ color: `red`, fontSize: `15px` }}>
+              <>{validationMsg.phone}</>
+            </span>
+            {/* Mất khẩu */}
+            <Row>
+              <Col sm={5}>Mật khẩu</Col>
+              <Col sm={7}>
+                <input
+                  name="password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+              </Col>
+            </Row>
+            <span style={{ color: `red`, fontSize: `15px` }}>
+              <>{validationMsg.password}</>
+            </span>
+            {/* Nhập lại mật khẩu */}
+            <Row>
+              <Col sm={5}>Nhập lại mật khẩu</Col>
+              <Col sm={7}>
+                <input
+                  name="confirm"
+                  value={confrim}
+                  onChange={(e) => {
+                    setConfirm(e.target.value);
+                  }}
+                />
+              </Col>
+            </Row>
+            <span style={{ color: `red`, fontSize: `15px` }}>
+              <>{validationMsg.confrim}</>
+            </span>
+            {/* Nhập họ và tên */}
+            <Row>
+              <Col sm={5}>Tên</Col>
+              <Col sm={7}>
+                <input
+                  name="full_name"
+                  value={full_name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                />
+              </Col>
+            </Row>
+            <span style={{ color: `red`, fontSize: `15px` }}>
+              <>{validationMsg.full_name}</>
+            </span>
+          </Col>
 
-        <div className="row-sign">
-          <label>Tỉnh thành: </label>
-          <select
-            className="optional"
-            onChange={(e) => handleChangePro(e)}
-            placeholder="Nhập tỉnh"
-          >
-            <option value="">Chọn tỉnh/thành phố</option>
-            {/* {province.map((option) => (
-              <option value={option.id}>{option.value}</option>
-            ))} */}
-          </select>
-          <p className="error">{validationMsg.province}</p>
-        </div>
-        <div className="row-sign">
-          <label>Quận/Huyện: </label>
-          <select
-            className="optional"
-            onChange={(e) => setDistrictID(e.target.value)}
-          >
-            <option value="">Chọn quận/huyện</option>
-            {districtArr.map((option) => (
-              <option value={option.id}>{option.value}</option>
-            ))}
-          </select>
-          <p className="error">{validationMsg.districtID}</p>
-          {/* <input {...register("disttrict")} placeholder="Nhập quận/huyện" />
-          {errors.disttrict && (
-            <p className="error">{errors.disttrict?.message}</p>
-          )} */}
-        </div>
-        <div className="btn">
-          <button type="submit">Đăng ký</button>
-        </div>
-      </form>
+          {/* col bên phải  */}
+          <Col className="col-right">
+            <Row>
+              {/* Ngày sinh */}
+              <Col sm={8}>
+                <Row>
+                  <Col sm={6}>Ngày sinh</Col>
+                  <Col sm={6}>
+                    <input
+                      style={{ fontSize: `18px` }}
+                      type="date"
+                      name="dateOfBirth"
+                      value={dateOfBirth}
+                      onChange={(e) => {
+                        setDateOfBirth(e.target.value);
+                      }}
+                    />
+                  </Col>
+                </Row>
+                <span style={{ color: `red`, fontSize: `15px` }}>
+                  <>{validationMsg.dateOfBirth}</>
+                </span>
+              </Col>
+              {/* Giới tính */}
+              <Col sm={4}>
+                <Row>
+                  <Col sm={5}>Giới tính</Col>
+                  <Col sm={7}>
+                    <select
+                      style={{ width: `100%` }}
+                      name="gender"
+                      className="optional"
+                      onChange={(e) => setGender(e.target.value)}
+                      defaultValue={1}
+                    >
+                      {/* <option value="">Chọn giới tính</option> */}
+                      {genders.map((option) => (
+                        <option value={option.id}>{option.value}</option>
+                      ))}
+                    </select>
+                  </Col>
+                </Row>
+                <span style={{ color: `red`, fontSize: `15px` }}>
+                  <>{validationMsg.gender}</>
+                </span>
+              </Col>
+            </Row>
+
+            {/* Email */}
+            <Row>
+              <Col sm={4}>Email</Col>
+              <Col sm={8}>
+                <input
+                  name="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                />
+              </Col>
+            </Row>
+            {/* Tỉnh thành phố  */}
+            <Row>
+              <Col sm={4}>Tỉnh/Thành phố</Col>
+              <Col sm={8}>
+                <select
+                  style={{ width: `100%` }}
+                  className="optional"
+                  onChange={(e) => handleChangePro(e)}
+                  placeholder="Nhập tỉnh"
+                >
+                  <option value="">Chọn tỉnh/thành phố</option>
+                  {provinceArr.map((option) => (
+                    <option value={option.id}>{option.name}</option>
+                  ))}
+                </select>
+              </Col>
+            </Row>
+            <span style={{ color: `red`, fontSize: `15px` }}>
+              <>{validationMsg.province}</>
+            </span>
+            {/* Quận Huyện  */}
+            <Row>
+              <Col sm={4}>Quận/Huyện</Col>
+              <Col sm={8}>
+                <select
+                  style={{ width: `100%` }}
+                  className="optional"
+                  onChange={(e) => setDistrictID(e.target.value)}
+                >
+                  <option value="">Chọn quận/huyện</option>
+                  {districtArr.map((option) => (
+                    <option value={option.id}>{option.name}</option>
+                  ))}
+                </select>
+              </Col>
+            </Row>
+            <span style={{ color: `red`, fontSize: `15px` }}>
+              <>{validationMsg.districtID}</>
+            </span>
+          </Col>
+        </Row>
+        <Row className="btn" style={{ textAlign: `center` }}>
+          <button type="button" onClick={() => clickSiginIn()}>
+            Đăng ký
+          </button>
+        </Row>
+      </div>
     </div>
   );
 }

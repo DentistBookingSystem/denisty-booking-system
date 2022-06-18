@@ -7,7 +7,6 @@ import ServiceList from "../../getData/ServiceList";
 import ServiceTypeList from "../../getData/ServiceTypeList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import Toast from "../Toast/Toast";
 import { Table, Row, Col, Container, Button } from "reactstrap";
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
@@ -261,28 +260,18 @@ export default class Appointment extends Component {
         )
         .then((res) => {
           // console(res);
-          toast.success("Đặt lịch thành công", {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 15000,
-          });
-          console.log("Đặt lịch thành công");
+          toast.success("Đặt lịch thành công");
           window.location.replace("/history");
-          return <Toast />;
         })
         .catch((error) => {
           if (error.message.indexOf(406) > -1) {
-            alert("Bạn đã có lịch hẹn");
+            toast.warn("Bạn đã có lịch hẹn");
             window.location.replace("/history");
           }
         });
     } else {
       // alert(this.state.validateMsg);
-      toast.error("Đặt lịch không thành công", {
-        // Set to 15sec
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 15000,
-      });
-      console.log("Đặt lịch không thành công");
+      toast.error("Đặt lịch không thành công");
     }
   }
 

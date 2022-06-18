@@ -52,6 +52,7 @@ table {
   border-top: 1px solid #ccc;
   padding: 10px;
   text-align: center;
+  vertical-align: middle;
 }
 .bordered th {
   background-color: #ececec;
@@ -73,6 +74,7 @@ table {
   border-top: none;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
+
 .bordered td:first-child,
 .bordered th:first-child {
   border-left: none;
@@ -129,7 +131,6 @@ table {
 
 #popup-history {
   display: block;
-  display: block;
   margin: auto;
 }
 
@@ -146,7 +147,7 @@ table {
 #icon-close button {
   border-radius: 3px;
   border-top-right-radius: 10px;
-  padding: 0.5vw;
+  padding: 0.5vw 0.8vw;
   width: auto;
   font-size: 20px;
   background-color: rgba(255, 255, 255, 0);
@@ -154,6 +155,34 @@ table {
 
 #icon-close button:hover {
   background-color: red;
+  color: white;
+}
+
+.cancel-button button {
+  color: red !important;
+  border-color: red !important;
+}
+
+.cancel-button button:hover {
+  color: white !important;
+  background-color: red !important;
+  border-color: red;
+}
+
+.row-button button {
+  text-align: center !important;
+  padding: 5px;
+  border-radius: 6px;
+  background-color: white;
+  border: 2px solid #0b0b90;
+  border-color: #0b0b90;
+  width: 90px !important;
+  font-weight: bolder;
+  color: #0b0b90;
+}
+
+.row-button button:hover {
+  background-color: #0b0b90;
   color: white;
 }
 
@@ -168,4 +197,68 @@ table {
   background: rgba(204, 204, 204, 0) !important;
   color: black !important;
   font-size: 25px;
+}
+
+#notify-login-page {
+  margin: auto;
+  background-color: white;
+  padding: 10px 20px 20px 20px;
+  /* margin-top: 20px; */
+  border-radius: 6px;
+  box-shadow: 0 0 4px 4px #ccc;
+  margin-top: 100px;
+}
+
+#notify-login-page button {
+  border-radius: 10px;
+  border: 2px solid #0b0b90;
+  background-color: #0b0b90;
+  font-weight: bolder;
+}
+#notify-login-page button:hover {
+  background-color: white;
+  color: rgb(227, 151, 38);
+}
+
+#notify-login {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(204, 204, 204, 0.963);
+  display: none;
+}
+
+#login-page {
+  display: none;
+}
+
+/* Feedback  */
+
+#add-feeback-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  background-color: rgba(128, 128, 128, 0.5);
+}
+
+#add-feedback {
+  top: 100px;
+  right: 20vw;
+  left: 20vw;
+  position: fixed;
+  background-color: rgb(237, 231, 231);
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 0 4px 4px rgba(128, 128, 128, 0.8);
+  justify-content: center;
+}
+
+#add-feedback table {
+  width: 100%;
 }

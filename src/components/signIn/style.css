@@ -1,59 +1,58 @@
 #signForm {
-  border: solid 2px;
+  border: 2px solid black;
   border-radius: 10px;
   padding: 10px;
   padding-bottom: 20px;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  width: 70vw;
   background-color: white;
-  box-shadow: 4px 4px rgb(3, 70, 91);
+  box-shadow: 0 0 8px 8px rgba(128, 128, 128, 0.722);
 }
 
-.form-sign {
-  display: flex;
-  flex-direction: column;
-  height: auto;
+.row input {
+  padding: 10px 5px;
+  font-size: 18px;
 }
 
-.row-sign {
-  display: flex;
-  margin: 5px;
-  border-bottom: solid 2px;
+#content-sign {
+  justify-content: center;
 }
 
-.row-sign label {
-  min-width: 150px;
-}
-.row-sign input {
-  min-width: 300px;
-  border: 2px solid;
-  padding: 2px;
+.form-sign .row {
+  padding: 0;
+  text-align: right;
 }
 
-.optional {
-  min-width: 300px;
-  border: 2px solid;
-  padding: 2px;
-}
-
-.error {
-  color: red;
-  margin-left: 2px;
+.col-right {
+  text-align: left;
+  justify-content: left;
 }
 
 .btn {
+  margin-top: 20px;
+  width: 100%;
   padding-top: 10px;
   text-align: center;
 }
 
 .btn button {
-  padding: 5px 15px;
-  background-color: aqua;
-  border-radius: 20px;
+  width: 20vw;
+  text-decoration: none;
+  margin: 10px 10px 0 0;
+  padding: 10px 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 25px;
+  background-color: #0b0b90;
   cursor: pointer;
+  border-radius: 10px;
+  border: 2px solid rgb(11, 11, 144);
 }
 
 .btn button:hover {
-  box-shadow: 2px 2px;
-  padding: 7px 17px;
+  background-color: white;
+  color: rgb(227, 151, 38);
 }
 
 .form-header {

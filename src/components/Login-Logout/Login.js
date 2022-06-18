@@ -2,6 +2,7 @@ import React from "react";
 import "./style.css";
 import AccountLogin from "../../service/loginService";
 import gmail_icon from "../../assets/images/google.jpg";
+import { toast } from "react-toastify";
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
@@ -44,15 +45,12 @@ class LoginForm extends React.Component {
           localStorage.setItem("phone", response.data.phone);
           localStorage.setItem("accessToken", response.data.accessToken);
           localStorage.setItem("role", response.data.role);
-          // console.log(localStorage.getItem("phone"));
-          console.log("AccessToken : " + localStorage.getItem("accessToken"));
-          // console.log(localStorage.getItem("role"));
           localStorage.setItem("statusLogin", true);
           window.location.reload();
         })
         .catch((e) => {
           localStorage.setItem("statusLogin", false);
-          alert("Login không thành công");
+          toast.error("Login không thành công");
           this.setState({
             password: "",
           });
@@ -88,7 +86,7 @@ class LoginForm extends React.Component {
                 onChange={(e) => this.onChangeHandle(e)}
               />
             </div>
-            <div id="button" className="row">
+            <div id="button" className="row justify-content-center">
               <button type="button" onClick={() => this.onSubmitHandle()}>
                 Login
               </button>

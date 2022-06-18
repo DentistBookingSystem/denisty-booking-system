@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home/Home";
 import Footer from "./components/Footer/Footer";
 import Appointment from "./components/Appointment/Appointment";
-import pushAppointment from "./getData/pushAppointment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
 import ServiceInfo from "./components/Service/ServiceInfo";
@@ -13,11 +12,12 @@ import { useEffect } from "react";
 import Logout from "./components/Login-Logout/Logout";
 import Profile from "./components/Profile/Profile";
 import History from "./components/History/History";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import { Button } from "bootstrap";
-const handleOnclik = () => {
-  pushAppointment.postData();
-};
 
 function App() {
   useEffect(() => {
@@ -25,11 +25,23 @@ function App() {
     // localStorage.setItem("accessToken", "");
     // localStorage.setItem("statusLogin", false);
   }, []);
+
   return (
     <div className="App">
       <Router>
         <div id="header">
           <Nav />
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         </div>
         <div id="body">
           <Routes>
