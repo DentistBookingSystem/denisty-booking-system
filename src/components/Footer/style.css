@@ -5,6 +5,13 @@
   background-color: white;
   border-top: 2px solid black;
   font-weight: bold;
+  /* position: absolute; */
+  /* bottom: 0; */
+  /* width: 100vw; */
+  /* clear: both;
+  position: relative;
+  height: 200px;
+  margin-top: -200px; */
 }
 
 #footer h4 {

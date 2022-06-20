@@ -6,6 +6,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-image: linear-gradient(to right, #ccffcc, white, #ccffcc);
+  /* min-height: 500px; */
+  /* height: 5000px; */
 }
 
 code {

@@ -6,37 +6,20 @@ import axios from "axios";
 import ServiceList from "../../getData/ServiceList";
 import ServiceTypeList from "../../getData/ServiceTypeList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faBoltLightning, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Table, Row, Col, Container, Button } from "reactstrap";
+import { faLightbulb } from "@fortawesome/free-regular-svg-icons";
+// import { withNavigation } from "react-navigation";
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
 const API_INPUT_BRANCH = "http://localhost:8080/rade/patient/appointment";
-const slot = [
-  {
-    id: 1,
-    value: "7:00 - 9:00",
-  },
-  {
-    id: 2,
-    value: "9:00 - 11:00",
-  },
-  {
-    id: 3,
-    value: "11:00 - 13:00",
-  },
-  {
-    id: 4,
-    value: "13:00 - 15:00",
-  },
-  {
-    id: 5,
-    value: "15:00 - 17:00",
-  },
-  {
-    id: 6,
-    value: "17:00 - 19:00",
-  },
-];
+const API_GET_TIME =
+  "http://localhost:8080/rade/patient/appointment/check-doctor";
+const API_GET_SERVICE_OF_SERVICETYPE =
+  "http://localhost:8080/rade/patient/service/";
+const API_GET_BRANCH = "http://localhost:8080/rade/patient/branch";
+const API_GET_RECOMMEND_BRANCH =
+  "http://localhost:8080/rade/patient/branch/recommend";
 let msg = {};
 export default class Appointment extends Component {
   constructor(props) {
@@ -55,7 +38,7 @@ export default class Appointment extends Component {
       phone: phone,
       date: "",
       branchArr: [],
-      shift: 0,
+      shift: "",
       //
       validateMsg: {},
       numServiceSelected: 0,
@@ -64,9 +47,11 @@ export default class Appointment extends Component {
       maxday: this.getMaxDate(),
       slotSelected: [],
       address: "",
+      recommentBranch: [],
     };
     this.changeService = this.changeService.bind(this);
     this.MapDoctor = this.MapDoctor.bind(this);
+    this.getSlot = this.getSlot.bind(this);
   }
 
   getCurrentDate(separator = "") {
@@ -102,10 +87,14 @@ export default class Appointment extends Component {
   }
 
   changeService(e) {
-    let id = e.currentTarget.name;
-    ServiceList.getSericeType(id).then((res) =>
-      this.setState({ serviceArr: res.data })
-    );
+    let id = e.currentTarget.value;
+    ServiceList.getSericeType(id)
+      .then((res) => this.setState({ serviceArr: res.data }))
+      .catch((error) => {
+        if (error.message.indexOf("401" > -1)) {
+          // window.location.replace("/");
+        }
+      });
   }
 
   changDoctor(e) {
@@ -130,11 +119,11 @@ export default class Appointment extends Component {
                 {this.state.serviceID.at(0) ? (
                   <Row className="p-0 row-item-selected">
                     <Col sm={9} className="p-0">
-                      {this.state.serviceID.at(0).service.name}
+                      {this.state.serviceID.at(0).name}
                     </Col>
                     <Col sm={2} className="p-0 remove">
                       <button
-                        value={this.state.serviceID.at(0).service.id}
+                        value={this.state.serviceID.at(0).id}
                         style={{ backgroundColor: `rgba (255, 255, 255, 0).` }}
                         onClick={(e) => this.removeItem(e)}
                       >
@@ -153,11 +142,11 @@ export default class Appointment extends Component {
                 {this.state.serviceID.at(1) ? (
                   <Row className="p-0 row-item-selected">
                     <Col sm={9} className="p-0">
-                      {this.state.serviceID.at(1).service.name}
+                      {this.state.serviceID.at(1).name}
                     </Col>
                     <Col sm={2} className="p-0 remove">
                       <button
-                        value={this.state.serviceID.at(1).service.id}
+                        value={this.state.serviceID.at(1).id}
                         style={{ backgroundColor: `rgba (255, 255, 255, 0).` }}
                         onClick={(e) => this.removeItem(e)}
                       >
@@ -176,11 +165,11 @@ export default class Appointment extends Component {
                 {this.state.serviceID.at(2) ? (
                   <Row className="p-0 row-item-selected">
                     <Col sm={9} className="p-0">
-                      {this.state.serviceID.at(2).service.name}
+                      {this.state.serviceID.at(2).name}
                     </Col>
                     <Col sm={2} className="p-0 remove">
                       <button
-                        value={this.state.serviceID.at(2).service.id}
+                        value={this.state.serviceID.at(2).id}
                         onClick={(e) => this.removeItem(e)}
                       >
                         <FontAwesomeIcon icon={faXmark} />
@@ -203,12 +192,12 @@ export default class Appointment extends Component {
     );
   }
 
-  removeItem(e) {
+  async removeItem(e) {
     const valueRemove = e.currentTarget.value;
     var items = [];
     var serviveIDSelected = [];
     this.state.serviceID.map((item) => {
-      if (!(item.service.id === parseInt(valueRemove))) {
+      if (!(item.id === parseInt(valueRemove))) {
         items = [...items, item];
       }
     });
@@ -219,11 +208,13 @@ export default class Appointment extends Component {
       }
     });
 
-    this.setState({
+    await this.setState({
       serviceID: items,
       numServiceSelected: this.state.numServiceSelected - 1,
       serviceID_List: serviveIDSelected,
     });
+    console.log(this.state.serviceID_List);
+    return this.getSlot();
   }
 
   handleBooking(e) {
@@ -237,7 +228,7 @@ export default class Appointment extends Component {
           branch_id: this.state.branch.id,
           doctor_id: this.state.doctorID,
           date: this.state.date,
-          shift: this.state.shift,
+          time: this.state.shift,
         },
 
         phone: phone,
@@ -263,10 +254,17 @@ export default class Appointment extends Component {
           toast.success("Đặt lịch thành công");
           window.location.replace("/history");
         })
+
         .catch((error) => {
+          if (error.message.indexOf("401") > -1) {
+            window.location.replace("/");
+          }
           if (error.message.indexOf(406) > -1) {
-            toast.warn("Bạn đã có lịch hẹn");
-            window.location.replace("/history");
+            toast.warn("Bạn vui lòng nhập đầy đủ thông tin");
+            // window.location.replace("/history");
+          }
+          if (error.message.indexOf("410") > -1) {
+            toast.warn("Bạn có lịch chưa hoàn thành");
           }
         });
     } else {
@@ -303,22 +301,47 @@ export default class Appointment extends Component {
   }
 
   async componentDidMount() {
-    await ServiceTypeList.getSericeType()
+    const data = {
+      phone: phone,
+    };
+    await axios
+      .post(API_GET_BRANCH, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         this.setState({
-          branchArr: res.data.branchList,
+          branchArr: res.data,
         });
       })
       .catch((error) => {
-        console.log(error);
+        if (error.message.indexOf("401" > -1)) {
+          console.log(error);
+          // window.location.replace("/");
+        }
+      });
+
+    axios
+      .post(API_GET_RECOMMEND_BRANCH, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        this.setState({
+          recommentBranch: res.data,
+        });
       });
     // console.log("this.state.branchArr");
     // console.log(this.state.branchArr);
     if (this.state.displayChoose === true) {
-      document.getElementById("popup").style.display = "block";
+      document.getElementById("page").style.display = "block";
       // document.getElementById("page").style.width = "1920px";
     } else {
-      document.getElementById("popup").style.display = "none";
+      document.getElementById("page").style.display = "none";
       // document.getElementById("page").style.width = "0px";
     }
   }
@@ -348,13 +371,23 @@ export default class Appointment extends Component {
             <h3 className="choose-branch-title">Chọn chi nhánh bạn muốn đến</h3>
           </div>
           <div className="branch-hint">
-            {this.state.branchArr.map((item) => (
+            {this.state.branchArr.map((item, key) => (
               <button
+                style={{ position: `relative` }}
+                key={item.id}
                 value={item.id}
                 className="branch-item"
                 onClick={(e) => this.HandleClick(e)}
               >
                 <>
+                  {this.state.recommentBranch.at(key) !== 0 ? (
+                    <div className="hint">
+                      <FontAwesomeIcon icon={faLightbulb} />
+                      {` `}Gợi ý
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <h4>{item.name}</h4>
                   <div className="info-branch">
                     <div className="info-branch-left">
@@ -420,31 +453,54 @@ export default class Appointment extends Component {
         }
       });
     console.log(this.state.serviceTypeArr);
-    document.getElementById("popup").style.display = `none`;
+    // document.getElementById("popup").style.display = `none`;
     document.getElementById("page").style.display = `none`;
   }
 
-  getSlot() {
-    const API = "http://localhost:8080/rade/patient/appointment/check-doctor";
-    console.log(this.state.doctorID);
-    console.log(this.state.date);
+  async getSlot() {
+    console.log(
+      this.state.serviceID_List.length + "this.state.serviceID_List.length"
+    );
+    if (
+      this.state.serviceID_List.length === 0 ||
+      this.state.date.length === 0
+    ) {
+      this.setState({
+        slotSelected: [],
+      });
+      return;
+    }
     const data = {
+      branch_id: this.state.branch.id,
       doctor_id: this.state.doctorID,
       date: this.state.date,
-      branch_id: this.state.branch.id,
+      service_id: this.state.serviceID_List,
     };
-    axios
-      .post(API, JSON.stringify(data), {
+    console.log(data);
+    await axios
+      .post(API_GET_TIME, data, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(async (res) => {
-        console.log(res.data);
-        await this.setState({
-          slotSelected: res.data.shiftList,
-        });
+      .then((res) => {
+        this.setState(
+          {
+            slotSelected: res.data,
+          },
+          () => {
+            // console.log(res.data);
+            // console.log("this.state.slotSelected");
+            // console.log(this.state.slotSelected);
+          }
+        );
+      })
+      .catch((error) => {
+        // console.log(error);
+        if (error.message.indexOf("401") > -1) {
+          // window.location.replace("/");
+        }
       });
   }
 
@@ -474,8 +530,9 @@ export default class Appointment extends Component {
                   {this.state.serviceTypeArr.map((item) => (
                     <li key={item.id} className="service-type-item-small">
                       <button
+                        key={item.id}
                         style={{ borderRadius: `20px` }}
-                        name={item.id}
+                        value={item.id}
                         onClick={(e) => this.changeService(e)}
                       >
                         <p>{item.name}</p>
@@ -485,33 +542,36 @@ export default class Appointment extends Component {
                 </li>
                 <li style={{ padding: 0 }} className="service-item">
                   {this.state.serviceArr.map((item) => (
-                    <li key={item.service.id} className="service-item-small">
+                    <li key={item.id} className="service-item-small">
                       <button
                         style={{ borderRadius: `20px` }}
-                        name={item.service.id}
-                        value={item.service.name}
-                        onClick={(e) => {
+                        name={item.id}
+                        value={item.name}
+                        onClick={async (e) => {
                           msg.numServiceSelected = "";
                           console.log(this.state.serviceID.length);
                           if (this.state.serviceID.length < 3) {
                             let flag = false;
                             this.state.serviceID.map((item) => {
-                              if (item.service.name === e.currentTarget.value) {
+                              if (item.name === e.currentTarget.value) {
                                 flag = true;
                               }
                             });
                             if (!flag) {
-                              this.setState({
+                              await this.setState({
                                 serviceID: [...this.state.serviceID, item],
                                 serviceID_List: [
                                   ...this.state.serviceID_List,
-                                  item.service.id,
+                                  item.id,
                                 ],
                                 numServiceSelected:
                                   this.state.numServiceSelected + 1,
                               });
                             } else {
-                              alert("Dịch vụ này bạn đã chọn ");
+                              toast.error("Dịch vụ này bạn đã chọn");
+                            }
+                            if (this.state.date.length !== 0) {
+                              this.getSlot();
                             }
                           } else {
                             msg.numServiceSelected =
@@ -522,7 +582,7 @@ export default class Appointment extends Component {
                           }
                         }}
                       >
-                        <p>{item.service.name}</p>
+                        <p>{item.name}</p>
                       </button>
                     </li>
                   ))}
@@ -549,11 +609,17 @@ export default class Appointment extends Component {
 
             <div className="infor-appointment">
               {this.ShowAddress()}
+
+              {/* Chọn bác sĩ  */}
               <div className="doctor">
                 <div className="doctor-select">
                   <h4>Chọn bác sĩ</h4>
                   <select
-                    style={{ borderRadius: `10px` }}
+                    className="select-option__doctor"
+                    style={{
+                      borderRadius: `10px`,
+                      width: `25vw`,
+                    }}
                     onChange={(e) => this.changDoctor(e)}
                   >
                     <option value={0}>Chọn bác sĩ</option>
@@ -580,17 +646,33 @@ export default class Appointment extends Component {
                   <input
                     style={{
                       border: `1px solid black`,
-                      width: `200px`,
+                      width: `25vw`,
                       borderRadius: `10px`,
                     }}
                     type="date"
                     min={this.state.today}
                     max={this.state.maxday}
+                    disabledDays={{ daysOfWeek: [0, 6] }}
                     onChange={async (e) => {
-                      await this.setState({
-                        date: e.currentTarget.valueAsDate,
-                      });
-                      this.getSlot();
+                      var day = new Date(
+                        e.currentTarget.valueAsDate
+                      ).getUTCDay();
+                      console.log(day);
+                      if (
+                        [0].includes(e.currentTarget.valueAsDate.getUTCDay())
+                      ) {
+                        toast.warn(
+                          "Bạn vui lòng không được chọn ngảy Chủ Nhật. Bạn vui lòng chọn ngày khác"
+                        );
+                        await this.setState({
+                          date: "",
+                        });
+                      } else {
+                        await this.setState({
+                          date: e.currentTarget.valueAsDate,
+                        });
+                        this.getSlot();
+                      }
                     }}
                   />
                   <span>
@@ -605,27 +687,28 @@ export default class Appointment extends Component {
                   </span>
                 </div>
                 <div className="slot" style={{ textAlign: `left` }}>
-                  <h4>Chọn giờ làm việc</h4>
-                  <select
-                    style={{ border: `1px solid black`, borderRadius: `10px` }}
-                    onChange={async (e) => {
-                      await this.setState({
-                        shift: e.currentTarget.value,
-                      });
-                    }}
-                    defaultValue="Chọn giờ"
-                  >
-                    <option disabled>Chọn giờ</option>
-                    {slot.map((item) => {
-                      if (this.state.slotSelected.indexOf(item.id) > -1) {
-                        return (
-                          <option key={item.id} value={item.id}>
-                            {item.value}
-                          </option>
-                        );
-                      }
+                  <Row lg="auto" style={{ padding: `10px 50px ` }}>
+                    {this.state.slotSelected.map((item) => {
+                      let tmp = item.option.split("-");
+                      return (
+                        <Col
+                          lg={2}
+                          style={{ backgroundColor: `white`, color: `black` }}
+                          className="btn-select-time"
+                        >
+                          <Button
+                            onClick={() => {
+                              this.setState({
+                                shift: item.option,
+                              });
+                            }}
+                          >
+                            {tmp[0]}
+                          </Button>
+                        </Col>
+                      );
                     })}
-                  </select>
+                  </Row>
                 </div>
               </div>
               {/* time */}

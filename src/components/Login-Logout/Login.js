@@ -3,6 +3,7 @@ import "./style.css";
 import AccountLogin from "../../service/loginService";
 import gmail_icon from "../../assets/images/google.jpg";
 import { toast } from "react-toastify";
+
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);

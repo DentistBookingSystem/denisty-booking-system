@@ -15,15 +15,38 @@ import History from "./components/History/History";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import { Button } from "bootstrap";
-
+const token = localStorage.getItem("accessToken");
+const phone = localStorage.getItem("phone");
+const API_CHECK_ACCOUNT = "http://localhost:8080/rade/patient/account/";
 function App() {
+  const MINUTE_MS = 1000 * 60 * 20;
+
   useEffect(() => {
-    // localStorage.setItem("phone", "");
-    // localStorage.setItem("accessToken", "");
-    // localStorage.setItem("statusLogin", false);
+    const interval = setInterval(() => {
+      axios
+        .get(API_CHECK_ACCOUNT + phone, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {})
+        .catch((error) => {
+          localStorage.clear();
+          toast.warn(
+            "Tài khoản cùa bạn hết hạn đang nhập. Hệ thống sẽ reload lại trong 5 giây."
+          );
+          setTimeout(() => {
+            window.location.reload();
+          }, 5000);
+        });
+    }, MINUTE_MS);
+
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, []);
 
   return (

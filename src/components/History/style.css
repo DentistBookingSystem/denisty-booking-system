@@ -55,9 +55,9 @@ table {
   vertical-align: middle;
 }
 .bordered th {
-  background-color: #ececec;
-  /* background-color: #0b0b90; */
-  /* color: white; */
+  /* background-color: #ececec; */
+  background-color: #0b0b90;
+  color: white;
   background-image: -webkit-gradient(
     linear,
     left top,

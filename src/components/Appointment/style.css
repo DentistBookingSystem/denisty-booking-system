@@ -298,23 +298,22 @@ select {
   border-radius: 5px;
   box-shadow: 0 0 4px 4px rgba(128, 128, 128, 0.477);
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
-.branch-hint,
 .choose-branch-container {
   display: flex;
   flex-wrap: wrap;
-  width: 80vw;
-  justify-content: flex-start;
-}
-
-.branch-hint {
-  padding-bottom: 0;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.233);
+  width: 70vw;
+  justify-content: center;
+  /* overflow-y: auto; */
 }
 
 .branch-item {
-  width: 30%;
+  width: 380px;
   /* background-color: aquamarine; */
   margin: 10px;
   padding: 10px;
@@ -322,7 +321,7 @@ select {
   position: relative;
   border: 1px solid black;
   border-radius: 10px;
-  box-shadow: 1.5px 1.5px rgba(128, 128, 128, 0.7);
+  box-shadow: 0 0 2px 2px rgba(128, 128, 128, 0.7);
 }
 
 .branch-item button {
@@ -341,13 +340,40 @@ select {
   color: white;
 }
 
+.branch-hint {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
 .hint {
+  border-radius: 4px;
+  border-top-right-radius: 10px;
+
+  font-weight: bolder;
   position: absolute;
   top: 0;
   right: 0;
-  background-color: white;
   padding: 2px;
-  color: rgb(223, 87, 14);
+  background-color: #0b0b90;
+  color: white;
+  animation: hintAnimation 1s infinite;
+}
+
+@keyframes hintAnimation {
+  from {
+    /* width: 0px; */
+    opacity: 0.5;
+  }
+  50% {
+    /* width: 100%; */
+    opacity: 1;
+  }
+  to {
+    /* width: 0; */
+    opacity: 0.5;
+  }
 }
 
 .choose-branch-title {
@@ -370,22 +396,21 @@ select {
 }
 
 #page {
-  /* width: 1920px; */
-  /* height: 1000px; */
   top: 0;
   bottom: 0;
   right: 0;
   left: 0;
   background-color: rgba(128, 128, 128, 0.305);
-  /* position: absolute; */
   position: fixed;
 }
 
 #popup {
   position: absolute;
+  height: 490px;
   top: 150px;
   left: 100px;
-  /* right: 100px; */
+  right: 100px;
+  overflow-y: scroll;
 }
 
 ul,
@@ -396,4 +421,14 @@ p {
 
 #appointment-page {
   position: relative;
+}
+
+.btn-select-time {
+  padding: 0.25rem;
+}
+
+.btn-select-time button {
+  margin: 0;
+  background-color: white;
+  color: black;
 }

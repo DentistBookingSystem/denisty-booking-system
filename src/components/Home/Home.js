@@ -12,6 +12,7 @@ import img5 from "../../assets/images/slide (5).jpg";
 import img6 from "../../assets/images/banner-nieng-rang-dep-chuan-chat-rieng-pc2.webp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoffee } from "@fortawesome/free-solid-svg-icons";
+import Feedback from "./Feedback";
 
 const collection = [
   { src: img1, caption: "Đội ngũ chuyên nghiệp" },
@@ -91,6 +92,9 @@ export default class Home extends Component {
               thống quản lý chất lượng (QA) và các tiêu chuẩn về an toàn y khoa.
             </p>
           </div>
+        </div>
+        <div>
+          <Feedback />
         </div>
       </>
     );

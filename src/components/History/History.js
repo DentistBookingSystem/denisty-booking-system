@@ -1,4 +1,13 @@
 import { Table, Row, Col, Container, Button } from "reactstrap";
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/js/bootstrap.js";
+
 import React, { useEffect, useState } from "react";
 import "./style.css";
 import axios from "axios";
@@ -22,40 +31,16 @@ const API_GET_HISTORY_DETAIL =
   "http://localhost:8080/rade/patient/appointment-detail/history";
 const API_CANCEL_APPOINTMENT =
   "http://localhost:8080/rade/patient/appointment/cancel/";
-const slot = [
-  {
-    id: 1,
-    value: "7:00 - 9:00",
-  },
-  {
-    id: 2,
-    value: "9:00 - 11:00",
-  },
-  {
-    id: 3,
-    value: "11:00 - 13:00",
-  },
-  {
-    id: 4,
-    value: "13:00 - 15:00",
-  },
-  {
-    id: 5,
-    value: "15:00 - 17:00",
-  },
-  {
-    id: 6,
-    value: "17:00 - 19:00",
-  },
-];
+const API_SEND_FEEDBACK = "http://localhost:8080/rade/patient/feedback/send";
+
 export default function History() {
   const [page, setPage] = useState(1);
   const [listAppointment, setListAppointment] = useState([]);
   const [listHistoryDetail, setHistoryDetail] = useState([]);
+  const [contentFeedback, setContentFeedback] = useState("");
   const [id_appointment, setIDAppointmnet] = useState(0);
   const [displayNextbutton, setDisplayNextButton] = useState(true);
   useEffect(() => {
-    console.log("render");
     var data = {
       phone: phone,
       page: page,
@@ -69,6 +54,7 @@ export default function History() {
       })
       .then(async (res) => {
         setListAppointment(res.data);
+        console.log(res.data);
       })
       .catch((error) => {
         if (error.message.indexOf("401") > -1) {
@@ -111,37 +97,106 @@ export default function History() {
   }, [page, id_appointment]);
   const ShowDetail = (props) => {
     return (
-      <Table
-        bordered
-        hover
-        id="table-history-detail"
-        className="table-history-detail bordered"
-      >
-        <thead>
-          <tr>
-            <th>Dịch vụ</th>
-            <th>Giá</th>
-            <th>Khuyến mãi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listHistoryDetail.map((item) => {
-            return (
-              <tr>
-                <td>{item.service.name}</td>
-                <td>
-                  {item.service.min_price}VNĐ ~ {item.service.max_price}VNĐ
-                </td>
-                <td>
-                  {item.discount
-                    ? item.discount.percentage + "%"
-                    : "Không có khuyến mãi"}
-                </td>
-              </tr>
-            );
+      <>
+        <div>
+          {listAppointment.map((item, key) => {
+            if (item.id == id_appointment) {
+              return (
+                <>
+                  <Row
+                    xs="auto"
+                    lg="auto"
+                    className="justify-content-start text-start ms-3 p-1"
+                  >
+                    <Col xs="auto" lg={2} className="text-start">
+                      <label
+                        style={{ textAlign: `left`, color: `black` }}
+                        className="p-0 fw-bold"
+                      >
+                        Chi nhánh:{" "}
+                      </label>
+                    </Col>
+                    <Col xs="auto" lg={10}>
+                      <p className="m-0 text-start text-break">
+                        {item.branch.name} - {item.branch.district.name},{" "}
+                        {item.branch.district.province.name}
+                      </p>
+                    </Col>
+                  </Row>
+                  <Row
+                    xs="auto"
+                    lg="auto"
+                    className="justify-content-start ms-3 p-1"
+                  >
+                    <Col xs="auto" lg={2} className="text-start">
+                      <label
+                        style={{ textAlign: `left`, color: `black` }}
+                        className="p-0 fw-bold"
+                      >
+                        Bác sĩ:{" "}
+                      </label>
+                    </Col>
+                    <Col xs="auto" lg={10}>
+                      <p className="m-0 text-start">{item.doctor.name}</p>
+                    </Col>
+                  </Row>
+                  <Row
+                    xs="auto"
+                    lg="auto"
+                    className="justify-content-start ms-3 p-1"
+                  >
+                    <Col xs="auto" lg={2} className="text-start">
+                      <label
+                        style={{ textAlign: `left`, color: `black` }}
+                        className="p-0 fw-bold"
+                      >
+                        Ngày & Giờ:{" "}
+                      </label>
+                    </Col>
+                    <Col xs="auto" lg={10}>
+                      <p className="m-0 text-start">
+                        {item.appointment_date} - {item.appointment_time}
+                      </p>
+                    </Col>
+                  </Row>
+                </>
+              );
+            }
           })}
-        </tbody>
-      </Table>
+          {/* <label>Chi nhánh: {historySelected.branch.name}</label> */}
+        </div>
+        <Table
+          bordered
+          hover
+          id="table-history-detail"
+          className="table-history-detail bordered"
+        >
+          <thead>
+            <tr>
+              <th>Dịch vụ</th>
+              <th>Giá</th>
+              <th>Khuyến mãi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {listHistoryDetail.map((item) => {
+              return (
+                <tr>
+                  <td>{item.service.name}</td>
+                  <td>
+                    {item.service.min_price}VNĐ ~ {item.service.max_price}VNĐ
+                  </td>
+                  <td>
+                    {item.discount
+                      ? item.discount.percentage + "%"
+                      : "Không có khuyến mãi"}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </>
     );
   };
   const ViewHistory = () => (
@@ -159,28 +214,24 @@ export default function History() {
         <tbody>
           {listAppointment.map((item) => {
             let val;
-            slot.map((element) => {
-              if (element.id === item.shift) {
-                val = element.value;
-              }
-            });
             return (
-              <tr style={{ alignItems: `center` }}>
+              <tr key={item.id} style={{ alignItems: `center` }}>
                 <td style={{ alignItems: `center` }}>
                   <Row className="p-0 ">
                     <p>
-                      {item.date}
-                      {/* {val} */}
+                      {item.appointment_date}
+                      <br />
+                      {item.appointment_time}
                     </p>
                   </Row>
                 </td>
                 <td style={{ alignItems: `center` }}>
-                  <Row className="justify-content-center">
+                  <Row className="justify-content-center p-0">
                     <p>{item.branch.name}</p>
                   </Row>
                 </td>
                 <td style={{ width: `17vw` }}>
-                  <Row className="justify-content-center">
+                  <Row className="justify-content-center p-0">
                     {item.doctor.name}
                   </Row>
                 </td>
@@ -188,7 +239,7 @@ export default function History() {
                   <Row className="row-appointment-history p-0">
                     <Col style={{ textAlign: `center` }} className="">
                       {item.status === 0 ? (
-                        <p style={{ color: `blue` }}>Chờ xét duyệt</p>
+                        <p style={{ color: `blue` }}>Chờ hoàn thành</p>
                       ) : (
                         ""
                       )}
@@ -197,8 +248,18 @@ export default function History() {
                       ) : (
                         ""
                       )}
-                      {item.status === 2 ? (
+                      {item.status === 3 ? (
                         <p style={{ color: `red` }}>Đã hủy</p>
+                      ) : (
+                        ""
+                      )}
+                      {item.status === 4 ? (
+                        <p style={{ color: `red` }}>Chờ hoàn thành</p>
+                      ) : (
+                        ""
+                      )}
+                      {item.status === 2 ? (
+                        <p style={{ color: `red` }}>Không hoàn thành</p>
                       ) : (
                         ""
                       )}
@@ -207,7 +268,7 @@ export default function History() {
                 </td>
                 <td style={{ width: `17vw` }}>
                   <Row
-                    className="row-button justify-content-end"
+                    className="row-button justify-content-end p-0"
                     style={{ justifyContent: "flex-end" }}
                     sm="auto"
                     lg="auto"
@@ -223,6 +284,9 @@ export default function History() {
                         </button>
                       </Col>
                     ) : (
+                      ""
+                    )}
+                    {item.status === 1 ? (
                       <Col className="feedback-button p-0" lg={6}>
                         <button
                           style={{ width: `auto` }}
@@ -235,6 +299,8 @@ export default function History() {
                           Phản hồi
                         </button>
                       </Col>
+                    ) : (
+                      ""
                     )}
 
                     <Col lg={6} className="p-0">
@@ -242,7 +308,10 @@ export default function History() {
                         type="button"
                         value={item.id}
                         style={{ textAlign: `right`, width: `auto` }}
-                        onClick={(e) => show(e)}
+                        onClick={(e) => {
+                          console.log(item);
+                          show(e);
+                        }}
                       >
                         Chi tiết
                       </button>
@@ -318,6 +387,34 @@ export default function History() {
     document.getElementById("login-page").style.display = "block";
   };
 
+  const submitFeedback = () => {
+    const data = {
+      feedbackDTO: {
+        appointment_id: id_appointment,
+        content: contentFeedback,
+      },
+      phone: phone,
+    };
+    // console.log(data);
+    axios
+      .post(API_SEND_FEEDBACK, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        toast.success("Bạn đã phản hồi thành công. Cảm ơn sự đóng góp của bạn");
+      })
+      .catch((error) => {
+        if (error.message.indexOf("404") > -1) {
+          toast.error("Lịch đặt không tồn tại");
+        }
+      });
+    document.getElementById("add-feeback-page").style.display = "none";
+  };
+
   return (
     <div>
       <div className="history-header">
@@ -326,7 +423,7 @@ export default function History() {
       <div
         id="add-feeback-page"
         onClick={() => {
-          document.getElementById("add-feeback-page").style.display = "none";
+          // document.getElementById("add-feeback-page").style.display = "none";
         }}
       >
         <div id="add-feedback">
@@ -367,11 +464,30 @@ export default function History() {
                 fontSize: `18px`,
                 padding: `5px`,
               }}
+              onChange={(e) => {
+                setContentFeedback(e.target.value);
+              }}
             ></textarea>
             <Row className="justify-content-center">
-              <button style={{ width: `13vw` }}>Gửi phản hồi</button>
+              <button
+                style={{ width: `13vw` }}
+                onClick={() => submitFeedback()}
+              >
+                Gửi phản hồi
+              </button>
             </Row>
           </Col>
+          {/* button close  */}
+          <div id="icon-close">
+            <button
+              onClick={() => {
+                document.getElementById("add-feeback-page").style.display =
+                  "none";
+              }}
+            >
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+          </div>
         </div>
       </div>
       {/* notify login  */}

@@ -4,6 +4,7 @@ import "./style.css";
 import isEmpty from "validator/lib/isEmpty";
 import axios from "axios";
 import { Col, Row } from "reactstrap";
+import { toast } from "react-toastify";
 const API_REGIS = "http://localhost:8080/rade/account/registration";
 const API_GET_PROVINCE = "http://localhost:8080/rade/province";
 const API_GET_DISTRICT = "http://localhost:8080/rade/district/";
@@ -28,7 +29,7 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [confrim, setConfirm] = useState("");
   const [full_name, setName] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState("1");
   const [dateOfBirth, setDateOfBirth] = useState();
   const [districtID, setDistrictID] = useState("");
   const [province, setProvice] = useState("");
@@ -60,11 +61,18 @@ export default function SignIn() {
       phone: phone,
       email: email,
     };
-    console.log(data);
-    axios.post(API_REGIS, data).then(() => {
-      console.log("thành công");
-      window.location.replace("/");
-    });
+    // console.log(data);
+    axios
+      .post(API_REGIS, data)
+      .then(() => {
+        console.log("thành công");
+        window.location.replace("/");
+      })
+      .catch((error) => {
+        if (error.message.indexOf("400") > -1) {
+          toast.warn("Số điện thoại của bạn đã được sữ dụng");
+        }
+      });
   };
 
   const validateAll = () => {
@@ -202,6 +210,7 @@ export default function SignIn() {
                       name="dateOfBirth"
                       value={dateOfBirth}
                       onChange={(e) => {
+                        console.log(e.target.value);
                         setDateOfBirth(e.target.value);
                       }}
                     />
@@ -220,8 +229,11 @@ export default function SignIn() {
                       style={{ width: `100%` }}
                       name="gender"
                       className="optional"
-                      onChange={(e) => setGender(e.target.value)}
-                      defaultValue={1}
+                      onChange={(e) => {
+                        console.log(e.target.value);
+                        setGender(e.target.value);
+                      }}
+                      defaultValue={"1"}
                     >
                       {/* <option value="">Chọn giới tính</option> */}
                       {genders.map((option) => (
