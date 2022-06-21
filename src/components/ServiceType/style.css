@@ -45,6 +45,10 @@
   display: block;
 }
 
+.dropdown:focus .noidung_dropdown {
+  display: block;
+}
+
 /* Thay đổi màu background cho nút khi được hover */
 .dropdown:hover .nut_dropdown {
   /* background-color: #00bfff; */

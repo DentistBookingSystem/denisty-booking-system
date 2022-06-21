@@ -1,12 +1,7 @@
 import { Table, Row, Col, Container, Button } from "reactstrap";
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from "reactstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
+import { useNavigate } from "react-router-dom";
 
 import React, { useEffect, useState } from "react";
 import "./style.css";
@@ -18,10 +13,7 @@ import {
   faTriangleExclamation,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { autocompleteClasses } from "@mui/material";
 import { toast } from "react-toastify";
-import { Redirect } from "react-router";
-import { yellow } from "@mui/material/colors";
 import LoginForm from "../Login-Logout/Login";
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
@@ -38,8 +30,9 @@ export default function History() {
   const [listAppointment, setListAppointment] = useState([]);
   const [listHistoryDetail, setHistoryDetail] = useState([]);
   const [contentFeedback, setContentFeedback] = useState("");
-  const [id_appointment, setIDAppointmnet] = useState(0);
+  const [appointmentID, setIDAppointmnet] = useState(0);
   const [displayNextbutton, setDisplayNextButton] = useState(true);
+  const navigate = useNavigate();
   useEffect(() => {
     var data = {
       phone: phone,
@@ -82,9 +75,9 @@ export default function History() {
           setDisplayNextButton(true);
         }
       });
-    if (id_appointment !== 0) {
+    if (appointmentID !== 0) {
       axios
-        .get(API_GET_HISTORY_DETAIL + "/" + id_appointment, {
+        .get(API_GET_HISTORY_DETAIL + "/" + appointmentID, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -94,13 +87,13 @@ export default function History() {
           setHistoryDetail(res.data);
         });
     }
-  }, [page, id_appointment]);
+  }, [page, appointmentID]);
   const ShowDetail = (props) => {
     return (
       <>
         <div>
           {listAppointment.map((item, key) => {
-            if (item.id == id_appointment) {
+            if (item.id == appointmentID) {
               return (
                 <>
                   <Row
@@ -155,7 +148,7 @@ export default function History() {
                     </Col>
                     <Col xs="auto" lg={10}>
                       <p className="m-0 text-start">
-                        {item.appointment_date} - {item.appointment_time}
+                        {item.appointmentDate} - {item.appointmentTime}
                       </p>
                     </Col>
                   </Row>
@@ -184,7 +177,7 @@ export default function History() {
                 <tr>
                   <td>{item.service.name}</td>
                   <td>
-                    {item.service.min_price}VNĐ ~ {item.service.max_price}VNĐ
+                    {item.service.minPrice}VNĐ ~ {item.service.maxPrice}VNĐ
                   </td>
                   <td>
                     {item.discount
@@ -219,9 +212,9 @@ export default function History() {
                 <td style={{ alignItems: `center` }}>
                   <Row className="p-0 ">
                     <p>
-                      {item.appointment_date}
+                      {item.appointmentDate}
                       <br />
-                      {item.appointment_time}
+                      {item.appointmentTime}
                     </p>
                   </Row>
                 </td>
@@ -278,7 +271,11 @@ export default function History() {
                         <button
                           style={{ width: `auto` }}
                           value={item.id}
-                          onClick={(e) => CancelAppointment(e)}
+                          onClick={(e) => {
+                            navigate("/appointment/update", {
+                              state: { id: item.id },
+                            });
+                          }}
                         >
                           Sửa
                         </button>
@@ -390,7 +387,7 @@ export default function History() {
   const submitFeedback = () => {
     const data = {
       feedbackDTO: {
-        appointment_id: id_appointment,
+        appointment_id: appointmentID,
         content: contentFeedback,
       },
       phone: phone,

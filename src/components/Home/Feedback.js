@@ -19,10 +19,11 @@ export default function Feedback() {
     //   console.log(res.data);
     //   setServiceTypeList(res.data.serviceTypeList);
     // });
-    ServiceList.getSericeType(0).then((res) => {
+    ServiceList.getSericeType(1).then((res) => {
       //   setServiceList(res.data);
       console.log("res.data");
       console.log(res.data);
+      setServiceList(res.data);
     });
   }, []);
 
@@ -39,8 +40,13 @@ export default function Feedback() {
       <Row className="filter-service">
         <Col>
           <Dropdown isOpen={isOpen} toggle={() => toggle()}>
-            <DropdownToggle caret>Dịch vụ</DropdownToggle>
-            <DropdownMenu>
+            <DropdownToggle
+              style={{ backgroundColor: `white`, color: `black` }}
+              caret
+            >
+              Dịch vụ
+            </DropdownToggle>
+            <DropdownMenu style={{ width: `100%` }}>
               {serviceList.map((item, key) => {
                 return <DropdownItem key={item.id}>{item.name}</DropdownItem>;
               })}
@@ -48,6 +54,7 @@ export default function Feedback() {
           </Dropdown>
         </Col>
       </Row>
+      <div></div>
     </div>
   );
 }

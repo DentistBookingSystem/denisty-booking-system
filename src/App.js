@@ -2,6 +2,7 @@ import Nav from "./components/Navbar/Nav";
 import "./App.css";
 // import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Home from "./components/Home/Home";
 import Footer from "./components/Footer/Footer";
 import Appointment from "./components/Appointment/Appointment";
@@ -16,6 +17,7 @@ import History from "./components/History/History";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import UpdateAppointment from "./components/Appointment/UpdateAppointment";
 
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import { Button } from "bootstrap";
@@ -75,6 +77,11 @@ function App() {
             <Route exact path="/logout" element={<Logout />} />
             <Route exact path="/profile" element={<Profile />} />
             <Route exact path="/history" element={<History />} />
+            <Route
+              exact
+              path="/appointment/update"
+              element={<UpdateAppointment />}
+            />
           </Routes>
         </div>
         <Footer />

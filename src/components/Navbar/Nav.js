@@ -183,8 +183,14 @@ export default function Nav(props) {
       <nav>
         <div className="nav">
           <div className="logo">
-            <img src={logo} alt="logo" />
-            <p>Nha khoa RADE</p>
+            <img
+              src={logo}
+              alt="logo"
+              onClick={() => {
+                navigate("/");
+              }}
+            />
+            <p className="p-2">Nha khoa RADE</p>
           </div>
           <FirstNav />
           {localStorage.getItem("statusLogin") === "true" ? (

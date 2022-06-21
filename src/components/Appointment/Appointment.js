@@ -6,7 +6,12 @@ import axios from "axios";
 import ServiceList from "../../getData/ServiceList";
 import ServiceTypeList from "../../getData/ServiceTypeList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBoltLightning, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBoltLightning,
+  faLocationArrow,
+  faLocationCrosshairs,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { Table, Row, Col, Container, Button } from "reactstrap";
 import { faLightbulb } from "@fortawesome/free-regular-svg-icons";
 // import { withNavigation } from "react-navigation";
@@ -382,7 +387,7 @@ export default class Appointment extends Component {
                 <>
                   {this.state.recommentBranch.at(key) !== 0 ? (
                     <div className="hint">
-                      <FontAwesomeIcon icon={faLightbulb} />
+                      <FontAwesomeIcon icon={faLocationArrow} />
                       {` `}Gợi ý
                     </div>
                   ) : (

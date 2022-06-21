@@ -5,10 +5,14 @@ import ServiceList from "../../getData/ServiceList";
 import { Table, Row, Col, Container, Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faBandage,
   faCaretDown,
   faCaretLeft,
   faCaretRight,
   faCaretUp,
+  faIdBadge,
+  faTag,
+  faTags,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
@@ -26,59 +30,32 @@ export default function ServiceInfo() {
   const [serviceSelected, setServiceSelected] = useState([]);
   const [nameServiceType, setNameServiceType] = useState("");
   const [feedback, setFeedback] = useState([]);
-  const [page, setPage] = useState(1);
+  const [serviceAndDiscount, setServiceAndDiscount] = useState([]);
   const [serviceIDSelected, setServiceIDSelected] = useState("");
-  const [displayNextbutton, setDisplayNextButton] = useState(true);
   const { id } = useParams();
-  const [tmpID, setTmpID] = useState(id);
   const [contentFeedback, setContenFeedback] = useState("");
   const [discount, setDiscount] = useState({});
   let idServiceSelected;
+  const API_GET_SERVICE_BY_SERVICETYPE_ID =
+    "http://localhost:8080/rade/service/discount/";
   useEffect(() => {
     console.log("render");
     setTimeout(() => {
-      ServiceList.getSericeType(id).then((Response) => {
-        console.log(Response.data.at(0).id);
-        setServiceList(Response.data);
-        setNameServiceType(Response.data.at(0).serviceType.name);
-        setServiceIDSelected(Response.data.at(0).id);
-        idServiceSelected = Response.data.at(0).id;
-        console.log("Response.data.at(0).id");
-        console.log(Response.data.at(0).id);
+      axios.get(API_GET_SERVICE_BY_SERVICETYPE_ID + id).then((res) => {
+        console.log(res.data);
+        let serviceList = res.data;
+        let tmp = [];
+        serviceList.map((item) => {
+          tmp = [...tmp, item.service];
+        });
+        setServiceAndDiscount(res.data);
+        console.log(tmp);
+        setServiceList(tmp);
+        setNameServiceType(tmp.at(0).serviceType.name);
+        setServiceIDSelected(tmp.at(0).id);
+        // setServiceList(res.data);
       });
     }, 0);
-
-    // .then(console.log(serviceIDSelected));
-    // console.log("serviceIDSelected: " + serviceIDSelected);
-    // if (tmpID !== serviceIDSelected) {
-    //   setPage(1);
-    //   setTmpID(serviceIDSelected);
-    // }
-    // //Get feeb back
-    // const data = {
-    //   service_id: serviceIDSelected,
-    //   page: page,
-    // };
-
-    // axios.post(API_GET_FEEDBACK, data).then((res) => {
-    //   console.log("data ");
-    //   console.log(res);
-    //   setFeedback(res.data);
-    // });
-    // //get next feed back
-    // const next_data = {
-    //   service_id: serviceIDSelected,
-    //   page: page + 1,
-    // };
-    // axios.post(API_GET_FEEDBACK, next_data).then((res) => {
-    //   console.log(" next data ");
-    //   console.log(res);
-    //   if (res.data.length === 0) {
-    //     setDisplayNextButton(false);
-    //   } else {
-    //     setDisplayNextButton(true);
-    //   }
-    // });
   }, [id]);
 
   useEffect(() => {
@@ -87,28 +64,27 @@ export default function ServiceInfo() {
       axios
         .get(API_GET_DISCOUNT_FOLLOW_SERVICEID + serviceIDSelected)
         .then((res) => {
-          console.log(API_GET_DISCOUNT_FOLLOW_SERVICEID + serviceIDSelected);
           if (res.data !== null) {
             tmpDiscount.name = res.data.name;
             tmpDiscount.percentage = res.data.percentage + "%";
             tmpDiscount.description = res.data.description;
-            tmpDiscount.start_date = res.data.start_date;
-            tmpDiscount.end_date = res.data.end_date;
+            tmpDiscount.start_date = res.data.startDate;
+            tmpDiscount.end_date = res.data.endDate;
           }
-          console.log(tmpDiscount);
           setDiscount(tmpDiscount);
         });
     }, 0);
   }, [serviceIDSelected]);
 
   // const getServiceSelected = (e) => {};
-  const MapServiceDetail = () => {
+  const MapServiceType = () => {
     return (
       <ul style={{ padding: `0px` }}>
-        {serviceList.map((item) => {
+        {serviceList.map((item, key) => {
           return (
-            <li>
+            <li className="d-flex flex-row justify-content-center">
               <button
+                className="d-flex flex-row justify-content-center"
                 id={item.id}
                 value={item.id}
                 onClick={(e) => {
@@ -123,8 +99,8 @@ export default function ServiceInfo() {
                         tmp.name = res.data.name;
                         tmp.percentage = res.data.name;
                         tmp.description = res.data.description;
-                        tmp.start_date = res.data.start_date;
-                        tmp.end_date = res.data.end_date;
+                        tmp.start_date = res.data.startDate;
+                        tmp.end_date = res.data.endDate;
                       }
                       setDiscount(tmp);
                       // });
@@ -136,7 +112,14 @@ export default function ServiceInfo() {
                     });
                 }}
               >
-                {item.name}
+                <p>{item.name}</p>
+                {serviceAndDiscount.at(key).discount ? (
+                  <div className="ps-3 icon-tag">
+                    <FontAwesomeIcon icon={faTags} />
+                  </div>
+                ) : (
+                  ""
+                )}
               </button>
             </li>
           );
@@ -236,13 +219,13 @@ export default function ServiceInfo() {
               <div className="d-flex flex-row p-1">
                 <h5>Thời gian: </h5>
                 <p style={{ paddingLeft: `5px` }}>
-                  ~{estimateTime(tmp.estimated_time)}
+                  ~{estimateTime(tmp.estimatedTime)}
                 </p>
               </div>
               <div className="d-flex flex-row p-1">
                 <h5>Giá: </h5>
                 <p style={{ paddingLeft: `5px` }}>
-                  {tmp.min_price} (VNĐ) - {tmp.max_price} (VNĐ)
+                  {tmp.minPrice} (VNĐ) - {tmp.maxPrice} (VNĐ)
                 </p>
               </div>
               {ShowDiscount(tmp.id)}
@@ -283,7 +266,7 @@ export default function ServiceInfo() {
                 <div className="d-flex flex-row p-1">
                   <h5>Giá: </h5>
                   <p style={{ paddingLeft: `5px` }}>
-                    {tmp.min_price} VNĐ - {tmp.max_price} VNĐ
+                    {tmp.minPrice} VNĐ - {tmp.maxPrice} VNĐ
                   </p>
                 </div>
                 {ShowDiscount(tmp.id)}
@@ -388,7 +371,7 @@ export default function ServiceInfo() {
         <div>
           <h4>{nameServiceType}</h4>
         </div>
-        <MapServiceDetail />
+        <MapServiceType />
       </div>
       <div className="service-detail">
         <div className="desc">
