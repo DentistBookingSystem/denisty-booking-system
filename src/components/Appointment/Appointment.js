@@ -36,7 +36,7 @@ export default class Appointment extends Component {
       doctorArr: [],
       branch: {},
       serviceID: [],
-      serviceID_List: [],
+      serviceIdList: [],
       doctorID: 0,
       distritID: "",
       cusName: "",
@@ -207,7 +207,7 @@ export default class Appointment extends Component {
       }
     });
 
-    this.state.serviceID_List.map((item) => {
+    this.state.serviceIdList.map((item) => {
       if (!(item === parseInt(valueRemove))) {
         serviveIDSelected = [...serviveIDSelected, item];
       }
@@ -216,9 +216,9 @@ export default class Appointment extends Component {
     await this.setState({
       serviceID: items,
       numServiceSelected: this.state.numServiceSelected - 1,
-      serviceID_List: serviveIDSelected,
+      serviceIdList: serviveIDSelected,
     });
-    console.log(this.state.serviceID_List);
+    console.log(this.state.serviceIdList);
     return this.getSlot();
   }
 
@@ -230,14 +230,14 @@ export default class Appointment extends Component {
       console.log("data");
       const data = {
         appointmentDTO: {
-          branch_id: this.state.branch.id,
-          doctor_id: this.state.doctorID,
+          branchId: this.state.branch.id,
+          doctorId: this.state.doctorID,
           date: this.state.date,
           time: this.state.shift,
         },
 
         phone: phone,
-        serviceIdList: this.state.serviceID_List,
+        serviceIdList: this.state.serviceIdList,
       };
 
       console.log(data);
@@ -416,7 +416,7 @@ export default class Appointment extends Component {
                           Thời gian làm việc:
                         </p>
                         <p style={{ marginLeft: `15px` }}>
-                          {item.open_time}-{item.close_time}
+                          {item.openTime}-{item.closeTime}
                         </p>
                       </div>
                     </div>
@@ -464,24 +464,21 @@ export default class Appointment extends Component {
 
   async getSlot() {
     console.log(
-      this.state.serviceID_List.length + "this.state.serviceID_List.length"
+      this.state.serviceIdList.length + "this.state.serviceIdList.length"
     );
-    if (
-      this.state.serviceID_List.length === 0 ||
-      this.state.date.length === 0
-    ) {
+    if (this.state.serviceIdList.length === 0 || this.state.date.length === 0) {
       this.setState({
         slotSelected: [],
       });
       return;
     }
     const data = {
-      branch_id: this.state.branch.id,
-      doctor_id: this.state.doctorID,
+      branchId: this.state.branch.id,
+      doctorId: this.state.doctorID,
       date: this.state.date,
-      service_id: this.state.serviceID_List,
+      serviceId: this.state.serviceIdList,
     };
-    console.log(data);
+
     await axios
       .post(API_GET_TIME, data, {
         headers: {
@@ -565,8 +562,8 @@ export default class Appointment extends Component {
                             if (!flag) {
                               await this.setState({
                                 serviceID: [...this.state.serviceID, item],
-                                serviceID_List: [
-                                  ...this.state.serviceID_List,
+                                serviceIdList: [
+                                  ...this.state.serviceIdList,
                                   item.id,
                                 ],
                                 numServiceSelected:

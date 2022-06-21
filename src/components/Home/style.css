@@ -30,3 +30,20 @@
 .home ul ol {
   margin: 5px;
 }
+
+/* ///////////////////////////////////////////////////////////////////////////// */
+#button-left,
+#button-right {
+  background-color: rgba(255, 255, 255, 0);
+  color: black;
+  width: 100%;
+  padding: 5px 20px;
+  /* border: 2px solid black; */
+  display: block;
+}
+
+button:disabled {
+  cursor: context-menu !important;
+  opacity: 0;
+  color: gray;
+}

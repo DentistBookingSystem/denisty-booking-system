@@ -47,7 +47,16 @@ class LoginForm extends React.Component {
           localStorage.setItem("accessToken", response.data.accessToken);
           localStorage.setItem("role", response.data.role);
           localStorage.setItem("statusLogin", true);
-          window.location.reload();
+          if (response.data.roleName === "ROLE_USER") {
+            window.location.reload();
+          } else {
+            toast.warn(
+              "Bạn đăng nhập không thành công. Tài khoản của bạn không tồn tại"
+            );
+            this.setState({
+              password: "",
+            });
+          }
         })
         .catch((e) => {
           localStorage.setItem("statusLogin", false);

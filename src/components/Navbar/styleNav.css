@@ -65,6 +65,9 @@
 }
 
 @media only screen and (max-width: 950px) {
+  #body {
+    margin: auto 10px;
+  }
   .nav {
     flex-direction: column;
     height: 100%;
@@ -79,7 +82,22 @@
     flex-basis: content !important;
   }
 
+  .first-nav {
+    margin-top: 80px;
+    animation: slideIn 1s ease-in;
+  }
+  .second-nav {
+    animation: slideIn 1s ease-in;
+  }
+
   .logo {
+    position: fixed;
+    top: 0;
+    right: 0;
+    justify-content: center;
+    background-color: white;
+    /* border-bottom: 1px solid; */
+    box-shadow: 4px 4px rgba(128, 128, 128, 0.57);
     width: 100% !important;
     height: 80px !important;
     flex-basis: content !important;
@@ -96,6 +114,15 @@
 
   .second-nav {
     justify-content: flex-start !important;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(calc(-100% - 20px));
+  }
+  to {
+    transform: translateX(0);
   }
 }
 
