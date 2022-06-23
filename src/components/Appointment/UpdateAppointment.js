@@ -25,6 +25,8 @@ const API_GET_TIME_POST =
   "http://localhost:8080/rade/patient/appointment/check-doctor";
 const API_UPDATE_APPOINTMENT =
   "http://localhost:8080/rade/patient/appointment/update";
+const API_CANCEL_APPOINTMENT =
+  "http://localhost:8080/rade/patient/appointment/cancel";
 export default function UpdateAppointment() {
   const [isOpen, setIsOpen] = useState(false);
   const [serviceList, setServiceList] = useState([]);
@@ -97,6 +99,10 @@ export default function UpdateAppointment() {
       setSlotSelected([]);
     }
   };
+
+  useEffect(() => {
+    setTimeCome("Vui lòng chọn thời gian");
+  }, [doctorSelected, date]);
 
   useEffect(() => {
     getAppointment();
@@ -186,9 +192,27 @@ export default function UpdateAppointment() {
 
     if (result.status === 200) {
       toast.success("Thay đổi lịch hẹn thành công");
-      navigate("/history");
+      navigate("/user/history");
     } else {
     }
+  };
+
+  const CancelAppointment = (e) => {
+    // if (checkAccount()) {
+    const data = {
+      phone: phone,
+      appointmentId: location.state.id,
+    };
+    console.log(data);
+    axios
+      .post(API_CANCEL_APPOINTMENT, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => navigate("/history"));
+    // }
   };
   return (
     <>
@@ -380,7 +404,13 @@ export default function UpdateAppointment() {
               </Col>
               <Col lg={3}>
                 <Row>
-                  <Button>Hủy bỏ lịch hẹn</Button>
+                  <Button
+                    onClick={(e) => {
+                      CancelAppointment(e);
+                    }}
+                  >
+                    Hủy bỏ lịch hẹn
+                  </Button>
                 </Row>
               </Col>
             </Row>

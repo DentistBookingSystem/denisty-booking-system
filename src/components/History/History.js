@@ -17,12 +17,13 @@ import { toast } from "react-toastify";
 import LoginForm from "../Login-Logout/Login";
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
+const API_CHECK_ACCOUNT = "http://localhost:8080/rade/patient/account/";
 const API_POST_HISTORY =
   "http://localhost:8080/rade/patient/appointment/history";
 const API_GET_HISTORY_DETAIL =
   "http://localhost:8080/rade/patient/appointment-detail/history";
 const API_CANCEL_APPOINTMENT =
-  "http://localhost:8080/rade/patient/appointment/cancel/";
+  "http://localhost:8080/rade/patient/appointment/cancel";
 const API_SEND_FEEDBACK = "http://localhost:8080/rade/patient/feedback/send";
 
 export default function History() {
@@ -33,11 +34,20 @@ export default function History() {
   const [appointmentID, setIDAppointmnet] = useState(0);
   const [displayNextbutton, setDisplayNextButton] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("notDone")) {
+      toast.warn("Bạn có lịch hẹn chưa hoàn thành");
+      localStorage.removeItem("notDone");
+    }
+  }, []);
+
   useEffect(() => {
     var data = {
       phone: phone,
       page: page,
     };
+    console.log(data);
     axios
       .post(API_POST_HISTORY, data, {
         headers: {
@@ -232,7 +242,7 @@ export default function History() {
                   <Row className="row-appointment-history p-0">
                     <Col style={{ textAlign: `center` }} className="">
                       {item.status === 0 ? (
-                        <p style={{ color: `blue` }}>Chờ hoàn thành</p>
+                        <p style={{ color: `#0b0b90` }}>Chờ hoàn thành</p>
                       ) : (
                         ""
                       )}
@@ -247,12 +257,30 @@ export default function History() {
                         ""
                       )}
                       {item.status === 4 ? (
-                        <p style={{ color: `red` }}>Chờ hoàn thành</p>
+                        <p
+                          style={{
+                            color: `#0b0b90`,
+                          }}
+                        >
+                          Chờ hoàn thành
+                        </p>
                       ) : (
                         ""
                       )}
                       {item.status === 2 ? (
-                        <p style={{ color: `red` }}>Không hoàn thành</p>
+                        <p style={{ color: `red` }}>Vắng mặt</p>
+                      ) : (
+                        ""
+                      )}
+                      {item.status === 5 ? (
+                        <p style={{ color: `green` }}>
+                          Hoàn thành và phản hồi thành công
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                      {item.status === 6 ? (
+                        <p style={{ color: `yellow` }}>Lịch đã bị hủy</p>
                       ) : (
                         ""
                       )}
@@ -267,14 +295,16 @@ export default function History() {
                     lg="auto"
                   >
                     {item.status === 0 ? (
-                      <Col className="cancel-button p-0" lg={6}>
+                      <Col className="feedback-button p-0" lg={6}>
                         <button
                           style={{ width: `auto` }}
                           value={item.id}
                           onClick={(e) => {
-                            navigate("/appointment/update", {
-                              state: { id: item.id },
-                            });
+                            if (checkAccount()) {
+                              navigate("/user/appointment/update", {
+                                state: { id: item.id },
+                              });
+                            }
                           }}
                         >
                           Sửa
@@ -289,11 +319,25 @@ export default function History() {
                           style={{ width: `auto` }}
                           value={item.id}
                           onClick={(e) => {
-                            setIDAppointmnet(e.target.value);
                             AddFeedback(e);
                           }}
                         >
                           Phản hồi
+                        </button>
+                      </Col>
+                    ) : (
+                      ""
+                    )}
+                    {item.status === 4 ? (
+                      <Col className="cancel-button p-0" lg={6}>
+                        <button
+                          style={{ width: `auto` }}
+                          value={item.id}
+                          onClick={(e) => {
+                            CancelAppointment(e);
+                          }}
+                        >
+                          Xóa
                         </button>
                       </Col>
                     ) : (
@@ -358,20 +402,28 @@ export default function History() {
     </div>
   );
   const CancelAppointment = (e) => {
-    axios
-      .get(API_CANCEL_APPOINTMENT + e.target.value, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => window.location.reload());
+    if (checkAccount()) {
+      const data = {
+        phone: phone,
+        appointmentId: e.target.value,
+      };
+      console.log(data);
+      axios
+        .post(API_CANCEL_APPOINTMENT, data, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => window.location.reload());
+    }
   };
 
-  const EditAppointment = (e) => {};
-
   const AddFeedback = (e) => {
-    document.getElementById("add-feeback-page").style.display = "block";
+    if (checkAccount()) {
+      setIDAppointmnet(e.target.value);
+      document.getElementById("add-feeback-page").style.display = "block";
+    }
   };
   const show = (e) => {
     setIDAppointmnet(e.target.value);
@@ -385,31 +437,63 @@ export default function History() {
   };
 
   const submitFeedback = () => {
-    const data = {
-      feedbackDTO: {
-        appointment_id: appointmentID,
-        content: contentFeedback,
-      },
-      phone: phone,
-    };
-    // console.log(data);
+    if (checkAccount()) {
+      const data = {
+        feedbackDTO: {
+          appointmentId: appointmentID,
+          content: contentFeedback,
+        },
+        phone: phone,
+      };
+      // console.log(data);
+      axios
+        .post(API_SEND_FEEDBACK, data, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          toast.success(
+            "Bạn đã phản hồi thành công. Cảm ơn sự đóng góp của bạn"
+          );
+        })
+        .catch((error) => {
+          if (error.message.indexOf("404") > -1) {
+            toast.error("Lịch đặt không tồn tại");
+          }
+        });
+      document.getElementById("add-feeback-page").style.display = "none";
+    }
+  };
+
+  const checkAccount = () => {
     axios
-      .post(API_SEND_FEEDBACK, data, {
+      .get(API_CHECK_ACCOUNT + phone, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
-        toast.success("Bạn đã phản hồi thành công. Cảm ơn sự đóng góp của bạn");
+        return true;
       })
       .catch((error) => {
-        if (error.message.indexOf("404") > -1) {
-          toast.error("Lịch đặt không tồn tại");
+        if (error.message.indexOf("406") > -1) {
+          toast.warn("Tài khoản bạn không có trong hệ thống");
+          return false;
+        }
+        // if (error.message.indexOf("410") > -1) {
+        //   toast.warn("Bạn có lịch hẹn chưa hoàn thành");
+        //   return false;
+        // }
+        if (error.message.indexOf("423") > -1) {
+          toast.warn("Tài khoản của bạn đã bị đưa vào danh sách đen");
+          return false;
         }
       });
-    document.getElementById("add-feeback-page").style.display = "none";
+    return true;
   };
 
   return (

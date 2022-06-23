@@ -25,6 +25,7 @@ const API_GET_SERVICE_OF_SERVICETYPE =
 const API_GET_BRANCH = "http://localhost:8080/rade/patient/branch";
 const API_GET_RECOMMEND_BRANCH =
   "http://localhost:8080/rade/patient/branch/recommend";
+const API_CHECK_ACCOUNT = "http://localhost:8080/rade/patient/account/";
 let msg = {};
 export default class Appointment extends Component {
   constructor(props) {
@@ -257,7 +258,7 @@ export default class Appointment extends Component {
         .then((res) => {
           // console(res);
           toast.success("Đặt lịch thành công");
-          window.location.replace("/history");
+          window.location.replace("/user/history");
         })
 
         .catch((error) => {
@@ -305,7 +306,28 @@ export default class Appointment extends Component {
     return flag;
   }
 
+  checkAccount() {
+    axios
+      .get(API_CHECK_ACCOUNT + phone, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch((error) => {
+        if (error.message.indexOf("406") > -1) {
+          toast.warn("Tài khoản bạn không có trong hệ thống");
+        } else if (error.message.indexOf("410") > -1) {
+          localStorage.setItem("notDone", true);
+          return window.location.replace("/user/history");
+        } else if (error.message.indexOf("423") > -1) {
+          toast.warn("Tài khoản của bạn đã bị đưa vào danh sách đen");
+        }
+      });
+  }
+
   async componentDidMount() {
+    this.checkAccount();
     const data = {
       phone: phone,
     };

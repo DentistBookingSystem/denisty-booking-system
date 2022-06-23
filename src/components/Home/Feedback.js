@@ -40,11 +40,14 @@ export default function Feedback() {
 
   const getFeedback = async () => {
     if (pageFeedback === 1) {
-      setPrevious(!previous);
+      setPrevious(false);
+    } else {
+      setPrevious(true);
     }
     //lấy trang hiện tại
+
     const data = {
-      serviceId: serviceSelected,
+      serviceId: serviceSelected ? serviceSelected.id : 0,
       page: pageFeedback,
     };
     const result = await axios.post(API_GET_FEEDBACK, data).catch((error) => {
@@ -58,7 +61,7 @@ export default function Feedback() {
 
     //lấy trang tiếp theo
     const dataNext = {
-      serviceId: serviceSelected,
+      serviceId: serviceSelected.id,
       page: pageFeedback + 1,
     };
     await axios
@@ -66,7 +69,9 @@ export default function Feedback() {
       .then((res) => {
         console.log("next data", res.data);
         if (res.data.length === 0) {
-          setNext(!next);
+          setNext(false);
+        } else {
+          setNext(true);
         }
       })
       .catch((error) => {
@@ -75,11 +80,11 @@ export default function Feedback() {
   };
   useEffect(() => {
     getAllService();
-  }, [serviceList, pageFeedback]);
+  }, []);
   //thực hiện lại khi serviceId and pageFeedback thay đổi
   useEffect(() => {
     getFeedback();
-  }, [pageFeedback]);
+  }, [pageFeedback, serviceSelected]);
 
   const toggle = async () => {
     await setIsOpen(!isOpen);
@@ -87,15 +92,15 @@ export default function Feedback() {
   return (
     <div>
       <Row>
-        <h3 style={{ fontSize: `25px`, color: `rgb(9, 196, 196` }}>
+        <h3 style={{ fontSize: `25px`, color: `#0b0b90` }}>
           Phản hồi từ khách hàng
         </h3>
       </Row>
-      <Row className="filter-service">
+      <Row className="filter-service justify-content-center">
         <Col lg={3}>
           <h5>Xem theo loại dịch vụ</h5>
         </Col>
-        <Col>
+        <Col lg={3}>
           <Dropdown isOpen={isOpen} toggle={() => toggle()}>
             <DropdownToggle
               style={{ backgroundColor: `white`, color: `black` }}
@@ -106,6 +111,13 @@ export default function Feedback() {
                 : serviceSelected.name}
             </DropdownToggle>
             <DropdownMenu style={{ width: `100%` }}>
+              <DropdownItem
+                onClick={() => {
+                  setServiceSelected(null);
+                }}
+              >
+                Chọn tất cả
+              </DropdownItem>
               {serviceList.map((item, key) => {
                 return (
                   <DropdownItem
@@ -120,11 +132,11 @@ export default function Feedback() {
           </Dropdown>
         </Col>
       </Row>
-      <Row>
+      <Row className="justify-content-center">
         {feedbackList.map((item) => {
           return (
             <Col
-              lg={4}
+              lg={3}
               className="bordered m-3"
               style={{ backgroundColor: `white` }}
             >

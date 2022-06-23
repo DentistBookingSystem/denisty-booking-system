@@ -83,19 +83,16 @@ export default function Nav(props) {
         },
       })
       .then((res) => {
-        return navigate("/appointment");
+        return navigate("/user/appointment");
       })
       .catch((error) => {
         if (error.message.indexOf("406") > -1) {
           toast.warn("Tài khoản bạn không có trong hệ thống");
-        }
-        if (error.message.indexOf("410") > -1) {
+        } else if (error.message.indexOf("410") > -1) {
           toast.warn("Bạn có lịch hẹn chưa hoàn thành");
-
-          return navigate("/history");
-        }
-        if (error.message.indexOf("423") > -1) {
-          toast.warn("Tài khoản của bạn đã bị khóa");
+          return navigate("/user/history");
+        } else if (error.message.indexOf("423") > -1) {
+          toast.warn("Tài khoản của bạn đã bị đưa vào danh sách đen");
         }
       });
   };
@@ -103,7 +100,7 @@ export default function Nav(props) {
   const SecondNavLogin = () => (
     <ul className="second-nav">
       <div
-        to="/appointment"
+        to="/user/appointment"
         className="nav-item"
         style={{ textDecoration: "none" }}
       >
@@ -126,7 +123,7 @@ export default function Nav(props) {
       </Link>
       <Link
         className="nav-item"
-        to="/history"
+        to="/user/history"
         style={{ textDecoration: "none" }}
       >
         <button>
@@ -135,7 +132,7 @@ export default function Nav(props) {
       </Link>
       <Link
         className="nav-item"
-        to="/profile"
+        to="/user/profile"
         style={{ textDecoration: "none" }}
       >
         <button>
