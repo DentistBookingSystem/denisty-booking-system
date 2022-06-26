@@ -55,7 +55,30 @@
   color: rgb(227, 151, 38);
 }
 
+#service__950px {
+  display: flex;
+  flex-direction: column;
+}
+
 /*Dùng Để hiển thị nội dung*/
 .hienThi {
   display: block;
+}
+
+#service-type__950px {
+  display: none;
+}
+@media only screen and (max-width: 950px) {
+  #service-type__950px {
+    display: block !important;
+  }
+
+  .dropdown {
+    display: none !important;
+  }
+
+  /* 
+  #service__950px {
+    display: block;
+  } */
 }

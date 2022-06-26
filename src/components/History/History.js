@@ -221,7 +221,7 @@ export default function History() {
               <tr key={item.id} style={{ alignItems: `center` }}>
                 <td style={{ alignItems: `center` }}>
                   <Row className="p-0 ">
-                    <p>
+                    <p className="p-2">
                       {item.appointmentDate}
                       <br />
                       {item.appointmentTime}
@@ -230,29 +230,35 @@ export default function History() {
                 </td>
                 <td style={{ alignItems: `center` }}>
                   <Row className="justify-content-center p-0">
-                    <p>{item.branch.name}</p>
+                    <p className="p-2">{item.branch.name}</p>
                   </Row>
                 </td>
                 <td style={{ width: `17vw` }}>
                   <Row className="justify-content-center p-0">
-                    {item.doctor.name}
+                    <p className="p-2">{item.doctor.name}</p>
                   </Row>
                 </td>
                 <td style={{ width: `15vw` }}>
                   <Row className="row-appointment-history p-0">
                     <Col style={{ textAlign: `center` }} className="">
                       {item.status === 0 ? (
-                        <p style={{ color: `#0b0b90` }}>Chờ hoàn thành</p>
+                        <p style={{ color: `#0b0b90` }} className="p-2">
+                          Chờ hoàn thành
+                        </p>
                       ) : (
                         ""
                       )}
                       {item.status === 1 ? (
-                        <p style={{ color: `green` }}>Đã hoàn thành</p>
+                        <p style={{ color: `green` }} className="p-2">
+                          Đã hoàn thành
+                        </p>
                       ) : (
                         ""
                       )}
                       {item.status === 3 ? (
-                        <p style={{ color: `red` }}>Đã hủy</p>
+                        <p style={{ color: `red` }} className="p-2">
+                          Đã hủy
+                        </p>
                       ) : (
                         ""
                       )}
@@ -261,6 +267,7 @@ export default function History() {
                           style={{
                             color: `#0b0b90`,
                           }}
+                          className="p-2"
                         >
                           Chờ hoàn thành
                         </p>
@@ -268,19 +275,23 @@ export default function History() {
                         ""
                       )}
                       {item.status === 2 ? (
-                        <p style={{ color: `red` }}>Vắng mặt</p>
+                        <p style={{ color: `red` }} className="p-2">
+                          Vắng mặt
+                        </p>
                       ) : (
                         ""
                       )}
                       {item.status === 5 ? (
-                        <p style={{ color: `green` }}>
+                        <p style={{ color: `green` }} className="p-2">
                           Hoàn thành và phản hồi thành công
                         </p>
                       ) : (
                         ""
                       )}
                       {item.status === 6 ? (
-                        <p style={{ color: `yellow` }}>Lịch đã bị hủy</p>
+                        <p style={{ color: `yellow` }} className="p-2">
+                          Lịch đã bị hủy
+                        </p>
                       ) : (
                         ""
                       )}
@@ -288,16 +299,15 @@ export default function History() {
                   </Row>
                 </td>
                 <td style={{ width: `17vw` }}>
-                  <Row
-                    className="row-button justify-content-end p-0"
+                  <div
+                    className="row-button d-flex justify-content-around flex-wrap p-0"
                     style={{ justifyContent: "flex-end" }}
-                    sm="auto"
-                    lg="auto"
                   >
                     {item.status === 0 ? (
-                      <Col className="feedback-button p-0" lg={6}>
+                      <Col className="feedback-button p-1" lg={6}>
                         <button
-                          style={{ width: `auto` }}
+                          className="m-2"
+                          style={{ width: `100%` }}
                           value={item.id}
                           onClick={(e) => {
                             if (checkAccount()) {
@@ -314,8 +324,9 @@ export default function History() {
                       ""
                     )}
                     {item.status === 1 ? (
-                      <Col className="feedback-button p-0" lg={6}>
+                      <Col className="feedback-button p-1" lg={6}>
                         <button
+                          className="m-2"
                           style={{ width: `auto` }}
                           value={item.id}
                           onClick={(e) => {
@@ -329,8 +340,9 @@ export default function History() {
                       ""
                     )}
                     {item.status === 4 ? (
-                      <Col className="cancel-button p-0" lg={6}>
+                      <Col className="cancel-button p-1" lg={6}>
                         <button
+                          className="m-2"
                           style={{ width: `auto` }}
                           value={item.id}
                           onClick={(e) => {
@@ -344,61 +356,63 @@ export default function History() {
                       ""
                     )}
 
-                    <Col lg={6} className="p-0">
+                    <Col lg={6} className="p-1">
                       <button
+                        className="m-2"
                         type="button"
                         value={item.id}
                         style={{ textAlign: `right`, width: `auto` }}
                         onClick={(e) => {
-                          console.log(item);
                           show(e);
                         }}
                       >
                         Chi tiết
                       </button>
                     </Col>
-                  </Row>
+                  </div>
                 </td>
               </tr>
             );
           })}
         </tbody>
       </Table>
-      <Row className="next-page d-flex justify-content-center">
-        {page === 1 ? (
+      <div className="text-center d-flex justify-content-center pb-3">
+        <Row className="next-page justify-content-center">
+          {page === 1 ? (
+            <Col className="p-1">
+              <button></button>
+            </Col>
+          ) : (
+            <Col className="p-1">
+              <button
+                onClick={() => {
+                  setPage(page - 1);
+                }}
+              >
+                <FontAwesomeIcon icon={faCaretLeft} />
+              </button>
+            </Col>
+          )}
           <Col className="p-1">
-            <button></button>
+            <p className="m-0">{page}</p>
           </Col>
-        ) : (
-          <Col className="p-1">
-            <button
-              onClick={() => {
-                setPage(page - 1);
-              }}
-            >
-              <FontAwesomeIcon icon={faCaretLeft} />
-            </button>
-          </Col>
-        )}
-        <Col className="p-1">
-          <p>{page}</p>
-        </Col>
-        {displayNextbutton ? (
-          <Col className="p-1">
-            <button
-              onClick={() => {
-                setPage(page + 1);
-              }}
-            >
-              <FontAwesomeIcon icon={faCaretRight} />
-            </button>
-          </Col>
-        ) : (
-          <Col className="p-1">
-            <button></button>
-          </Col>
-        )}
-      </Row>
+          {displayNextbutton ? (
+            <Col className="p-1">
+              <button
+                onClick={() => {
+                  setPage(page + 1);
+                }}
+              >
+                <FontAwesomeIcon icon={faCaretRight} />
+              </button>
+            </Col>
+          ) : (
+            <Col className="p-1">
+              <button></button>
+            </Col>
+          )}
+        </Row>
+      </div>
     </div>
   );
   const CancelAppointment = (e) => {

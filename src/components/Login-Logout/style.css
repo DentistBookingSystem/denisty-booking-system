@@ -30,7 +30,7 @@ html {
   text-align: center;
   font-family: "open sans", sans-serif;
   padding: 1rem 0;
-  font-size: 2rem;
+  font-size: 35px;
 }
 
 .row {
@@ -40,14 +40,17 @@ html {
   padding-top: 0.7rem;
 }
 
-.row input {
+.row > input {
   width: 100%;
+  margin: 0 auto;
   box-sizing: border-box;
   border: none;
-  font-size: 1.8rem;
+  font-size: 35px !important;
   padding: 10px;
+  text-align: center;
   box-shadow: inset 0px -3px 0px 0px rgba(187, 187, 187, 0.2);
   transition: box-shadow 0.2s ease-in;
+  border-radius: 10px;
 }
 
 .row input:focus {
@@ -67,7 +70,7 @@ html {
 
 .row label {
   align-self: start;
-  padding-left: 4rem;
+  padding-left: 1rem;
   font-size: 18px;
   color: rgba(187, 187, 187, 0.9);
 }

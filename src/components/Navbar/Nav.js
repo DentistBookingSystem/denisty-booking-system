@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./styleNav.css";
+import "../ServiceType/style.css";
 import logo from "../../logo/logo1.jpg";
+import logoDentist from "../../assets/images/logoDentist.png";
 import LoginForm from "../Login-Logout/Login";
 import { Link, useRoutes, useNavigate, Navigate } from "react-router-dom";
 import SignIn from "../signIn/SignIn";
-import Service from "../ServiceType/Service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Popup from "reactjs-popup";
 import {
@@ -12,15 +13,13 @@ import {
   faUser,
   faCalendarDays,
 } from "@fortawesome/free-regular-svg-icons";
-import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import Notification from "../Notification/Notification";
 import axios from "axios";
 import { toast } from "react-toastify";
-import HistoryPage from "../History/History";
-// import { useHistory } from "react-router-dom";
-// import Sign_in from "../signIn/Sign_in";
-import { Redirect } from "react-router-dom";
-
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/js/bootstrap.js";
+import ServiceTypeList from "../../getData/ServiceTypeList";
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
 const API_POST_HISTORY =
@@ -29,8 +28,40 @@ const API_CHECK_ACCOUNT = "http://localhost:8080/rade/patient/account/";
 
 export default function Nav(props) {
   const [statusLogin, setStatusLogin] = useState(null);
+  const [displayServiceType, setDisplayServiceType] = useState("none");
   let navigate = useNavigate();
   // let HistoryPage = useRoutes([{ path: "/history", element: <HistoryPage /> }]);
+  const [serviceType, setServiceType] = useState([]);
+  useEffect(() => {
+    ServiceTypeList.getSericeType()
+      .then((Response) => {
+        setServiceType(Response.data.serviceTypeList);
+      })
+      .catch((error) => console.log("Error: " + error));
+  }, []);
+  const clickButton = () => {
+    if (document.getElementById("service-type").style.display === "none") {
+      setDisplayServiceType("flex");
+      // document.getElementById("abc").style.display = `block`;
+    } else {
+      setDisplayServiceType("none");
+      // document.getElementById("abc").style.display = `none`;
+    }
+  };
+
+  const clickMenuBar = () => {
+    if (
+      document.getElementById("show").style.animation.indexOf("slideIn") > -1
+      // document.getElementById("show").style.display === "block"
+    ) {
+      // document.getElementById("show").style.display = "none";
+      document.getElementById("show").style.animation =
+        "slideOut ease-out 0.5s forwards";
+    } else {
+      // document.getElementById("show").style.display = "block";
+      document.getElementById("show").style.animation = "slideIn ease-in 0.5s";
+    }
+  };
   useEffect(() => {
     var data = {
       phone: phone,
@@ -58,16 +89,50 @@ export default function Nav(props) {
   const FirstNav = () => {
     return (
       <nav>
-        <ul className="first-nav">
+        <ul id="show-first-nav" className="first-nav m-0 p-0">
           <li className="nav-item">
             <Link to="/home" style={{ textDecoration: "none" }}>
               <button>Trang chủ</button>
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/servicetype/1" style={{ textDecoration: "none" }}>
-              <Service />
-            </Link>
+            <div to="/servicetype/1" style={{ textDecoration: "none" }}>
+              <div className="dropdown">
+                <button className="nut_dropdown" style={{ width: `160px` }}>
+                  Dịch vụ
+                </button>
+                <div className="noidung_dropdown">
+                  {serviceType.map((item) => (
+                    <Link to={`/serviceType/${item.id}`} key={item.id}>
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              {/* Hiển thị khi màn hình < 950px */}
+              <div id="service-type__950px">
+                <button type="button" onClick={() => clickButton()}>
+                  Dịch vụ 1
+                </button>
+                <div
+                  id="service-type"
+                  className="ms-3 flex-column"
+                  style={{ display: displayServiceType }}
+                >
+                  {serviceType.map((item) => (
+                    <button>
+                      <Link
+                        to={`/serviceType/${item.id}`}
+                        key={item.id}
+                        style={{ textDecoration: `none` }}
+                      >
+                        {item.name}
+                      </Link>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
       </nav>
@@ -98,7 +163,7 @@ export default function Nav(props) {
   };
 
   const SecondNavLogin = () => (
-    <ul className="second-nav">
+    <ul id="show-second-nav" className="second-nav m-0 p-0">
       <div
         to="/user/appointment"
         className="nav-item"
@@ -106,7 +171,7 @@ export default function Nav(props) {
       >
         <button
           type="button"
-          className="btn-datlich"
+          className="btn-datlich display"
           style={{
             backgroundColor: `#0b0b90 `,
             color: `white`,
@@ -151,7 +216,7 @@ export default function Nav(props) {
     </ul>
   );
   const SecondNav = () => (
-    <ul className="second-nav">
+    <ul id="show-second-nav" className="second-nav m-0 p-0">
       <Popup
         modal
         trigger={
@@ -178,16 +243,18 @@ export default function Nav(props) {
   return (
     <>
       <nav>
-        <div className="nav">
-          <div className="logo">
-            <img
-              src={logo}
-              alt="logo"
-              onClick={() => {
-                navigate("/");
-              }}
-            />
-            <p className="p-2">Nha khoa RADE</p>
+        {/* Hiển thị khi màn hình > 950px */}
+        <div id="display-nav__950px" className="nav">
+          <div className="logo justify-content-between">
+            <div className="d-flex justify-content-start">
+              <img
+                src={logoDentist}
+                alt="logo"
+                onClick={() => {
+                  navigate("/");
+                }}
+              />
+            </div>
           </div>
           <FirstNav />
           {localStorage.getItem("statusLogin") === "true" ? (
@@ -195,6 +262,69 @@ export default function Nav(props) {
           ) : (
             <SecondNav />
           )}
+        </div>
+
+        {/* Hiển thị khi màn hình < 950px */}
+        <div className="nav__950px ">
+          <div className="d-flex flex-column">
+            <div className="logo__950px justify-content-between">
+              <div
+                className="logo-icon__950px"
+                style={{ width: `15vw`, display: `flex`, margin: `auto 0` }}
+              >
+                <FontAwesomeIcon
+                  className="icon-menu"
+                  icon={faBars}
+                  style={{
+                    margin: `auto 0`,
+                    fontSize: `30px`,
+                    width: `100%`,
+                    cursor: `pointer`,
+                  }}
+                  onClick={() => clickMenuBar()}
+                />
+              </div>
+
+              <div className="d-flex ">
+                <img
+                  src={logoDentist}
+                  alt="logo"
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                />
+              </div>
+
+              <div
+                to="/user/appointment"
+                className="nav-item"
+                style={{ textDecoration: "none" }}
+              >
+                <button
+                  type="button"
+                  className="btn-datlich me-3 display-max-width"
+                  style={{
+                    backgroundColor: `#0b0b90 `,
+                    color: `white`,
+                    borderRadius: `10px`,
+                    border: `2px solid #0b0b90`,
+                  }}
+                  onClick={() => ClickMakeAppoiment()}
+                >
+                  Đặt lịch
+                </button>
+              </div>
+            </div>
+            {/* ============ */}
+            <div id="show" className="nav-side-bar">
+              <FirstNav />
+              {localStorage.getItem("statusLogin") === "true" ? (
+                <SecondNavLogin />
+              ) : (
+                <SecondNav />
+              )}
+            </div>
+          </div>
         </div>
       </nav>
     </>

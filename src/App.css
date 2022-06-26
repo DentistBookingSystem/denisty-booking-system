@@ -4,6 +4,8 @@
   padding: 0;
   box-sizing: border-box;
   vertical-align: middle;
+  cursor: context-menu;
+  user-select: none;
 }
 
 .App {

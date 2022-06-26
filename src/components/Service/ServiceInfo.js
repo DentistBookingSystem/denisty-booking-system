@@ -1,7 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ServiceList from "../../getData/ServiceList";
 import { Table, Row, Col, Container, Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -29,13 +28,10 @@ export default function ServiceInfo() {
   const [serviceList, setServiceList] = useState([]);
   const [serviceSelected, setServiceSelected] = useState([]);
   const [nameServiceType, setNameServiceType] = useState("");
-  const [feedback, setFeedback] = useState([]);
   const [serviceAndDiscount, setServiceAndDiscount] = useState([]);
   const [serviceIDSelected, setServiceIDSelected] = useState("");
   const { id } = useParams();
-  const [contentFeedback, setContenFeedback] = useState("");
   const [discount, setDiscount] = useState({});
-  let idServiceSelected;
   const API_GET_SERVICE_BY_SERVICETYPE_ID =
     "http://localhost:8080/rade/service/discount/";
   useEffect(() => {
@@ -112,7 +108,7 @@ export default function ServiceInfo() {
                     });
                 }}
               >
-                <p>{item.name}</p>
+                <p className="m-0">{item.name}</p>
                 {serviceAndDiscount.at(key).discount ? (
                   <div className="ps-3 icon-tag">
                     <FontAwesomeIcon icon={faTags} />
@@ -260,7 +256,7 @@ export default function ServiceInfo() {
                 <div className="d-flex flex-row p-1">
                   <h5>Thời gian ước tính:</h5>
                   <p style={{ paddingLeft: `5px` }}>
-                    {estimateTime(item.estimated_time)}
+                    {estimateTime(item.estimatedTime)}
                   </p>
                 </div>
                 <div className="d-flex flex-row p-1">

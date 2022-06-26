@@ -56,7 +56,7 @@ table {
 }
 .bordered th {
   /* background-color: #ececec; */
-  background-color: #0b0b90;
+  background-color: #0b0b90 !important;
   color: white;
   background-image: -webkit-gradient(
     linear,

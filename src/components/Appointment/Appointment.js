@@ -428,16 +428,24 @@ export default class Appointment extends Component {
                     </div>
                     <div className="info-branch-right">
                       <div className="addr">
-                        <p style={{ fontWeight: `bold` }}>Địa chỉ:</p>
-                        <p style={{ marginLeft: `15px` }}>
+                        <p
+                          className="m-0 text-start"
+                          style={{ fontWeight: `bold` }}
+                        >
+                          Địa chỉ:
+                        </p>
+                        <p className="m-0" style={{ marginLeft: `10px` }}>
                           {item.district.name}, {item.district.province.name}
                         </p>
                       </div>
                       <div>
-                        <p style={{ fontWeight: `bold` }}>
+                        <p
+                          className="m-0 text-start"
+                          style={{ fontWeight: `bold` }}
+                        >
                           Thời gian làm việc:
                         </p>
-                        <p style={{ marginLeft: `15px` }}>
+                        <p className="m-0" style={{ marginLeft: `10px` }}>
                           {item.openTime}-{item.closeTime}
                         </p>
                       </div>
@@ -542,31 +550,35 @@ export default class Appointment extends Component {
           <div className="side-left">
             <h3 className="title-left">Chọn dịch vụ</h3>
             <div className="title">
-              <ul>
+              <ul className="m-0  ps-0">
                 <li className="service-type-item">Loại dịch vụ</li>
                 <li className="service-item">Dịch vụ</li>
               </ul>
             </div>
             {/* thôngtin */}
             <div>
-              <ul className="service-info">
+              <ul className="service-info m-0 ps-0">
                 <li style={{ padding: 0 }} className="service-type-item">
                   {this.state.serviceTypeArr.map((item) => (
-                    <li key={item.id} className="service-type-item-small">
+                    <li
+                      key={item.id}
+                      className="service-type-item-small m-0 p-1"
+                    >
                       <button
+                        className="text-center"
                         key={item.id}
                         style={{ borderRadius: `20px` }}
                         value={item.id}
                         onClick={(e) => this.changeService(e)}
                       >
-                        <p>{item.name}</p>
+                        <p className="m-0">{item.name}</p>
                       </button>
                     </li>
                   ))}
                 </li>
                 <li style={{ padding: 0 }} className="service-item">
                   {this.state.serviceArr.map((item) => (
-                    <li key={item.id} className="service-item-small">
+                    <li key={item.id} className="service-item-small m-0 p-1">
                       <button
                         style={{ borderRadius: `20px` }}
                         name={item.id}
@@ -606,7 +618,7 @@ export default class Appointment extends Component {
                           }
                         }}
                       >
-                        <p>{item.name}</p>
+                        <p className="m-0">{item.name}</p>
                       </button>
                     </li>
                   ))}

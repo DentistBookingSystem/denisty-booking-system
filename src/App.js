@@ -26,6 +26,7 @@ import axios from "axios";
 import UpdateAppointment from "./components/Appointment/UpdateAppointment";
 import { Redirect } from "react-router";
 import LoginForm from "./components/Login-Logout/Login";
+import UpdateProfile from "./components/Profile/UpdateProfile";
 
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import { Button } from "bootstrap";
@@ -44,7 +45,6 @@ function App() {
       toast.success("Đăng nhập thành công");
       localStorage.removeItem("loginSuccess");
     }
-    console.log("stateLogin");
     const interval = setInterval(() => {
       axios
         .get(API_CHECK_ACCOUNT + phone, {
@@ -98,6 +98,10 @@ function App() {
             <Route
               path="/user/profile"
               element={stateLogin ? <Profile /> : <LoginForm />}
+            />
+            <Route
+              path="/user/profile/update"
+              element={stateLogin ? <UpdateProfile /> : <LoginForm />}
             />
             <Route
               path="/user/history"

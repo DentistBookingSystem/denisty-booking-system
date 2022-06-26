@@ -61,7 +61,7 @@ export default function Feedback() {
 
     //lấy trang tiếp theo
     const dataNext = {
-      serviceId: serviceSelected.id,
+      serviceId: serviceSelected ? serviceSelected.id : 0,
       page: pageFeedback + 1,
     };
     await axios

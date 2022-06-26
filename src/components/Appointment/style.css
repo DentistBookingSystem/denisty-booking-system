@@ -514,3 +514,8 @@ table {
   -webkit-border-radius: 0 0 10px 0;
   border-radius: 0 0 10px 0;
 }
+
+.input-time {
+  font-size: 20px !important ;
+  width: 100%;
+}

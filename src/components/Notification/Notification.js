@@ -41,11 +41,7 @@ export default function Notification() {
       </button>
       <div className="content-dropdown">
         {notificationList.map((item) => (
-          <Link
-            to={`/serviceType/${item.id}`}
-            key={item.id}
-            className="text-start"
-          >
+          <Link to="" key={item.id} className="text-start">
             {item.description}
           </Link>
         ))}

@@ -1,6 +1,5 @@
 .header-profile {
-  color: rgb(9, 198, 206);
-  text-shadow: 2px 2px rgba(0, 0, 0, 0.338);
+  color: #0b0b90;
   padding: 20px;
   font-size: 25px;
 }
@@ -14,7 +13,7 @@
   padding: 20px;
   border: 1.5px solid black;
   border-radius: 20px;
-  box-shadow: 4px 4px rgba(128, 128, 128, 0.6);
+  box-shadow: 0 0 4px 4px rgba(128, 128, 128, 0.7);
 }
 
 .profile-item {
@@ -27,6 +26,8 @@
 .profile-item label {
   min-width: 180px;
   text-align: left;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .form-profile input {

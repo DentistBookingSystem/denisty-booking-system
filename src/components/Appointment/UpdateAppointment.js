@@ -100,9 +100,9 @@ export default function UpdateAppointment() {
     }
   };
 
-  useEffect(() => {
-    setTimeCome("Vui lòng chọn thời gian");
-  }, [doctorSelected, date]);
+  // useEffect(() => {
+  //   setTimeCome("Vui lòng chọn thời gian");
+  // }, [doctorSelected, date]);
 
   useEffect(() => {
     getAppointment();
@@ -305,6 +305,7 @@ export default function UpdateAppointment() {
                         <DropdownItem
                           key={item.id}
                           onClick={() => {
+                            setTimeCome("Vui lòng chọn thời gian");
                             setDoctorSelected(item);
                           }}
                         >
@@ -323,30 +324,43 @@ export default function UpdateAppointment() {
                 </h5>
               </Col>
               <Col lg={3}>
-                <input
-                  style={{
-                    border: `1px solid black`,
-                    borderRadius: `5px`,
-                  }}
-                  className="text-center"
-                  type="date"
-                  value={date}
-                  pattern="\d{4}-\d{2}-\d{2}"
-                  min={today()}
-                  max={maxday()}
-                  onChange={(e) => {
-                    // var day = new Date(e.currentTarget.valueAsDate).getUTCDay();
-                    if ([0].includes(e.currentTarget.valueAsDate.getUTCDay())) {
-                      toast.warn(
-                        "Bạn vui lòng không được chọn ngảy Chủ Nhật. Bạn vui lòng chọn ngày khác"
-                      );
-                      setDate("");
-                    } else {
-                      setDate(e.target.valueAsDate);
-                      // getSlot(e);
-                    }
-                  }}
-                />
+                <div>
+                  <input
+                    style={{
+                      border: `1px solid black`,
+                      borderRadius: `5px`,
+                    }}
+                    className="text-center input-time"
+                    type="date"
+                    value={date}
+                    pattern="\d{4}-\d{2}-\d{2}"
+                    min={today()}
+                    max={maxday()}
+                    onChange={(e) => {
+                      setTimeCome("Vui lòng chọn thời gian");
+                      // var day = new Date(e.currentTarget.valueAsDate).getUTCDay();
+                      if (
+                        [0].includes(e.currentTarget.valueAsDate.getUTCDay())
+                      ) {
+                        toast.warn(
+                          "Bạn vui lòng không được chọn ngảy Chủ Nhật. Bạn vui lòng chọn ngày khác"
+                        );
+                        setDate("");
+                      } else {
+                        let separator = "";
+                        let date = e.target.valueAsDate.getDate();
+                        let month = e.target.valueAsDate.getMonth() + 1;
+                        let year = e.target.valueAsDate.getFullYear();
+
+                        let dateBooking = `${year}${separator}-${
+                          month < 10 ? `0${month}` : `${month}`
+                        }-${separator}${date}`;
+                        setDate(dateBooking);
+                        // getSlot(e);
+                      }
+                    }}
+                  />
+                </div>
               </Col>
               <Col className="d-flex">
                 <h5 style={{ color: "gray" }}>Thời gian dự kiến: </h5>
