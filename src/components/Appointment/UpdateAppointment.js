@@ -188,6 +188,9 @@ export default function UpdateAppointment() {
       })
       .catch((error) => {
         console.log(error);
+        if (error.response.status === 410) {
+          toast.warn("Thao tác chỉ được thực hiện trước lịch hẹn 1 ngày.");
+        }
       });
 
     if (result.status === 200) {
@@ -211,7 +214,15 @@ export default function UpdateAppointment() {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => navigate("/history"));
+      .then((res) => navigate("/history"))
+      .catch((error) => {
+        if (error.response.status === 423) {
+          toast.warn("Bạn đã sử dụng quá 3 lần hủy trong 1 tháng.");
+        }
+        if (error.response.status === 410) {
+          toast.warn("Thao tác chỉ được thực hiện trước lịch hẹn 1 ngày.");
+        }
+      });
     // }
   };
   return (
@@ -223,7 +234,6 @@ export default function UpdateAppointment() {
             style={{ color: `#0b0b90`, fontSize: `25px` }}
           >
             <h3>Cập nhật thông tin lịch hẹn</h3>
-            <h3>{location.state.id}</h3>
           </div>
           <div>
             <Row className="justify-content-start p-0">

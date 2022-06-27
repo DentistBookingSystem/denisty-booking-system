@@ -53,15 +53,15 @@ export default function SignIn() {
   const clickSiginIn = () => {
     validateAll();
     const data = {
-      full_name: full_name,
+      fullName: full_name,
       password: password,
-      date_of_birth: dateOfBirth,
+      dateOfBirth: dateOfBirth,
       gender: gender,
-      district_id: districtID,
+      districtId: districtID,
       phone: phone,
       email: email,
     };
-    // console.log(data);
+    console.log("data signin", data);
     axios
       .post(API_REGIS, data)
       .then(() => {
@@ -134,11 +134,14 @@ export default function SignIn() {
             <Row>
               <Col sm={5}>Số điện thoại</Col>
               <Col sm={7}>
+                {/* <PhoneInput */}
                 <input
+                  type="number"
                   name="phone"
                   value={phone}
                   onChange={(e) => {
                     setPhone(e.target.value);
+                    console.log(e.target.value);
                   }}
                 />
               </Col>
@@ -151,6 +154,7 @@ export default function SignIn() {
               <Col sm={5}>Mật khẩu</Col>
               <Col sm={7}>
                 <input
+                  type="password"
                   name="password"
                   value={password}
                   onChange={(e) => {
@@ -167,6 +171,7 @@ export default function SignIn() {
               <Col sm={5}>Nhập lại mật khẩu</Col>
               <Col sm={7}>
                 <input
+                  type="password"
                   name="confirm"
                   value={confrim}
                   onChange={(e) => {

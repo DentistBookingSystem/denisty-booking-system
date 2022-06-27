@@ -55,7 +55,15 @@ export default function LoginForm(props) {
         })
         .catch((e) => {
           localStorage.setItem("statusLogin", false);
-          toast.error("Login không thành công");
+          console.log(e);
+          if (e.response.status === 406) {
+            toast.error(
+              "Tài khoản của bạn đã bị khóa. \nVui lòng liên hệ 0987654321 để biết thông tin chi tiết"
+            );
+          } else {
+            toast.error("Đăng nhập không thành công");
+          }
+
           setPassword("");
         });
       // AccountLogin.getBranch();

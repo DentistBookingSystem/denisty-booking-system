@@ -50,13 +50,14 @@ export default function Feedback() {
       serviceId: serviceSelected ? serviceSelected.id : 0,
       page: pageFeedback,
     };
+    console.log("data feedback", data);
     const result = await axios.post(API_GET_FEEDBACK, data).catch((error) => {
       console.log(error);
     });
 
     if (result.data) {
       setFeedbackList(result.data);
-      console.log(result.data);
+      console.log("list feedback", result.data);
     }
 
     //lấy trang tiếp theo
@@ -97,10 +98,10 @@ export default function Feedback() {
         </h3>
       </Row>
       <Row className="filter-service justify-content-center">
-        <Col lg={3}>
+        <Col lg={3} md={3}>
           <h5>Xem theo loại dịch vụ</h5>
         </Col>
-        <Col lg={3}>
+        <Col lg={3} md={3}>
           <Dropdown isOpen={isOpen} toggle={() => toggle()}>
             <DropdownToggle
               style={{ backgroundColor: `white`, color: `black` }}
@@ -149,7 +150,9 @@ export default function Feedback() {
                 </p>
               </Row>
               <Row>
-                <p className="text-start ps-4 mb-3">{item.content}</p>
+                <p className="text-start ps-4 mb-3 text-break">
+                  {item.content}
+                </p>
               </Row>
             </Col>
           );
