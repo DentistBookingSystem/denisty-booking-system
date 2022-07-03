@@ -27,6 +27,7 @@ import UpdateAppointment from "./components/Appointment/UpdateAppointment";
 import { Redirect } from "react-router";
 import LoginForm from "./components/Login-Logout/Login";
 import UpdateProfile from "./components/Profile/UpdateProfile";
+import SignIn from "./components/signIn/SignIn";
 
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import { Button } from "bootstrap";
@@ -117,6 +118,8 @@ function App() {
               path="/user/appointment/update"
               element={stateLogin ? <UpdateAppointment /> : <LoginForm />}
             />
+
+            <Route exact path="/account/register" element={<SignIn />} />
             <Route exact path="/logout" element={<Logout />} />
             {/* </>
             ) : (
@@ -137,85 +140,6 @@ function App() {
         </div>
         <Footer />
       </Router>
-      {/* {window.location.href.indexOf("/user") > -1 ? (
-        <Router>
-          <div id="header">
-            <Nav />
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
-          </div>
-          <div id="body">
-            <Routes>
-              {stateLogin ? (
-                <>
-                  <Route path="/user/home" element={<Home />} />
-                  <Route path="/user/profile" element={<Profile />} />
-                  <Route path="/user/history" element={<History />} />
-                  <Route
-                    exact
-                    path="/serviceType/:id"
-                    element={<ServiceInfo />}
-                  />
-                  <Route path="/user/appointment" element={<Appointment />} />
-                  <Route
-                    exact
-                    path="/user/appointment/update"
-                    element={<UpdateAppointment />}
-                  />
-                  <Route exact path="/logout" element={<Logout />} />
-                </>
-              ) : (
-                <>
-                  <Route
-                    path="/user/*"
-                    element={<Navigate replace to="/home" />}
-                  />
-                  <Route exact path="/home" element={<Home />} />
-                </>
-              )}
-            </Routes>
-          </div>
-          <Footer />
-        </Router>
-      ) : (
-        <Router>
-          <div id="header">
-            <Nav />
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
-          </div>
-          <div id="body">
-            <Routes>
-              <Route exact path="/user/home" element={<Home />} />
-              <Route index element={<Home />} />
-              <Route exact path="/serviceType/:id" element={<ServiceInfo />} />
-              <Route exact path="/home" element={<Home />} />
-              <Route exact path="/logout" element={<Logout />} />
-              <Route path="/rade/login" element={<LoginForm setStateLogin />} />
-              <Route path="*" element={<Navigate replace to="/rade/login" />} />
-            </Routes>
-          </div>
-          <Footer />
-        </Router>
-      )} */}
 
       <div className="chatBox">
         <a href="https://l.messenger.com/l.php?u=http%3A%2F%2Fm.me%2F107337128652951&h=AT1R4u7pSoC4rdF5yHZ0e7myOVni1br5HBNiSsmK2Q_dUr9sNSEFQ8OmWGoFkVXMES6BM0nPWCzLh-JVLevAEg2xzp4WzOuFfUpW39WgQkILbTDH8jxEMSz9r2upi75kUed7uQ">

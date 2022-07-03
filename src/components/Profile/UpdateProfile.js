@@ -5,7 +5,9 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Col, Row } from "reactstrap";
+import { Col, Input, Row } from "reactstrap";
+import Validate from "../signIn/Validate";
+import validator from "validator";
 const API_GET_ACCOUNT_PROFILE =
   "http://localhost:8080/rade/patient/account/profile?phone=";
 const API_GET_PROVINCE = "http://localhost:8080/rade/province";
@@ -30,6 +32,13 @@ export default function UpdateProfile() {
   const [district, setDistrict] = useState(null);
   const [province, setProvince] = useState(null);
   const [gender, setGender] = useState(null);
+
+  const [emailValidate, setEmailValidate] = useState(false);
+  const [nameValidate, setNameValidate] = useState(false);
+  const [dateOfBirthValidate, setDateOfBirthValidate] = useState(false);
+  const [districtValidate, setDistrictValidate] = useState(false);
+  const [provinceValidate, setProvinceValidate] = useState(false);
+  const [genderValidate, setGenderValidate] = useState(false);
 
   //
   const [provinceList, setProvinceList] = useState([]);
@@ -69,6 +78,7 @@ export default function UpdateProfile() {
     console.log("province", result.data);
     if (result.data) {
       setProvinceList(result.data);
+      setDistrict(null);
     }
   };
 
@@ -94,82 +104,151 @@ export default function UpdateProfile() {
   }, [province]);
 
   return (
-    <div>
+    <div
+      style={{ backgroundColor: `white`, padding: `20px`, paddingTop: `0px` }}
+    >
       <Row className="header-profile">
         <h3>Chỉnh sửa thông tin của bạn</h3>
       </Row>
-      <form>
+      <div>
         {/* Phone  */}
-        <Row>
-          <Col>
-            <label>Số điện thoại: </label>
+        <Row className="justify-content-center">
+          <Col md={2} className="text-start">
+            <label style={{ color: `black`, textAlign: `left` }}>
+              Số điện thoại:{" "}
+            </label>
           </Col>
-          <Col>
-            <input value={account.phone} />
+          <Col md={5}>
+            <Input
+              style={{
+                width: `100%`,
+                border: `1px solid gray`,
+                borderRadius: `4px`,
+              }}
+              value={account.phone}
+            />
           </Col>
         </Row>
+
         {/* Tên  */}
-        <Row>
-          <Col>
-            <label>Tên: </label>
+        <Row className="justify-content-center">
+          <Col md={2} className="text-start">
+            <label style={{ color: `black`, textAlign: `left` }}>Tên: </label>
           </Col>
-          <Col>
-            <input
+          <Col md={5}>
+            <Input
+              style={{
+                width: `100%`,
+                border: `1px solid gray`,
+                borderRadius: `4px`,
+              }}
               placeholder="Nhập tên của bạn"
               value={name}
               onChange={(e) => {
+                if (!Validate.validateMinLength(e.target.value, 8)) {
+                  setNameValidate(true);
+                } else {
+                  setNameValidate(false);
+                }
                 setName(e.target.value);
               }}
             />
           </Col>
+          {nameValidate ? (
+            <Col md={7} className=" text-end">
+              <span style={{ color: `red`, fontSize: `15px` }}>
+                Tên phải dài ít nhất 8 kí tự.
+              </span>
+            </Col>
+          ) : null}
         </Row>
         {/* Email  */}
-        <Row>
-          <Col>
-            <label>Email: </label>
+        <Row className="justify-content-center" md={5}>
+          <Col md={2} className="text-start">
+            <label style={{ color: `black`, textAlign: `left` }}>Email: </label>
           </Col>
-          <Col>
-            <input
+          <Col md={5}>
+            <Input
+              style={{
+                width: `100%`,
+                border: `1px solid gray`,
+                borderRadius: `4px`,
+              }}
               placeholder="Nhập email của bạn"
               type="email"
               value={email}
               onChange={(e) => {
+                if (!validator.isEmail(email)) {
+                  setEmailValidate(true);
+                } else {
+                  setEmailValidate(false);
+                }
                 setEmail(e.target.value);
               }}
             />
           </Col>
+          {emailValidate ? (
+            <Col md={7} className=" text-end">
+              <span style={{ color: `red`, fontSize: `15px` }}>
+                Email không tồn tại.
+              </span>
+            </Col>
+          ) : null}
         </Row>
+
         {/* Date of birth  */}
-        <Row>
-          <Col>
-            <label>Ngày sinh: </label>
+        <Row className="justify-content-center">
+          <Col md={2} className="text-start">
+            <label style={{ color: `black`, textAlign: `left` }}>
+              Ngày sinh:{" "}
+            </label>
           </Col>
-          <Col>
-            <input
+          <Col md={5}>
+            <Input
+              style={{
+                width: `100%`,
+                border: `1px solid gray`,
+                borderRadius: `4px`,
+              }}
               placeholder="Nhập email của bạn"
               type="date"
+              pattern="yyyy-mm-dd"
               value={dateOfBirth}
               onChange={(e) => {
-                let separator = "";
-                let date = e.target.valueAsDate.getDate();
-                let month = e.target.valueAsDate.getMonth() + 1;
-                let year = e.target.valueAsDate.getFullYear();
+                // let separator = "";
+                // let date = e.target.valueAsDate.getDate();
+                // let month = e.target.valueAsDate.getMonth() + 1;
+                // let year = e.target.valueAsDate.getFullYear();
 
-                let dayOfBirth = `${year}${separator}-${
-                  month < 10 ? `0${month}` : `${month}`
-                }-${separator}${date}`;
-                setDateOfBirth(dayOfBirth);
+                // let dayOfBirth = `${year}${separator}-${
+                //   month < 10 ? `0${month}` : `${month}`
+                // }-${separator}${date}`;
+                setDateOfBirth(e.target.valueAsDate);
               }}
             />
           </Col>
+          {dateOfBirthValidate ? (
+            <Col md={7} className=" text-end">
+              <span style={{ color: `red`, fontSize: `15px` }}>
+                Vui lòng chọn ngày sinh của bạn.
+              </span>
+            </Col>
+          ) : null}
         </Row>
         {/* Giới tính  */}
-        <Row>
-          <Col>
-            <label>Giới tính: </label>
+        <Row className="justify-content-center">
+          <Col md={2} className="text-start">
+            <label style={{ color: `black`, textAlign: `left` }}>
+              Giới tính:{" "}
+            </label>
           </Col>
-          <Col>
+          <Col md={5}>
             <select
+              style={{
+                width: `100%`,
+                border: `1px solid gray`,
+                borderRadius: `4px`,
+              }}
               defaultValue={gender}
               onChange={(e) => {
                 setGender(e.target.value);
@@ -192,14 +271,28 @@ export default function UpdateProfile() {
               })}
             </select>
           </Col>
+          {genderValidate ? (
+            <Col md={7} className=" text-end">
+              <span style={{ color: `red`, fontSize: `15px` }}>
+                Vui lòng chọn giới tính của bạn.
+              </span>
+            </Col>
+          ) : null}
         </Row>
         {/* province  */}
-        <Row>
-          <Col>
-            <label>Tỉnh/thành phố: </label>
+        <Row className="justify-content-center">
+          <Col md={2} className="text-start">
+            <label style={{ color: `black`, textAlign: `left` }}>
+              Tỉnh/thành phố:{" "}
+            </label>
           </Col>
-          <Col>
+          <Col md={5}>
             <select
+              style={{
+                width: `100%`,
+                border: `1px solid gray`,
+                borderRadius: `4px`,
+              }}
               defaultValue={province}
               onChange={(e) => {
                 console.log(e.target.value);
@@ -223,19 +316,34 @@ export default function UpdateProfile() {
               })}
             </select>
           </Col>
+          {provinceValidate ? (
+            <Col md={7} className=" text-end">
+              <span style={{ color: `red`, fontSize: `15px` }}>
+                Vui lòng chọn tỉnh/thành phố bạn đang ở.
+              </span>
+            </Col>
+          ) : null}
         </Row>
         {/* District  */}
-        <Row>
-          <Col>
-            <label>Quận/huyện: </label>
+        <Row className="justify-content-center">
+          <Col md={2} className="text-start">
+            <label style={{ color: `black`, textAlign: `left` }}>
+              Quận/huyện:{" "}
+            </label>
           </Col>
-          <Col>
+          <Col md={5}>
             <select
+              style={{
+                width: `100%`,
+                border: `1px solid gray`,
+                borderRadius: `4px`,
+              }}
               defaultValue={district}
               onChange={(e) => {
                 setDistrict(e.target.value);
               }}
             >
+              <option value="-1">--- Select district --- </option>
               {districtList.map((item, key) => {
                 if (district === item.id) {
                   return (
@@ -253,8 +361,27 @@ export default function UpdateProfile() {
               })}
             </select>
           </Col>
+          {districtValidate ? (
+            <Col md={7} className=" text-end">
+              <span style={{ color: `red`, fontSize: `15px` }}>
+                Vui lòng chọn quận/huyện bạn đang ở.
+              </span>
+            </Col>
+          ) : null}
         </Row>
-      </form>
+        <Row className="justify-content-around">
+          <Col xs={3} md={2}>
+            <Row>
+              <button>Thay đổi</button>
+            </Row>
+          </Col>
+          <Col xs={3} md={2}>
+            <Row>
+              <button>Hủy bỏ</button>
+            </Row>
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 }

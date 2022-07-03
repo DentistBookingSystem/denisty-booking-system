@@ -157,7 +157,7 @@ export default function ServiceInfo() {
       return;
     } else {
       return (
-        <div className="p-2">
+        <div className="p-2" style={{ border: `2px solid black` }}>
           <div className="d-flex flex-row">
             <h5>
               Khuyến mãi - {discount.name} - {discount.percentage}

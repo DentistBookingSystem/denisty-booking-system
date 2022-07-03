@@ -227,16 +227,11 @@ export default function Nav(props) {
       >
         <LoginForm />
       </Popup>
-      <Popup
-        modal
-        trigger={
-          <li className="nav-item">
-            <button>Đăng ký</button>
-          </li>
-        }
-      >
-        <SignIn />
-      </Popup>
+      <li>
+        <Link to="/account/register" className="nav-item">
+          <button>Đăng ký</button>
+        </Link>
+      </li>
     </ul>
   );
 

@@ -49,8 +49,8 @@ export default class Appointment extends Component {
       validateMsg: {},
       numServiceSelected: 0,
       displayChoose: true,
-      today: this.getCurrentDate(),
-      maxday: this.getMaxDate(),
+      // today: this.getCurrentDate(),
+      // maxday: this.getMaxDate(),
       slotSelected: [],
       address: "",
       recommentBranch: [],
@@ -62,14 +62,24 @@ export default class Appointment extends Component {
 
   getCurrentDate(separator = "") {
     let newDate = new Date();
-    newDate.setDate(newDate.getDate() + 1);
+    // newDate.setDate(newDate.getDate());
     let date = newDate.getDate();
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
-
-    return `${year}${separator}-${
-      month < 10 ? `0${month}` : `${month}`
-    }-${separator}${date}`;
+    console.log(
+      `${year}${separator}-${month < 10 ? `0${month}` : `${month}`}-${
+        date < 10 ? `0${date}` : `${date}`
+      }`
+    );
+    this.setState({
+      today: `${year}${separator}-${month < 10 ? `0${month}` : `${month}`}-${
+        date < 10 ? `0${date}` : `${date}`
+      }`,
+    });
+    return `${year}${separator}-
+    ${month < 10 ? `0${month}` : `${month}`}-${
+      date < 10 ? `0${date}` : `${date}`
+    }`;
   }
 
   getMaxDate(separator = "") {
@@ -79,6 +89,11 @@ export default class Appointment extends Component {
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
 
+    this.setState({
+      maxday: `${year}${separator}-${month < 10 ? `0${month}` : `${month}`}-${
+        date < 10 ? `0${date}` : `${date}`
+      }`,
+    });
     return `${year}${separator}-${
       month < 10 ? `0${month}` : `${month}`
     }-${separator}${date}`;
@@ -328,6 +343,8 @@ export default class Appointment extends Component {
 
   async componentDidMount() {
     this.checkAccount();
+    this.getCurrentDate();
+    this.getMaxDate();
     const data = {
       phone: phone,
     };
@@ -688,7 +705,6 @@ export default class Appointment extends Component {
                     type="date"
                     min={this.state.today}
                     max={this.state.maxday}
-                    disabledDays={{ daysOfWeek: [0, 6] }}
                     onChange={async (e) => {
                       var day = new Date(
                         e.currentTarget.valueAsDate

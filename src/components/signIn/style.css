@@ -1,13 +1,8 @@
 #signForm {
-  border: 2px solid black;
-  border-radius: 10px;
   padding: 10px;
   padding-bottom: 20px;
   padding-left: 5vw;
   padding-right: 5vw;
-  width: 70vw;
-  background-color: white;
-  box-shadow: 0 0 8px 8px rgba(128, 128, 128, 0.722);
 }
 
 .row input {

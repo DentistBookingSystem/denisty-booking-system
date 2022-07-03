@@ -139,7 +139,11 @@ export default function Feedback() {
             <Col
               lg={3}
               className="bordered m-3"
-              style={{ backgroundColor: `white` }}
+              style={{
+                backgroundColor: `white`,
+                height: `200px`,
+                overflow: `auto`,
+              }}
             >
               <Row>
                 <h5 className="text-start m-0">
