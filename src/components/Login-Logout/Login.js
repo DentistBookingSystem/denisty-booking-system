@@ -17,10 +17,10 @@ export default function LoginForm(props) {
     console.log(phone);
     if (phone.length < 10 || phone.length > 11) {
       console.log("phone-err");
-      error.phone = "Please input your phone!!!";
+      error.phone = "Số điện thoại không đúng";
     }
     if (password.length === 0) {
-      error.password = "Please input your password";
+      error.password = "Mật khẩu trống";
     }
     setValidMsg(error);
   };
@@ -101,7 +101,7 @@ export default function LoginForm(props) {
             </button>
           </div>
         </form>
-        <div id="alternativeLogin">
+        {/* <div id="alternativeLogin">
           <label>Hoặc đăng nhập bằng:</label>
           <div id="iconGroup">
             <a
@@ -112,7 +112,7 @@ export default function LoginForm(props) {
               <img className="logo" src={gmail_icon} alt="gmail" />
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

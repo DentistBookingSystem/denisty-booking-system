@@ -47,3 +47,28 @@ button:disabled {
   opacity: 0;
   color: gray;
 }
+
+.feedback-item:hover {
+  border-color: blue;
+}
+
+.feedback-item:hover .feedback-icon {
+  color: blue;
+}
+
+.feedback-item {
+  border: 2px solid black;
+}
+
+.box-feedback {
+  background-color: white;
+  height: 200px;
+  overflow: auto;
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+
+.box-feedback::-webkit-scrollbar {
+  width: 0 !important;
+  display: none;
+}

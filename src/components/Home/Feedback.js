@@ -2,6 +2,7 @@ import {
   faCaretLeft,
   faCaretRight,
   faL,
+  faQuoteRight,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -123,7 +124,10 @@ export default function Feedback() {
                 return (
                   <DropdownItem
                     key={item.id}
-                    onClick={() => setServiceSelected(item)}
+                    onClick={() => {
+                      setServiceSelected(item);
+                      setPageFeedback(1);
+                    }}
                   >
                     {item.name}
                   </DropdownItem>
@@ -138,26 +142,40 @@ export default function Feedback() {
           return (
             <Col
               lg={3}
-              className="bordered m-3"
+              className="bordered m-3 pt-3 feedback-item"
               style={{
                 backgroundColor: `white`,
-                height: `200px`,
-                overflow: `auto`,
+                position: `relative`,
               }}
             >
-              <Row>
-                <h5 className="text-start m-0">
-                  {item.appointment.account.fullName}
-                </h5>
-                <p className="text-start ps-4" style={{ fontSize: `10px` }}>
-                  {item.time}
-                </p>
+              <Row
+                style={{
+                  position: `absolute`,
+                  top: `0px`,
+                  left: `0`,
+                  right: `0`,
+                }}
+              >
+                <FontAwesomeIcon
+                  className="feedback-icon"
+                  icon={faQuoteRight}
+                />
               </Row>
-              <Row>
-                <p className="text-start ps-4 mb-3 text-break">
-                  {item.content}
-                </p>
-              </Row>
+              <div className="mt-3 mb-3 p-2 box-feedback">
+                <Row>
+                  <h5 className="text-start m-0">
+                    {item.appointment.account.fullName}
+                  </h5>
+                  <p className="text-start ps-4" style={{ fontSize: `10px` }}>
+                    {item.time}
+                  </p>
+                </Row>
+                <Row>
+                  <p className="text-start ps-4 mb-3 text-break">
+                    {item.content}
+                  </p>
+                </Row>
+              </div>
             </Col>
           );
         })}
@@ -176,7 +194,9 @@ export default function Feedback() {
           </button>
         </Col>
         <Col lg={1}>
-          <p style={{ fontWeight: `bold` }}>{pageFeedback}</p>
+          <p style={{ fontWeight: `bold` }} className="p-0 m-0">
+            {pageFeedback}
+          </p>
         </Col>
         <Col lg={1}>
           <button

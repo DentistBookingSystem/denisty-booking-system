@@ -68,3 +68,13 @@
 .hienThi {
   display: block;
 }
+
+@media only screen and (max-width: 950px) {
+  .dropdown:hover .content-dropdown {
+    display: none !important;
+  }
+}
+
+.text-notification:hover {
+  color: #0b0b90;
+}

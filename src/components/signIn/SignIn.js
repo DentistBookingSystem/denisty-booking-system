@@ -17,6 +17,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import Validate from "./Validate";
 import validator from "validator";
+import { Navigate, useNavigate } from "react-router-dom";
 const API_REGIS = "http://localhost:8080/rade/account/registration";
 const API_GET_PROVINCE = "http://localhost:8080/rade/province";
 const API_GET_DISTRICT = "http://localhost:8080/rade/district/";
@@ -51,6 +52,7 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [stringVerify, setStringVerify] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -168,7 +170,8 @@ export default function SignIn() {
         .post(API_REGIS, data)
         .then(() => {
           console.log("thành công");
-          window.location.replace("/");
+          toast.success("Đăng kí thành công.");
+          navigate("/");
         })
         .catch((error) => {
           if (error.message.indexOf("400") > -1) {

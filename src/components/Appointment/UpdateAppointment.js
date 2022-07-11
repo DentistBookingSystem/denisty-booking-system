@@ -2,7 +2,16 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Col, Row, Table, Button } from "reactstrap";
+import {
+  Col,
+  Row,
+  Table,
+  Button,
+  Modal,
+  ModalFooter,
+  ModalHeader,
+  ModalBody,
+} from "reactstrap";
 import "./style.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
@@ -37,6 +46,7 @@ export default function UpdateAppointment() {
   const [timeCome, setTimeCome] = useState("");
   const [doctorSelected, setDoctorSelected] = useState(null);
   const [serviceIdList, setServiceIdList] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
   //
   const [slotSelected, setSlotSelected] = useState([]);
 
@@ -228,7 +238,7 @@ export default function UpdateAppointment() {
   return (
     <>
       {appointment ? (
-        <div>
+        <div className="pb-4">
           <div
             className="p-2 pt-4"
             style={{ color: `#0b0b90`, fontSize: `25px` }}
@@ -421,7 +431,7 @@ export default function UpdateAppointment() {
               </Col>
               <Col lg={3} className="p-3">
                 <Row>
-                  <Button onClick={() => navigate("/history")}>
+                  <Button onClick={() => navigate("/user/history")}>
                     Hủy bỏ thay đổi
                   </Button>
                 </Row>
@@ -429,8 +439,8 @@ export default function UpdateAppointment() {
               <Col lg={3}>
                 <Row>
                   <Button
-                    onClick={(e) => {
-                      CancelAppointment(e);
+                    onClick={() => {
+                      setModalOpen(true);
                     }}
                   >
                     Hủy bỏ lịch hẹn
@@ -439,6 +449,41 @@ export default function UpdateAppointment() {
               </Col>
             </Row>
           </div>
+          <Modal isOpen={modalOpen}>
+            <ModalHeader tag={"h4"} className="text-center">
+              Nhắc nhở
+            </ModalHeader>
+            <ModalBody>
+              <p>Bạn có chắc chắn muốn xóa lịch hẹn này hay không?</p>
+            </ModalBody>
+            <ModalFooter>
+              <Row className="justify-content-center">
+                <Col mg={3} className="me-5">
+                  <Row>
+                    <button
+                      onClick={(e) => {
+                        CancelAppointment(e);
+                        setModalOpen(false);
+                      }}
+                      style={{ fontSize: `18px`, padding: `5px` }}
+                    >
+                      Xóa
+                    </button>
+                  </Row>
+                </Col>
+                <Col mg={3} className="me-2">
+                  <Row>
+                    <button
+                      onClick={() => setModalOpen(false)}
+                      style={{ fontSize: `18px`, padding: `5px` }}
+                    >
+                      Hủy
+                    </button>
+                  </Row>
+                </Col>
+              </Row>
+            </ModalFooter>
+          </Modal>
         </div>
       ) : (
         console.log("appointment rỗng")

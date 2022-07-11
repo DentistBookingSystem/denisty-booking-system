@@ -40,6 +40,10 @@ export default function History() {
       toast.warn("Bạn có lịch hẹn chưa hoàn thành");
       localStorage.removeItem("notDone");
     }
+    if (localStorage.getItem("feedback")) {
+      toast.success("Bạn đã phản hồi thành công. Cảm ơn sự đóng góp của bạn");
+      localStorage.removeItem("feedback");
+    }
   }, []);
 
   useEffect(() => {
@@ -98,6 +102,7 @@ export default function History() {
         });
     }
   }, [page, appointmentID]);
+
   const ShowDetail = (props) => {
     return (
       <>
@@ -469,13 +474,16 @@ export default function History() {
         })
         .then((res) => {
           console.log(res.data);
-          toast.success(
-            "Bạn đã phản hồi thành công. Cảm ơn sự đóng góp của bạn"
-          );
+          localStorage.setItem("feedback", "yes");
+          setContentFeedback(null);
+          window.location.reload();
         })
         .catch((error) => {
           if (error.message.indexOf("404") > -1) {
             toast.error("Lịch đặt không tồn tại");
+          }
+          if (error.message.indexOf("406") > -1) {
+            toast.error("Lịch đã được gửi phản hồi từ bạn");
           }
         });
       document.getElementById("add-feeback-page").style.display = "none";

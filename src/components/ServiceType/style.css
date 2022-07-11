@@ -73,11 +73,15 @@
     display: block !important;
   }
 
-  .dropdown {
+  .dropdown-service-type {
     display: none !important;
   }
 
-  /* 
+  .dropdown:hover .noidung_dropdown {
+    display: none !important;
+  }
+
+  /*  
   #service__950px {
     display: block;
   } */

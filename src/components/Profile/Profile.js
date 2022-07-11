@@ -108,7 +108,9 @@ export default function Profile() {
 
       <Col lg={3} className="justify-content-end">
         <Row lg={12} className="text-center">
-          <button type="button">Hủy</button>
+          <button type="button" onClick={() => navigate("/")}>
+            Hủy
+          </button>
         </Row>
       </Col>
     </Row>

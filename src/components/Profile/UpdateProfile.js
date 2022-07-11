@@ -5,13 +5,26 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Col, Input, Row } from "reactstrap";
+import {
+  Button,
+  Col,
+  Input,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
+} from "reactstrap";
 import Validate from "../signIn/Validate";
 import validator from "validator";
 const API_GET_ACCOUNT_PROFILE =
   "http://localhost:8080/rade/patient/account/profile?phone=";
 const API_GET_PROVINCE = "http://localhost:8080/rade/province";
 const API_GET_DISTRICT = "http://localhost:8080/rade/district/";
+const URL_CHECK_ACCOUNT_UPDATE =
+  "http://localhost:8080/rade/patient/account/confirmPassword";
+const URL_UPDATE_PROFILE =
+  "http://localhost:8080/rade/patient/account/profile/edit";
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
 const genders = [
@@ -32,18 +45,28 @@ export default function UpdateProfile() {
   const [district, setDistrict] = useState(null);
   const [province, setProvince] = useState(null);
   const [gender, setGender] = useState(null);
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
 
+  const [modalConfirm, setModalConfirm] = useState(false);
+
+  const [passwordValidate, setPasswordValidate] = useState(false);
+  const [newPasswordValidate, setNewPasswordValidate] = useState(false);
+  const [confirmValidate, setConfirmValidate] = useState(false);
   const [emailValidate, setEmailValidate] = useState(false);
   const [nameValidate, setNameValidate] = useState(false);
   const [dateOfBirthValidate, setDateOfBirthValidate] = useState(false);
   const [districtValidate, setDistrictValidate] = useState(false);
   const [provinceValidate, setProvinceValidate] = useState(false);
   const [genderValidate, setGenderValidate] = useState(false);
+  const [modalUpdate, setModalUpdate] = useState(false);
 
   //
   const [provinceList, setProvinceList] = useState([]);
   const [districtList, setDistrictList] = useState([]);
 
+  let navigate = useNavigate();
   const getAccount = async () => {
     console.log("getAccount");
     const data = {
@@ -78,7 +101,6 @@ export default function UpdateProfile() {
     console.log("province", result.data);
     if (result.data) {
       setProvinceList(result.data);
-      setDistrict(null);
     }
   };
 
@@ -102,6 +124,112 @@ export default function UpdateProfile() {
   useEffect(() => {
     getDistrict();
   }, [province]);
+
+  const validateAll = () => {
+    let flag = true;
+
+    if (!Validate.validateLength(password, 8, 32)) {
+      flag = false;
+      setPasswordValidate(true);
+    }
+    if (!Validate.validateLength(confirm, 8, 32)) {
+      flag = false;
+      setConfirmValidate(true);
+    } else if (!Validate.compare(newPassword, confirm)) {
+      setConfirmValidate(true);
+      flag = false;
+    }
+    if (!Validate.validateLength(newPassword, 8, 32)) {
+      flag = false;
+      setNewPasswordValidate(true);
+    }
+    if (!Validate.validateLength(name, 8, 32)) {
+      flag = false;
+      setNameValidate(true);
+    } else {
+      setNameValidate(false);
+    }
+    if (!validator.isEmail(email)) {
+      setEmailValidate(true);
+      flag = false;
+    } else {
+      setEmailValidate(false);
+    }
+    if (dateOfBirth.length === 0) {
+      setDateOfBirthValidate(true);
+      flag = false;
+    }
+    if (gender == -1) {
+      setGenderValidate(true);
+      flag = false;
+    } else {
+      setGender(false);
+    }
+    if (province == -1) {
+      setProvinceValidate(true);
+      flag = false;
+    } else {
+      setProvinceValidate(false);
+    }
+    if (district == -1) {
+      setDistrictValidate(true);
+      flag = false;
+    } else {
+      setDistrictValidate(false);
+    }
+    return flag;
+  };
+
+  const clickChangeProfile = () => {
+    if (validateAll()) {
+      updateProfile();
+    } else {
+      toast.error("Thay đổi thông tin khôg thành công ");
+    }
+  };
+
+  const updateProfile = async () => {
+    var dataCheckUpdate = {
+      phone: account.phone,
+      password: password,
+    };
+    console.log("adata", dataCheckUpdate);
+    const result = await axios
+      .post(URL_CHECK_ACCOUNT_UPDATE, dataCheckUpdate, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const dataUpdate = {
+          fullName: name,
+          password: newPassword,
+          dateOfBirth: dateOfBirth,
+          gender: gender,
+          districtId: district,
+          phone: account.phone,
+          email: email,
+        };
+        console.log("dataUpdate", dataUpdate);
+        axios
+          .post(URL_UPDATE_PROFILE, dataUpdate, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            navigate("/user/profile");
+          });
+      })
+      .catch((error) => {
+        if (error.response.status === 406) {
+          toast.error("Sai mật khẩu. Vui lòng nhập lại");
+        }
+      });
+  };
 
   return (
     <div
@@ -130,6 +258,113 @@ export default function UpdateProfile() {
           </Col>
         </Row>
 
+        {/* password  */}
+        <Row className="justify-content-center">
+          <Col md={2} className="text-start">
+            <label style={{ color: `black`, textAlign: `left` }}>
+              Mật khẩu cũ:{" "}
+            </label>
+          </Col>
+          <Col md={5}>
+            <Input
+              style={{
+                width: `100%`,
+                border: `1px solid gray`,
+                borderRadius: `4px`,
+              }}
+              type="password"
+              value={password}
+              onChange={(e) => {
+                if (!Validate.validateLength(e.target.value, 8, 32)) {
+                  setPasswordValidate(true);
+                } else {
+                  setPasswordValidate(false);
+                }
+                setPassword(e.target.value);
+              }}
+            />
+          </Col>
+          {passwordValidate ? (
+            <Col md={7} className=" text-end">
+              <span style={{ color: `red`, fontSize: `15px` }}>
+                Mật khẩu phải dài ít nhất 8 kí tự và tối đa là 32 kí tự.
+              </span>
+            </Col>
+          ) : null}
+        </Row>
+
+        {/* New password  */}
+        <Row className="justify-content-center">
+          <Col md={2} className="text-start">
+            <label style={{ color: `black`, textAlign: `left` }}>
+              Nhập mật khẩu mới:{" "}
+            </label>
+          </Col>
+          <Col md={5}>
+            <Input
+              style={{
+                width: `100%`,
+                border: `1px solid gray`,
+                borderRadius: `4px`,
+              }}
+              placeholder="Nhập mật khẩu mới"
+              value={newPassword}
+              type="password"
+              onChange={(e) => {
+                if (!Validate.validateLength(e.target.value, 8, 32)) {
+                  setNewPasswordValidate(true);
+                } else {
+                  setNewPasswordValidate(false);
+                }
+                setNewPassword(e.target.value);
+              }}
+            />
+          </Col>
+          {newPasswordValidate ? (
+            <Col md={7} className=" text-end">
+              <span style={{ color: `red`, fontSize: `15px` }}>
+                Mật khẩu phải dài ít nhất 8 kí tự và tối đa là 32 kí tự.
+              </span>
+            </Col>
+          ) : null}
+        </Row>
+
+        {/* Confirm  */}
+        <Row className="justify-content-center">
+          <Col md={2} className="text-start">
+            <label style={{ color: `black`, textAlign: `left` }}>
+              Nhập lại mật khẩu:
+            </label>
+          </Col>
+          <Col md={5}>
+            <Input
+              style={{
+                width: `100%`,
+                border: `1px solid gray`,
+                borderRadius: `4px`,
+              }}
+              type="password"
+              placeholder="Nhập lại mật khẩu"
+              value={confirm}
+              onChange={(e) => {
+                if (!Validate.validateLength(e.target.value, 8, 32)) {
+                  setConfirmValidate(true);
+                } else {
+                  setConfirmValidate(false);
+                }
+                setConfirm(e.target.value);
+              }}
+            />
+          </Col>
+          {confirmValidate ? (
+            <Col md={7} className=" text-end">
+              <span style={{ color: `red`, fontSize: `15px` }}>
+                Mật khẩu nhập lại không trùng khớp với mật khẩu mới.
+              </span>
+            </Col>
+          ) : null}
+        </Row>
+
         {/* Tên  */}
         <Row className="justify-content-center">
           <Col md={2} className="text-start">
@@ -145,7 +380,7 @@ export default function UpdateProfile() {
               placeholder="Nhập tên của bạn"
               value={name}
               onChange={(e) => {
-                if (!Validate.validateMinLength(e.target.value, 8)) {
+                if (!Validate.validateLength(e.target.value, 8, 32)) {
                   setNameValidate(true);
                 } else {
                   setNameValidate(false);
@@ -157,7 +392,7 @@ export default function UpdateProfile() {
           {nameValidate ? (
             <Col md={7} className=" text-end">
               <span style={{ color: `red`, fontSize: `15px` }}>
-                Tên phải dài ít nhất 8 kí tự.
+                Tên phải dài ít nhất 8 kí tự và tối đa là 32 kí tự
               </span>
             </Col>
           ) : null}
@@ -212,18 +447,19 @@ export default function UpdateProfile() {
               }}
               placeholder="Nhập email của bạn"
               type="date"
-              pattern="yyyy-mm-dd"
               value={dateOfBirth}
               onChange={(e) => {
-                // let separator = "";
-                // let date = e.target.valueAsDate.getDate();
-                // let month = e.target.valueAsDate.getMonth() + 1;
-                // let year = e.target.valueAsDate.getFullYear();
+                // console.log(e.target.value);
+                let separator = "";
+                let date = e.target.valueAsDate.getDate();
+                let month = e.target.valueAsDate.getMonth() + 1;
+                let year = e.target.valueAsDate.getFullYear();
 
-                // let dayOfBirth = `${year}${separator}-${
-                //   month < 10 ? `0${month}` : `${month}`
-                // }-${separator}${date}`;
-                setDateOfBirth(e.target.valueAsDate);
+                let day = `${year}${separator}-${
+                  month < 10 ? `0${month}` : `${month}`
+                }-${date < 10 ? `0${date}` : `${date}`}`;
+                console.log(day);
+                setDateOfBirth(day);
               }}
             />
           </Col>
@@ -297,8 +533,11 @@ export default function UpdateProfile() {
               onChange={(e) => {
                 console.log(e.target.value);
                 setProvince(e.target.value);
+
+                setDistrict(-1);
               }}
             >
+              <option value="-1">--- Chọn tỉnh/thành phố --- </option>
               {provinceList.map((item, key) => {
                 if (province === item.id) {
                   return (
@@ -343,7 +582,7 @@ export default function UpdateProfile() {
                 setDistrict(e.target.value);
               }}
             >
-              <option value="-1">--- Select district --- </option>
+              <option value="-1">--- Chọn quận/huyện --- </option>
               {districtList.map((item, key) => {
                 if (district === item.id) {
                   return (
@@ -372,16 +611,85 @@ export default function UpdateProfile() {
         <Row className="justify-content-around">
           <Col xs={3} md={2}>
             <Row>
-              <button>Thay đổi</button>
+              <button
+                onClick={() => {
+                  if (validateAll()) {
+                    setModalUpdate(true);
+                  }
+                }}
+              >
+                Thay đổi
+              </button>
             </Row>
           </Col>
           <Col xs={3} md={2}>
             <Row>
-              <button>Hủy bỏ</button>
+              <button onClick={() => setModalConfirm(true)}>Hủy bỏ</button>
             </Row>
           </Col>
         </Row>
       </div>
+      <Modal isOpen={modalUpdate}>
+        <ModalHeader tag={"h3"}>Nhắc nhở</ModalHeader>
+        <ModalBody>
+          <p>Bạn có chắc chắn muốn lưu thay đổi này?</p>
+        </ModalBody>
+        <ModalFooter>
+          <Col md={2} className="me-5">
+            <Row>
+              <Button
+                style={{ fontSize: `18px`, padding: `5px` }}
+                onClick={() => {
+                  clickChangeProfile();
+                }}
+              >
+                Đồng ý
+              </Button>
+            </Row>
+          </Col>
+          <Col md={2} className="me-3">
+            <Row>
+              <Button
+                style={{ fontSize: `18px`, padding: `5px` }}
+                onClick={() => setModalUpdate(false)}
+              >
+                Hủy
+              </Button>
+            </Row>
+          </Col>
+        </ModalFooter>
+      </Modal>
+      <Modal isOpen={modalConfirm} toggle={() => setModalConfirm(false)}>
+        <ModalHeader tag={"h3"}>Nhắc nhở</ModalHeader>
+        <ModalBody>
+          <p>Bạn có chắc chắn muốn hủy bỏ thay đổi này?</p>
+        </ModalBody>
+        <ModalFooter>
+          <Col md={2} className="me-5">
+            <Row>
+              <Button
+                style={{ fontSize: `18px`, padding: `5px` }}
+                onClick={() => {
+                  setModalConfirm(false);
+                  navigate("/user/profile");
+                }}
+              >
+                Đồng ý
+              </Button>
+            </Row>
+          </Col>
+          <Col md={2} className="me-3">
+            <Row>
+              <Button
+                style={{ fontSize: `18px`, padding: `5px` }}
+                onClick={() => setModalUpdate(false)}
+              >
+                Hủy
+              </Button>
+            </Row>
+          </Col>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 }

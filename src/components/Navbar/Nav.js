@@ -97,7 +97,7 @@ export default function Nav(props) {
           </li>
           <li className="nav-item">
             <div to="/servicetype/1" style={{ textDecoration: "none" }}>
-              <div className="dropdown">
+              <div className="dropdown dropdown-service-type">
                 <button className="nut_dropdown" style={{ width: `160px` }}>
                   Dịch vụ
                 </button>
@@ -183,9 +183,9 @@ export default function Nav(props) {
           Đặt lịch
         </button>
       </div>
-      <Link to="" className="nav-item" style={{ textDecoration: "none" }}>
+      <div className="nav-item" style={{ textDecoration: "none" }}>
         <Notification />
-      </Link>
+      </div>
       <Link
         className="nav-item"
         to="/user/history"

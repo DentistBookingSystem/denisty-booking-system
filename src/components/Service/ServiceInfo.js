@@ -180,8 +180,16 @@ export default function ServiceInfo() {
                 <Col style={{ fontSize: `18px`, paddingLeft: `20px` }} lg={3}>
                   Thời gian áp dụng :{" "}
                 </Col>
-                <Col style={{ paddingLeft: `4px` }} lg={8}>
-                  {discount.start_date} - {discount.end_date}
+                <Col style={{ paddingLeft: `4px`, display: `flex` }} lg={8}>
+                  <p style={{ paddingRight: `10px` }}>Từ</p>
+                  <p style={{ color: `red`, paddingRight: `10px` }}>
+                    {discount.start_date}
+                  </p>
+                  <p style={{ paddingRight: `10px` }}>đến</p>{" "}
+                  <p style={{ color: `red`, paddingRight: `10px` }}>
+                    {" "}
+                    {discount.end_date}
+                  </p>
                 </Col>
               </Row>
               <Row>

@@ -10,6 +10,8 @@ import {
   faBoltLightning,
   faLocationArrow,
   faLocationCrosshairs,
+  faTag,
+  faTags,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { Table, Row, Col, Container, Button } from "reactstrap";
@@ -26,6 +28,8 @@ const API_GET_BRANCH = "http://localhost:8080/rade/patient/branch";
 const API_GET_RECOMMEND_BRANCH =
   "http://localhost:8080/rade/patient/branch/recommend";
 const API_CHECK_ACCOUNT = "http://localhost:8080/rade/patient/account/";
+const API_GET_SERVICE_BY_SERVICETYPE_ID =
+  "http://localhost:8080/rade/service/discount/";
 let msg = {};
 export default class Appointment extends Component {
   constructor(props) {
@@ -45,6 +49,7 @@ export default class Appointment extends Component {
       date: "",
       branchArr: [],
       shift: "",
+      serviceAndDiscount: [],
       //
       validateMsg: {},
       numServiceSelected: 0,
@@ -109,8 +114,15 @@ export default class Appointment extends Component {
 
   changeService(e) {
     let id = e.currentTarget.value;
+    axios.get(API_GET_SERVICE_BY_SERVICETYPE_ID + id).then((res) => {
+      console.log("service and discount", res.data);
+      this.setState({ serviceAndDiscount: res.data });
+    });
     ServiceList.getSericeType(id)
-      .then((res) => this.setState({ serviceArr: res.data }))
+      .then((res) => {
+        this.setState({ serviceArr: res.data });
+        console.log(res.data);
+      })
       .catch((error) => {
         if (error.message.indexOf("401" > -1)) {
           // window.location.replace("/");
@@ -594,10 +606,15 @@ export default class Appointment extends Component {
                   ))}
                 </li>
                 <li style={{ padding: 0 }} className="service-item">
-                  {this.state.serviceArr.map((item) => (
+                  {this.state.serviceArr.map((item, key) => (
                     <li key={item.id} className="service-item-small m-0 p-1">
                       <button
-                        style={{ borderRadius: `20px` }}
+                        style={{
+                          borderRadius: `20px`,
+                          display: `flex`,
+                          justifyContent: `center`,
+                          position: `relative `,
+                        }}
                         name={item.id}
                         value={item.name}
                         onClick={async (e) => {
@@ -635,7 +652,14 @@ export default class Appointment extends Component {
                           }
                         }}
                       >
-                        <p className="m-0">{item.name}</p>
+                        <p className="m-0" style={{ flexWrap: `wrap` }}>
+                          {item.name}
+                        </p>
+                        {this.state.serviceAndDiscount.at(key)?.discount ? (
+                          <div className="icon-discount">
+                            <FontAwesomeIcon icon={faTags} />
+                          </div>
+                        ) : null}
                       </button>
                     </li>
                   ))}
