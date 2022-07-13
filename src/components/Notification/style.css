@@ -78,3 +78,39 @@
 .text-notification:hover {
   color: #0b0b90;
 }
+
+.box-notification {
+  background-color: white;
+  height: 200px;
+  overflow: auto;
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+
+.box-notification::-webkit-scrollbar {
+  width: 0 !important;
+  display: none;
+}
+
+.bell {
+  animation: rota 0.8s infinite ease-in;
+  transform: rotate(45deg);
+  color: rgb(227, 151, 38);
+}
+
+.bell:hover {
+  animation: rota 0.3s infinite ease-in;
+}
+
+@keyframes rota {
+  from {
+    transform: rotate(30deg);
+  }
+  50% {
+    transform: rotate(-30deg);
+    /* color: blue; */
+  }
+  to {
+    transform: rotate(30deg);
+  }
+}

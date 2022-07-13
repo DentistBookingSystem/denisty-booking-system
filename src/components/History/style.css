@@ -41,7 +41,7 @@ table {
   box-shadow: 0 1px 1px #ccc;
 }
 .bordered tr:hover {
-  background: #ececec;
+  background: #def4de !important;
   -webkit-transition: all 0.1s ease-in-out;
   -moz-transition: all 0.1s ease-in-out;
   transition: all 0.1s ease-in-out;
@@ -104,6 +104,10 @@ table {
   -webkit-border-radius: 0 0 10px 0;
   border-radius: 0 0 10px 0;
 }
+
+.bordered tr:nth-child(even) {
+  background-color: #f0ebeb;
+}
 /* ================================================ */
 /* POPUP */
 #page-history-cover {
@@ -117,9 +121,9 @@ table {
 }
 
 #page-history {
-  top: 30vh;
-  right: 10vw;
-  left: 10vw;
+  top: 100px;
+  right: 20vw;
+  left: 20vw;
   position: fixed;
   background-color: rgb(237, 231, 231);
   display: flex;
@@ -135,7 +139,7 @@ table {
 }
 
 #table-history-detail {
-  width: 70vw;
+  width: 50vw;
 }
 
 #icon-close {

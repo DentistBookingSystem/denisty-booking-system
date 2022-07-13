@@ -155,9 +155,19 @@ export default function UpdateProfile() {
     } else {
       setEmailValidate(false);
     }
+    var dob = new Date(dateOfBirth);
+    var now = new Date();
     if (dateOfBirth.length === 0) {
       setDateOfBirthValidate(true);
       flag = false;
+    } else if (
+      dob.getFullYear() < now.getFullYear() - 100 ||
+      dob.getFullYear() >= now.getFullYear() - 5
+    ) {
+      setDateOfBirthValidate(true);
+      flag = false;
+    } else {
+      setDateOfBirthValidate(true);
     }
     if (gender == -1) {
       setGenderValidate(true);
@@ -184,7 +194,7 @@ export default function UpdateProfile() {
     if (validateAll()) {
       updateProfile();
     } else {
-      toast.error("Thay đổi thông tin khôg thành công ");
+      toast.error("Thay đổi thông tin không thành công ");
     }
   };
 
@@ -194,41 +204,47 @@ export default function UpdateProfile() {
       password: password,
     };
     console.log("adata", dataCheckUpdate);
-    const result = await axios
-      .post(URL_CHECK_ACCOUNT_UPDATE, dataCheckUpdate, {
+    // const result = await axios
+    //   .post(URL_CHECK_ACCOUNT_UPDATE, dataCheckUpdate, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   })
+    //   .then((res) => {
+    const dataUpdate = {
+      fullName: name,
+      confirmPassword: password,
+      password: newPassword,
+      dateOfBirth: dateOfBirth,
+      gender: gender ? 1 : 2,
+      districtId: district,
+      phone: account.phone,
+      email: email,
+    };
+    console.log("dataUpdate", dataUpdate);
+    axios
+      .post(URL_UPDATE_PROFILE, dataUpdate, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        const dataUpdate = {
-          fullName: name,
-          password: newPassword,
-          dateOfBirth: dateOfBirth,
-          gender: gender,
-          districtId: district,
-          phone: account.phone,
-          email: email,
-        };
-        console.log("dataUpdate", dataUpdate);
-        axios
-          .post(URL_UPDATE_PROFILE, dataUpdate, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((res) => {
-            console.log(res);
-            navigate("/user/profile");
-          });
+        console.log(res);
+        navigate("/user/profile");
       })
       .catch((error) => {
         if (error.response.status === 406) {
           toast.error("Sai mật khẩu. Vui lòng nhập lại");
         }
       });
+    // })
+    // .catch((error) => {
+    //   if (error.response.status === 406) {
+    //     toast.error("Sai mật khẩu. Vui lòng nhập lại");
+    //   }
+    // });
   };
 
   return (
@@ -651,7 +667,9 @@ export default function UpdateProfile() {
             <Row>
               <Button
                 style={{ fontSize: `18px`, padding: `5px` }}
-                onClick={() => setModalUpdate(false)}
+                onClick={() => {
+                  setModalUpdate(false);
+                }}
               >
                 Hủy
               </Button>
@@ -682,7 +700,10 @@ export default function UpdateProfile() {
             <Row>
               <Button
                 style={{ fontSize: `18px`, padding: `5px` }}
-                onClick={() => setModalUpdate(false)}
+                onClick={() => {
+                  setModalUpdate(false);
+                  setModalConfirm(false);
+                }}
               >
                 Hủy
               </Button>

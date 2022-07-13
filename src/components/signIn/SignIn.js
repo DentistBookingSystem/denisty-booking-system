@@ -53,6 +53,7 @@ export default function SignIn() {
   const [modalOpen, setModalOpen] = useState(false);
   const [stringVerify, setStringVerify] = useState("");
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     axios
@@ -204,7 +205,7 @@ export default function SignIn() {
           <CardBody className="text-center ">
             <div>
               <Row className="text-start justify-content-center mb-3">
-                Tin nhắn chứ mã OTP để xác thực cho tài khoản này đã được gửi
+                Tin nhắn chứa mã OTP để xác thực cho tài khoản này đã được gửi
                 đến số điện thoại: {phone}. <br /> Bạn vui lòng nhập vào đây để
                 hoàn tất đăng ký
               </Row>

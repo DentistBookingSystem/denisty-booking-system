@@ -59,6 +59,7 @@ export default class Appointment extends Component {
       slotSelected: [],
       address: "",
       recommentBranch: [],
+      isActive: "",
     };
     this.changeService = this.changeService.bind(this);
     this.MapDoctor = this.MapDoctor.bind(this);
@@ -138,11 +139,11 @@ export default class Appointment extends Component {
   ShowServiceSelected() {
     return (
       <>
-        <Table striped bordered hover style={{ fontSize: `18px` }}>
+        <Table hover style={{ fontSize: `18px` }} className="bordered">
           <thead>
             <tr>
               <th>#</th>
-              <th>Dịch vụ đã chọn</th>
+              <th>Dịch vụ </th>
             </tr>
           </thead>
           <tbody>
@@ -572,22 +573,81 @@ export default class Appointment extends Component {
           <this.ChooseBranchPopUp />
         </div>
 
-        <div className="header-appointment">
+        <div className="header-appointment text-start m-0">
           <h2>Đặt lịch nha khoa - Rade</h2>
         </div>
         <div className="appointment">
+          <div className="text-start m-3 mt-0">
+            <h4 style={{ fontSize: `20px`, textDecoration: `underline` }}>
+              Lưu ý:{" "}
+            </h4>
+            <li style={{ listStyleType: `circle`, fontSize: `18px` }}>
+              Lịch hẹn đã được đặt có thể sửa hoặc hủy trước ngày hẹn 1 ngày.
+            </li>{" "}
+            <li style={{ listStyleType: `circle`, fontSize: `18px` }}>
+              RaDe sẽ tự sắp xếp bác sĩ thực hiện lịch hẹn nếu bạn không chọn
+              bác sĩ cho lịch hẹn của mình.
+            </li>{" "}
+            <li style={{ listStyleType: `circle`, fontSize: `18px` }}>
+              Bác sĩ sẽ thêm ghi chú theo dõi nếu cần cho lịch hẹn sau khi hoàn
+              thành phẫu thuật.
+            </li>
+            <li style={{ listStyleType: `circle`, fontSize: `18px` }}>
+              Chỉ có thể có 1 lịch hẹn sắp tới. Các giảm giá được áp dụng sẽ
+              được tính vào hóa đơn chi phí sau khi hoàn thành phẫu thuật.
+            </li>
+          </div>
           <div className="side-left">
             <h3 className="title-left">Chọn dịch vụ</h3>
             <div className="title">
-              <ul className="m-0  ps-0">
-                <li className="service-type-item">Loại dịch vụ</li>
-                <li className="service-item">Dịch vụ</li>
+              <ul
+                className="m-0  ps-0"
+                style={{
+                  backgroundColor: `#0b0b90`,
+                  fontWeight: `bolder`,
+                  borderTopLeftRadius: `10px`,
+                  borderTopRightRadius: `10px`,
+                  color: `white`,
+                  height: `44px`,
+                }}
+              >
+                <li
+                  className="service-type-item"
+                  style={{
+                    overflow: `hidden`,
+                    height: `44px`,
+                    padding: `10px`,
+                    fontSize: `18px`,
+                  }}
+                >
+                  Loại dịch vụ
+                </li>
+                <li
+                  className="service-item"
+                  style={{
+                    overflow: `hidden`,
+                    height: `44px`,
+                    padding: `10px`,
+                    fontSize: `18px`,
+                  }}
+                >
+                  Dịch vụ
+                </li>
               </ul>
             </div>
             {/* thôngtin */}
             <div>
-              <ul className="service-info m-0 ps-0">
-                <li style={{ padding: 0 }} className="service-type-item">
+              <ul
+                className="service-info m-0 ps-0"
+                style={{
+                  borderBottomLeftRadius: `10px`,
+                  borderBottomRightRadius: `10px`,
+                }}
+              >
+                <li
+                  style={{ padding: 0, height: `650px` }}
+                  className="service-type-item"
+                >
                   {this.state.serviceTypeArr.map((item) => (
                     <li
                       key={item.id}
@@ -596,7 +656,7 @@ export default class Appointment extends Component {
                       <button
                         className="text-center"
                         key={item.id}
-                        style={{ borderRadius: `20px` }}
+                        style={{ borderRadius: `10px` }}
                         value={item.id}
                         onClick={(e) => this.changeService(e)}
                       >
@@ -605,12 +665,15 @@ export default class Appointment extends Component {
                     </li>
                   ))}
                 </li>
-                <li style={{ padding: 0 }} className="service-item">
+                <li
+                  style={{ padding: 0, height: `650px` }}
+                  className="service-item"
+                >
                   {this.state.serviceArr.map((item, key) => (
                     <li key={item.id} className="service-item-small m-0 p-1">
                       <button
                         style={{
-                          borderRadius: `20px`,
+                          borderRadius: `10px`,
                           display: `flex`,
                           justifyContent: `center`,
                           position: `relative `,
@@ -767,17 +830,22 @@ export default class Appointment extends Component {
                     {this.state.slotSelected.map((item) => {
                       let tmp = item.option.split("-");
                       return (
-                        <Col
-                          lg={2}
-                          style={{ backgroundColor: `white`, color: `black` }}
-                          className="btn-select-time"
-                        >
+                        <Col lg={3} className="btn-select-time">
                           <Button
                             onClick={() => {
                               this.setState({
                                 shift: item.option,
+                                isActive: item.option,
                               });
                             }}
+                            style={
+                              this.state.isActive === item.option
+                                ? {
+                                    backgroundColor: `#0b0b90`,
+                                    color: `white`,
+                                  }
+                                : { backgroundColor: `white`, color: `black` }
+                            }
                           >
                             {tmp[0]}
                           </Button>

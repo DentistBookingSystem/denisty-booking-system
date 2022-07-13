@@ -23,6 +23,7 @@ import {
   DropdownItem,
 } from "reactstrap";
 import { useNavigate } from "react-router-dom";
+import "./style.css";
 
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
@@ -49,6 +50,7 @@ export default function UpdateAppointment() {
   const [modalOpen, setModalOpen] = useState(false);
   //
   const [slotSelected, setSlotSelected] = useState([]);
+  const [isActive, setIsActive] = useState("");
 
   const today = (separator = "") => {
     let newDate = new Date();
@@ -145,6 +147,7 @@ export default function UpdateAppointment() {
       setDoctorSelected(result.data.appointment.doctor);
       setDate(result.data.appointment.appointmentDate);
       setTimeCome(result.data.appointment.appointmentTime);
+      setIsActive(result.data.appointment.appointmentTime);
     }
     let tmpServiceList = [];
     result.data.serviceList.map(async (item, key) => {
@@ -235,6 +238,17 @@ export default function UpdateAppointment() {
       });
     // }
   };
+
+  const clickTimeFunction = (id) => {
+    for (let index = 0; index <= slotSelected.length; index++) {
+      // document
+      //   .getElementById(`time${index}`)
+      //   .className.replace("active-button", "");
+      console.log("ascbsad", document.getElementById(`time${index}`).classList);
+    }
+
+    // document.getElementById(`time${id}`).className += " active-button";
+  };
   return (
     <>
       {appointment ? (
@@ -247,12 +261,12 @@ export default function UpdateAppointment() {
           </div>
           <div>
             <Row className="justify-content-start p-0">
-              <Col className="p-0" sm={3} lg={3}>
+              <Col className="p-0" sm={3} lg={3} md={3}>
                 <h5 className="text-start ps-5" style={{ color: "gray" }}>
                   Địa chỉ:
                 </h5>
               </Col>
-              <Col className="text-start" sm={9} lg={9}>
+              <Col className="text-start" sm={9} lg={9} md={9}>
                 <p>
                   {/* {appointment.map((item) => item.branch.name)} */}
                   {appointment.branch.name}-{appointment.branch.district.name},{" "}
@@ -265,130 +279,146 @@ export default function UpdateAppointment() {
                 Dịch vụ bạn đã chọn
               </h5>
             </Row>
-            <Table bordered hover className="table-history bordered">
-              <thead>
-                <th>Dịch vụ</th>
-                <th>Giá</th>
-                <th>Khuyến mãi</th>
-              </thead>
-              <tbody>
-                {serviceList.map((item, keyI) => {
-                  return (
-                    <tr key={item.id}>
-                      <td>{item.name}</td>
-                      <td>
-                        {item.minPrice}(VNĐ) ~ {item.maxPrice}(VNĐ)
-                      </td>
-
-                      {discount.map((e, key) => {
-                        if (e.id === item.id) {
-                          return (
-                            <td>
-                              {e.percentage === "undefined%"
-                                ? "Không có khuyến mãi"
-                                : e.percentage}
-                            </td>
-                          );
-                        }
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-            <Row className="justify-content-start p-0">
-              <Col className="p-0" sm="auto" lg={3}>
-                <h5 className="text-start ps-5" style={{ color: "gray" }}>
-                  Bác sĩ:
-                </h5>
-              </Col>
-              <Col className="text-start" sm="auto" lg={3}>
-                <Dropdown
-                  isOpen={isOpen}
-                  toggle={() => toggle()}
-                  className="text-start"
-                >
-                  <DropdownToggle
-                    className="text-center"
-                    style={{
-                      backgroundColor: `white`,
-                      color: `black`,
-                      width: `100%`,
-                    }}
-                    caret
-                  >
-                    {doctorSelected.name}
-                  </DropdownToggle>
-                  <DropdownMenu style={{ width: `100%` }}>
-                    {doctorList.map((item, key) => {
+            <Row className="justify-content-center">
+              <Col lg={8}>
+                {" "}
+                <Table bordered hover className="table-history bordered">
+                  <thead>
+                    <th>Dịch vụ</th>
+                    <th>Giá</th>
+                    <th>Khuyến mãi</th>
+                  </thead>
+                  <tbody>
+                    {serviceList.map((item, keyI) => {
                       return (
-                        <DropdownItem
-                          key={item.id}
-                          onClick={() => {
-                            setTimeCome("Vui lòng chọn thời gian");
-                            setDoctorSelected(item);
-                          }}
-                        >
-                          {item.name}
-                        </DropdownItem>
+                        <tr key={item.id}>
+                          <td>{item.name}</td>
+                          <td>
+                            {item.minPrice}(VNĐ) ~ {item.maxPrice}(VNĐ)
+                          </td>
+
+                          {discount.map((e, key) => {
+                            if (e.id === item.id) {
+                              return (
+                                <td>
+                                  {e.percentage === "undefined%"
+                                    ? "Không có khuyến mãi"
+                                    : e.percentage}
+                                </td>
+                              );
+                            }
+                          })}
+                        </tr>
                       );
                     })}
-                  </DropdownMenu>
-                </Dropdown>
+                  </tbody>
+                </Table>
+              </Col>
+            </Row>
+            <Row className="justify-content-center p-0">
+              <Col lg={6} md={6}>
+                <Row className="justify-content-between">
+                  <Col className="p-0" sm="auto" lg={3} md={3}>
+                    <h5
+                      className="text-start ps-5"
+                      style={{ color: "gray", fontSize: `20px` }}
+                    >
+                      Bác sĩ:
+                    </h5>
+                  </Col>
+                  <Col className="text-start" sm="auto" lg={6} md={9}>
+                    <Dropdown
+                      isOpen={isOpen}
+                      toggle={() => toggle()}
+                      className="text-start"
+                    >
+                      <DropdownToggle
+                        className="text-center"
+                        style={{
+                          backgroundColor: `white`,
+                          color: `black`,
+                          width: `100%`,
+                          fontSize: `19px`,
+                        }}
+                        caret
+                      >
+                        {doctorSelected.name}
+                      </DropdownToggle>
+                      <DropdownMenu style={{ width: `100%` }}>
+                        {doctorList.map((item, key) => {
+                          return (
+                            <DropdownItem
+                              key={item.id}
+                              onClick={() => {
+                                setTimeCome("Vui lòng chọn thời gian");
+                                setDoctorSelected(item);
+                              }}
+                            >
+                              {item.name}
+                            </DropdownItem>
+                          );
+                        })}
+                      </DropdownMenu>
+                    </Dropdown>
+                  </Col>
+                </Row>
+              </Col>
+              <Col lg={6} md={6}>
+                <Row>
+                  <Col className="p-0" sm="auto" lg={3} md={3}>
+                    <h5 className="text-start ps-5" style={{ color: "gray" }}>
+                      Chọn ngày:
+                    </h5>
+                  </Col>
+                  <Col lg={6} md={9}>
+                    <input
+                      style={{
+                        border: `1px solid black`,
+                        borderRadius: `5px`,
+                        padding: `0.375rem 0.75rem`,
+                      }}
+                      className="text-center input-time"
+                      type="date"
+                      value={date}
+                      pattern="\d{4}-\d{2}-\d{2}"
+                      min={today()}
+                      max={maxday()}
+                      onChange={(e) => {
+                        setTimeCome("Vui lòng chọn thời gian");
+                        // var day = new Date(e.currentTarget.valueAsDate).getUTCDay();
+                        if (
+                          [0].includes(e.currentTarget.valueAsDate.getUTCDay())
+                        ) {
+                          toast.warn(
+                            "Bạn vui lòng không được chọn ngảy Chủ Nhật. Bạn vui lòng chọn ngày khác"
+                          );
+                          setDate("");
+                        } else {
+                          let separator = "";
+                          let date = e.target.valueAsDate.getDate();
+                          let month = e.target.valueAsDate.getMonth() + 1;
+                          let year = e.target.valueAsDate.getFullYear();
+
+                          let dateBooking = `${year}${separator}-${
+                            month < 10 ? `0${month}` : `${month}`
+                          }-${separator}${date}`;
+                          setDate(dateBooking);
+                          // getSlot(e);
+                        }
+                      }}
+                    />
+                  </Col>
+                </Row>
               </Col>
             </Row>
             <Row className="justify-content-start p-0">
-              <Col className="p-0" sm="auto" lg={3}>
-                <h5 className="text-start ps-5" style={{ color: "gray" }}>
-                  Chọn ngày:
-                </h5>
-              </Col>
-              <Col lg={3}>
-                <div>
-                  <input
-                    style={{
-                      border: `1px solid black`,
-                      borderRadius: `5px`,
-                    }}
-                    className="text-center input-time"
-                    type="date"
-                    value={date}
-                    pattern="\d{4}-\d{2}-\d{2}"
-                    min={today()}
-                    max={maxday()}
-                    onChange={(e) => {
-                      setTimeCome("Vui lòng chọn thời gian");
-                      // var day = new Date(e.currentTarget.valueAsDate).getUTCDay();
-                      if (
-                        [0].includes(e.currentTarget.valueAsDate.getUTCDay())
-                      ) {
-                        toast.warn(
-                          "Bạn vui lòng không được chọn ngảy Chủ Nhật. Bạn vui lòng chọn ngày khác"
-                        );
-                        setDate("");
-                      } else {
-                        let separator = "";
-                        let date = e.target.valueAsDate.getDate();
-                        let month = e.target.valueAsDate.getMonth() + 1;
-                        let year = e.target.valueAsDate.getFullYear();
-
-                        let dateBooking = `${year}${separator}-${
-                          month < 10 ? `0${month}` : `${month}`
-                        }-${separator}${date}`;
-                        setDate(dateBooking);
-                        // getSlot(e);
-                      }
-                    }}
-                  />
-                </div>
-              </Col>
-              <Col className="d-flex">
+              {/* <Col className="d-flex">
                 <h5 style={{ color: "gray" }}>Thời gian dự kiến: </h5>
                 <p className="ps-3">{timeCome}</p>
-              </Col>
+              </Col> */}
             </Row>
             <Row>
-              <Col className="p-0" sm="auto" lg={3}>
+              <Col className="p-0" sm="auto" lg={3} md={3}>
                 <h5 className="text-start ps-5" style={{ color: "gray" }}>
                   Chọn thời gian:
                 </h5>
@@ -397,18 +427,30 @@ export default function UpdateAppointment() {
                 {" "}
                 <div className="slot" style={{ textAlign: `left` }}>
                   <Row lg="auto">
-                    {slotSelected.map((item) => {
+                    {slotSelected.map((item, key) => {
                       let tmp = item.option.split("-");
+
                       return (
                         <Col
                           lg={2}
-                          style={{ backgroundColor: `white`, color: `black` }}
+                          md={3}
+                          xs={4}
+                          style={{ color: `black` }}
                           className="btn-select-time"
                         >
                           <Button
-                            // active
+                            style={
+                              isActive === item.option
+                                ? {
+                                    backgroundColor: `#0b0b90`,
+                                    color: `white`,
+                                  }
+                                : null
+                            }
                             onClick={() => {
                               setTimeCome(item.option);
+                              setIsActive(item.option);
+                              // clickTimeFunction(key + 1);
                             }}
                           >
                             {tmp[0]}
@@ -422,21 +464,21 @@ export default function UpdateAppointment() {
             </Row>
 
             <Row className="justify-content-between ms-5 me-5" lg={12}>
-              <Col lg={3}>
+              <Col lg={3} md={3}>
                 <Row>
                   <Button onClick={() => submitUpdateAppointment()}>
                     Thay đổi
                   </Button>
                 </Row>
               </Col>
-              <Col lg={3} className="p-3">
+              <Col lg={3} md={3} className="p-3">
                 <Row>
                   <Button onClick={() => navigate("/user/history")}>
                     Hủy bỏ thay đổi
                   </Button>
                 </Row>
               </Col>
-              <Col lg={3}>
+              <Col lg={3} md={3}>
                 <Row>
                   <Button
                     onClick={() => {

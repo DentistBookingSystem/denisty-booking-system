@@ -3,7 +3,7 @@ import { intervalToDuration } from "date-fns";
 class Validate {
   validatePhone(phone) {
     let flag = true;
-    if (phone.length < 10 || phone.length > 11) {
+    if (phone.length !== 10) {
       flag = false;
     } else if (phone.at(0) != 0) {
       flag = false;

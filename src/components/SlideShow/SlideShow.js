@@ -139,17 +139,19 @@ export default class SlideShow extends React.Component {
                 </div> */}
                 <img className="image" src={image.src} alt={image.caption} />
 
-                <div className="caption-text">{image.caption}</div>
+                <div className="caption-text" style={{ fontSize: `25px` }}>
+                  {image.caption}
+                </div>
               </div>
             );
           })}
 
-          <span className="prev" onClick={this.backward}>
+          {/* <span className="prev" onClick={this.backward}>
             ❮
           </span>
           <span className="next" onClick={this.forward}>
             ❯
-          </span>
+          </span> */}
         </div>
 
         <div className="dot-container">

@@ -81,7 +81,7 @@ export default class Home extends Component {
               lượng, mang lại sự hài lòng cho khách hàng trên toàn hệ thống.
             </p>
             <img
-              src="https://znews-photo.zingcdn.me/w1920/Uploaded/wyhktpu/2021_01_11/unnamed_5_.jpg"
+              src="https://seadent.com.vn/wp-content/uploads/2021/12/y-si-nha-khoa-co-duoc-mo-phong-kham-khong.jpg"
               alt=""
             />
             <p>

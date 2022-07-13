@@ -204,6 +204,48 @@ export default function History() {
             })}
           </tbody>
         </Table>
+
+        {listAppointment.map((item, key) => {
+          if (item.id == appointmentID) {
+            if (!(item.status === 1 || item.status === 5)) {
+              return;
+            }
+            return (
+              <Row
+                xs="auto"
+                lg="auto"
+                className="justify-content-start ms-3 p-1"
+              >
+                <Col xs="auto" lg={2} className="text-start">
+                  <label
+                    style={{ textAlign: `left`, color: `black` }}
+                    className="p-0 fw-bold"
+                  >
+                    Ghi chú:
+                  </label>
+                </Col>
+                <Col xs="auto" lg={10}>
+                  {/* <p
+                    className="m-0 text-start"
+                    style={{ whiteSpace: `pre-line` }}
+                  >
+                    {item.note ? item.note : "Không có"}
+                  </p> */}
+                  <textarea
+                    value={item.note ? item.note : "Không có"}
+                    disabled={true}
+                    style={{
+                      backgroundColor: `white`,
+                      width: `100%`,
+                      padding: `10px`,
+                      borderRadius: `6px`,
+                    }}
+                  ></textarea>
+                </Col>
+              </Row>
+            );
+          }
+        })}
       </>
     );
   };
@@ -294,7 +336,7 @@ export default function History() {
                         ""
                       )}
                       {item.status === 6 ? (
-                        <p style={{ color: `yellow` }} className="p-2">
+                        <p style={{ color: `#E8AA42` }} className="p-2">
                           Lịch đã bị hủy
                         </p>
                       ) : (
@@ -529,7 +571,7 @@ export default function History() {
           // document.getElementById("add-feeback-page").style.display = "none";
         }}
       >
-        <div id="add-feedback">
+        <div id="add-feedback" style={{ overflow: `auto`, height: `600px` }}>
           <Row>
             <h4 style={{ color: `#0b0b90 `, fontWeight: `bold` }}>
               Gửi phản hồi về dịch vụ
@@ -628,9 +670,9 @@ export default function History() {
       {/* History detail  */}
       <div
         id="page-history-cover"
-        onClick={() => {
-          document.getElementById("page-history-cover").style.display = "none";
-        }}
+        // onClick={() => {
+        //   document.getElementById("page-history-cover").style.display = "none";
+        // }}
       >
         <div id="page-history">
           <div id="popup-history">

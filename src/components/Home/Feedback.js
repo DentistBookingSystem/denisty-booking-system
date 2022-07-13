@@ -98,7 +98,7 @@ export default function Feedback() {
           Phản hồi từ khách hàng
         </h3>
       </Row>
-      <Row className="filter-service justify-content-center">
+      {/* <Row className="filter-service justify-content-center">
         <Col lg={3} md={3}>
           <h5>Xem theo loại dịch vụ</h5>
         </Col>
@@ -136,7 +136,7 @@ export default function Feedback() {
             </DropdownMenu>
           </Dropdown>
         </Col>
-      </Row>
+      </Row> */}
       <Row className="justify-content-center">
         {feedbackList.map((item) => {
           return (

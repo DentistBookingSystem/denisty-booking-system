@@ -157,14 +157,31 @@ export default function ServiceInfo() {
       return;
     } else {
       return (
-        <div className="p-2" style={{ border: `2px solid black` }}>
+        <div
+          className="p-2"
+          style={{
+            border: `2px solid black`,
+            borderRadius: `7px`,
+            backgroundColor: `white`,
+          }}
+        >
           <div className="d-flex flex-row">
-            <h5>
-              Khuyến mãi - {discount.name} - {discount.percentage}
+            <h5 className="d-flex flex-row">
+              <h5 style={{ color: `red` }} className="ms-1 me-1">
+                {discount.name}
+              </h5>
+              <h5 className="ms-1" style={{ color: `red` }}>
+                Khuyến mãi {discount.percentage}
+              </h5>
             </h5>
-            <button
-              id="btn-view-more"
-              style={{ marginLeft: `20px` }}
+            {/* <button
+              // id="btn-view-more"
+              style={{
+                marginLeft: `20px`,
+                backgroundColor: `white`,
+                padding: `5px`,
+                paddingTop: 0,
+              }}
               onClick={() => onClickFuction()}
             >
               {icon ? (
@@ -172,38 +189,44 @@ export default function ServiceInfo() {
               ) : (
                 <FontAwesomeIcon icon={faCaretUp} />
               )}
-            </button>
+            </button> */}
           </div>
-          {!icon ? (
-            <div id="discount-info" style={{ display: `block` }}>
-              <Row className="d-flex flex-row justify-content-start">
-                <Col style={{ fontSize: `18px`, paddingLeft: `20px` }} lg={3}>
-                  Thời gian áp dụng :{" "}
-                </Col>
-                <Col style={{ paddingLeft: `4px`, display: `flex` }} lg={8}>
-                  <p style={{ paddingRight: `10px` }}>Từ</p>
-                  <p style={{ color: `red`, paddingRight: `10px` }}>
-                    {discount.start_date}
-                  </p>
-                  <p style={{ paddingRight: `10px` }}>đến</p>{" "}
-                  <p style={{ color: `red`, paddingRight: `10px` }}>
-                    {" "}
-                    {discount.end_date}
-                  </p>
-                </Col>
-              </Row>
-              <Row>
-                <Col style={{ fontSize: `18px`, paddingLeft: `20px` }} lg={3}>
-                  Mô tả :
-                </Col>
-                <Col style={{ paddingLeft: `4px` }} lg={8}>
-                  {discount.description}
-                </Col>
-              </Row>
-            </div>
-          ) : (
-            ""
-          )}
+          <div style={{ display: `block` }}>
+            <Row className="d-flex flex-row justify-content-start">
+              <Col style={{ fontSize: `18px`, paddingLeft: `20px` }} lg={3}>
+                Thời gian áp dụng :{" "}
+              </Col>
+              <Col style={{ paddingLeft: `4px`, display: `flex` }} lg={8}>
+                <p className="m-0" style={{ paddingRight: `10px` }}>
+                  Từ
+                </p>
+                <p
+                  className="m-0"
+                  style={{ color: `red`, paddingRight: `10px` }}
+                >
+                  {discount.start_date}
+                </p>
+                <p className="m-0" style={{ paddingRight: `10px` }}>
+                  đến
+                </p>{" "}
+                <p
+                  className="m-0"
+                  style={{ color: `red`, paddingRight: `10px` }}
+                >
+                  {" "}
+                  {discount.end_date}
+                </p>
+              </Col>
+            </Row>
+            <Row>
+              <Col style={{ fontSize: `18px`, paddingLeft: `20px` }} lg={3}>
+                Mô tả :
+              </Col>
+              <Col style={{ paddingLeft: `4px` }} lg={8}>
+                {discount.description}
+              </Col>
+            </Row>
+          </div>
         </div>
       );
     }
