@@ -96,6 +96,27 @@ export default function UpdateProfile() {
     }
   };
 
+  const getMaxDate = (separator = "") => {
+    let newDate = new Date();
+    let date = newDate.getDate();
+    let month = newDate.getMonth() + 1;
+    let year = newDate.getFullYear() - 15;
+
+    return `${year}${separator}-${
+      month < 10 ? `0${month}` : `${month}`
+    }-${separator}${date}`;
+  };
+  const getMinDate = (separator = "") => {
+    let newDate = new Date();
+    let date = newDate.getDate();
+    let month = newDate.getMonth() + 1;
+    let year = newDate.getFullYear() - 80;
+
+    return `${year}${separator}-${
+      month < 10 ? `0${month}` : `${month}`
+    }-${separator}${date}`;
+  };
+
   const getProvince = async () => {
     const result = await axios.get(API_GET_PROVINCE);
     console.log("province", result.data);
@@ -160,14 +181,16 @@ export default function UpdateProfile() {
     if (dateOfBirth.length === 0) {
       setDateOfBirthValidate(true);
       flag = false;
+      console.log(1);
     } else if (
-      dob.getFullYear() < now.getFullYear() - 100 ||
-      dob.getFullYear() >= now.getFullYear() - 5
+      dob.getFullYear() < now.getFullYear() - 80 ||
+      dob.getFullYear() >= now.getFullYear() - 15
     ) {
+      console.log(2);
       setDateOfBirthValidate(true);
       flag = false;
     } else {
-      setDateOfBirthValidate(true);
+      setDateOfBirthValidate(false);
     }
     if (gender == -1) {
       setGenderValidate(true);
@@ -283,6 +306,7 @@ export default function UpdateProfile() {
           </Col>
           <Col md={5}>
             <Input
+              maxLength={30}
               style={{
                 width: `100%`,
                 border: `1px solid gray`,
@@ -318,6 +342,7 @@ export default function UpdateProfile() {
           </Col>
           <Col md={5}>
             <Input
+              maxLength={30}
               style={{
                 width: `100%`,
                 border: `1px solid gray`,
@@ -354,6 +379,7 @@ export default function UpdateProfile() {
           </Col>
           <Col md={5}>
             <Input
+              maxLength={30}
               style={{
                 width: `100%`,
                 border: `1px solid gray`,
@@ -388,6 +414,7 @@ export default function UpdateProfile() {
           </Col>
           <Col md={5}>
             <Input
+              maxLength={30}
               style={{
                 width: `100%`,
                 border: `1px solid gray`,
@@ -420,6 +447,7 @@ export default function UpdateProfile() {
           </Col>
           <Col md={5}>
             <Input
+              maxLength={50}
               style={{
                 width: `100%`,
                 border: `1px solid gray`,
@@ -438,10 +466,10 @@ export default function UpdateProfile() {
               }}
             />
           </Col>
-          {emailValidate ? (
+          {email.length !== 0 && emailValidate ? (
             <Col md={7} className=" text-end">
               <span style={{ color: `red`, fontSize: `15px` }}>
-                Email không tồn tại.
+                Email không hợp lệ.
               </span>
             </Col>
           ) : null}
@@ -461,6 +489,8 @@ export default function UpdateProfile() {
                 border: `1px solid gray`,
                 borderRadius: `4px`,
               }}
+              min={getMinDate()}
+              max={getMaxDate()}
               placeholder="Nhập email của bạn"
               type="date"
               value={dateOfBirth}

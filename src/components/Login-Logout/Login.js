@@ -78,6 +78,7 @@ export default function LoginForm(props) {
             <label>Số điện thoại</label>
             <p style={{ color: `red` }}>{validMsg.phone}</p>
             <input
+              maxLength={10}
               type="text"
               placeholder="Nhập số điện thoại"
               name="phone"

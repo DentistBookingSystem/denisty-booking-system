@@ -41,8 +41,14 @@ export default function History() {
       localStorage.removeItem("notDone");
     }
     if (localStorage.getItem("feedback")) {
-      toast.success("Bạn đã phản hồi thành công. Cảm ơn sự đóng góp của bạn");
+      toast.success(
+        "Phản hồi của bạn đã được gửi tới trung tâm.\n Cảm ơn bạn đã để lại đánh giá cho RaDe."
+      );
       localStorage.removeItem("feedback");
+    }
+    if (sessionStorage.getItem("addAppointment")) {
+      toast.success("Đặt lịch thành công");
+      sessionStorage.removeItem("addAppointment");
     }
   }, []);
 
@@ -330,7 +336,7 @@ export default function History() {
                       )}
                       {item.status === 5 ? (
                         <p style={{ color: `green` }} className="p-2">
-                          Hoàn thành và phản hồi thành công
+                          Đã phản hồi thành công
                         </p>
                       ) : (
                         ""
@@ -603,6 +609,7 @@ export default function History() {
             </Col>
             <textarea
               placeholder="Nhập phản hồi của bạn"
+              maxLength={150}
               style={{
                 width: `100%`,
                 height: `15vh`,

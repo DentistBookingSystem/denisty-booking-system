@@ -50,10 +50,11 @@ export default function SignIn() {
   const [districtID, setDistrictID] = useState("-1");
   const [province, setProvice] = useState("-1");
   const [email, setEmail] = useState("");
+  const [emailErr, setEmailErr] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [stringVerify, setStringVerify] = useState("");
   const navigate = useNavigate();
-  
+  const [time, setTime] = useState(0);
 
   useEffect(() => {
     axios
@@ -68,10 +69,44 @@ export default function SignIn() {
         console.log("provinceArr");
         console.log(provinceArr);
       });
+    // let interval = setInterval(() => {
+    //   setTime(time - 1);
+    // }, 1000);
+    // return clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (time !== 0) {
+      setTimeout(() => {
+        setTime(time - 1);
+      }, 1000);
+    }
+  }, [time]);
+
+  const getMaxDate = (separator = "") => {
+    let newDate = new Date();
+    let date = newDate.getDate();
+    let month = newDate.getMonth() + 1;
+    let year = newDate.getFullYear() - 4;
+
+    return `${year}${separator}-${
+      month < 10 ? `0${month}` : `${month}`
+    }-${separator}${date}`;
+  };
+  const getMinDate = (separator = "") => {
+    let newDate = new Date();
+    let date = newDate.getDate();
+    let month = newDate.getMonth() + 1;
+    let year = newDate.getFullYear() - 80;
+
+    return `${year}${separator}-${
+      month < 10 ? `0${month}` : `${month}`
+    }-${separator}${date}`;
+  };
 
   const clickSiginIn = () => {
     const error = validateAll();
+    console.log("fasle", error);
     const data = {
       fullName: fullName,
       password: password,
@@ -81,20 +116,46 @@ export default function SignIn() {
       phone: phone,
       email: email,
     };
+    console.log("data signin", data);
     if (error) {
-      console.log("data signin", data);
-      setModalOpen(true);
-      axios.post(URL_CHECK_PHONE, data).then((res) => {
-        const dataGetOTP = {
-          phone: "+84" + phone.substring(1),
-        };
-        console.log("datagetOTP", dataGetOTP);
-        axios.post(URL_GET_OTP, dataGetOTP).then((res) => {
-          console.log("Get otp: ", res);
+      axios
+        .post(URL_CHECK_PHONE, data)
+        .then((res) => {
+          const dataGetOTP = {
+            phone: "+84" + phone.substring(1),
+          };
+          console.log("datagetOTP", dataGetOTP);
+          axios.post(URL_GET_OTP, dataGetOTP).then((res) => {
+            console.log("Get otp: ", res);
+            setModalOpen(true);
+            setTime(120);
+          });
           setModalOpen(true);
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response.status === 400) {
+            toast.warn("Số điện thoại của bạn đã được sử dụng");
+          }
         });
-      });
     }
+  };
+
+  const reSendOTP = () => {
+    const dataGetOTP = {
+      phone: "+84" + phone.substring(1),
+    };
+    console.log("datagetOTP", dataGetOTP);
+    axios
+      .post(URL_GET_OTP, dataGetOTP)
+      .then((res) => {
+        console.log("Get otp: ", res);
+        setModalOpen(true);
+        setTime(120);
+      })
+      .catch((error) => {
+        toast.error(error.response?.data?.message);
+      });
   };
 
   const validateAll = () => {
@@ -103,7 +164,7 @@ export default function SignIn() {
       setPhone("false");
       flag = false;
     }
-    if (!Validate.validateLength(password, 8, 32)) {
+    if (!Validate.validateLength(password, 8, 30)) {
       setPassword("false");
       flag = false;
     }
@@ -115,8 +176,10 @@ export default function SignIn() {
       setName("false");
       flag = false;
     }
-    if (!validator.isEmail(email)) {
-      setEmail("false");
+
+    if (!validator.isEmail(email) && email.length !== 0) {
+      setEmailErr("false");
+      console.log("fasle");
       flag = false;
     }
     if (dateOfBirth?.length === 0 || dateOfBirth === "false") {
@@ -175,8 +238,9 @@ export default function SignIn() {
           navigate("/");
         })
         .catch((error) => {
-          if (error.message.indexOf("400") > -1) {
-            toast.warn("Số điện thoại của bạn đã được sữ dụng");
+          if (error.response.status === 406) {
+            toast.warn("Mã OTP không hợp lệ");
+            setStringVerify("");
           }
         });
     });
@@ -184,7 +248,7 @@ export default function SignIn() {
 
   return (
     <div id="signForm">
-      <Modal isOpen={modalOpen} toggle={() => setModalOpen(false)}>
+      <Modal isOpen={modalOpen}>
         <div
           style={{
             margin: `auto`,
@@ -207,8 +271,13 @@ export default function SignIn() {
               <Row className="text-start justify-content-center mb-3">
                 Tin nhắn chứa mã OTP để xác thực cho tài khoản này đã được gửi
                 đến số điện thoại: {phone}. <br /> Bạn vui lòng nhập vào đây để
-                hoàn tất đăng ký
+                hoàn tất đăng ký trong {time} giây.
               </Row>
+              {/* <Row>
+                <Col>
+                  <button>Gửi lại{time}</button>
+                </Col>
+              </Row> */}
               <input
                 placeholder="OTP"
                 className="text-center p-2"
@@ -228,7 +297,17 @@ export default function SignIn() {
                   margin: `auto`,
                 }}
               >
-                <button onClick={() => submitOTP()}>Xác nhận</button>
+                <button
+                  onClick={() => {
+                    if (time === 0) {
+                      reSendOTP();
+                    } else {
+                      submitOTP();
+                    }
+                  }}
+                >
+                  {time === 0 ? "Gửi lại" : "Xác nhận"}
+                </button>
               </Row>
             </div>
           </CardBody>
@@ -249,6 +328,7 @@ export default function SignIn() {
               {/* <PhoneInput */}
               <input
                 style={{ width: `100%`, borderRadius: `6px` }}
+                maxLength={10}
                 type="number"
                 name="phone"
                 onChange={(e) => {
@@ -277,6 +357,7 @@ export default function SignIn() {
                 style={{ width: `100%`, borderRadius: `6px` }}
                 type="password"
                 name="password"
+                maxLength={30}
                 onChange={(e) => {
                   if (!Validate.validateLength(e.target.value, 8, 32)) {
                     setPassword("false");
@@ -287,7 +368,7 @@ export default function SignIn() {
               />
               {password === "false" ? (
                 <span style={{ color: `red` }}>
-                  <p>Mật khẩu dài từ 8 đến 32 kí tự</p>
+                  <p>Mật khẩu dài từ 8 đến 30 kí tự</p>
                 </span>
               ) : null}
             </Col>
@@ -302,6 +383,7 @@ export default function SignIn() {
             </Col>
             <Col lg={5} sm={7}>
               <input
+                maxLength={30}
                 style={{ width: `100%`, borderRadius: `6px` }}
                 type="password"
                 name="confirm"
@@ -331,6 +413,7 @@ export default function SignIn() {
             </Col>
             <Col lg={5} sm={7}>
               <input
+                maxLength={30}
                 style={{ width: `100%`, borderRadius: `6px` }}
                 name="fullName"
                 onChange={(e) => {
@@ -355,17 +438,20 @@ export default function SignIn() {
             </Col>
             <Col lg={5} sm={8}>
               <input
+                type="email"
+                maxLength={50}
                 style={{ width: `100%`, borderRadius: `6px` }}
                 name="email"
                 onChange={(e) => {
                   if (!validator.isEmail(e.target.value)) {
-                    setEmail("false");
-                    return;
+                    setEmailErr("false");
+                  } else {
+                    setEmailErr("true");
                   }
                   setEmail(e.target.value);
                 }}
               />
-              {email === "false" ? (
+              {email.length !== 0 && emailErr === "false" ? (
                 <span style={{ color: `red` }}>
                   <p>Vui lòng nhập đúng email</p>
                 </span>
@@ -381,6 +467,8 @@ export default function SignIn() {
                 style={{ width: `100%`, borderRadius: `6px`, fontSize: `18px` }}
                 type="date"
                 name="dateOfBirth"
+                min={getMinDate()}
+                max={getMaxDate()}
                 onChange={(e) => {
                   console.log(e.target.value);
                   setDateOfBirth(e.target.value);

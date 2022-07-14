@@ -69,7 +69,7 @@ export default class Appointment extends Component {
   getCurrentDate(separator = "") {
     let newDate = new Date();
     // newDate.setDate(newDate.getDate());
-    let date = newDate.getDate();
+    let date = newDate.getDate() + 1;
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
     console.log(
@@ -285,7 +285,7 @@ export default class Appointment extends Component {
         )
         .then((res) => {
           // console(res);
-          toast.success("Đặt lịch thành công");
+          sessionStorage.setItem("addAppointment", true);
           window.location.replace("/user/history");
         })
 

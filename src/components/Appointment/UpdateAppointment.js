@@ -199,6 +199,11 @@ export default function UpdateAppointment() {
           Authorization: `Bearer ${token}`,
         },
       })
+      .then((res) => {
+        console.log(res);
+        toast.success("Thay đổi lịch hẹn thành công");
+        navigate("/user/history");
+      })
       .catch((error) => {
         console.log(error);
         if (error.response.status === 410) {
@@ -206,11 +211,10 @@ export default function UpdateAppointment() {
         }
       });
 
-    if (result.status === 200) {
-      toast.success("Thay đổi lịch hẹn thành công");
-      navigate("/user/history");
-    } else {
-    }
+    // if (result.response?.status === 200) {
+
+    // } else {
+    // }
   };
 
   const CancelAppointment = (e) => {
@@ -227,7 +231,10 @@ export default function UpdateAppointment() {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => navigate("/history"))
+      .then((res) => {
+        toast.success("Hủy lịch thành công");
+        navigate("/user/history");
+      })
       .catch((error) => {
         if (error.response.status === 423) {
           toast.warn("Bạn đã sử dụng quá 3 lần hủy trong 1 tháng.");
@@ -239,16 +246,6 @@ export default function UpdateAppointment() {
     // }
   };
 
-  const clickTimeFunction = (id) => {
-    for (let index = 0; index <= slotSelected.length; index++) {
-      // document
-      //   .getElementById(`time${index}`)
-      //   .className.replace("active-button", "");
-      console.log("ascbsad", document.getElementById(`time${index}`).classList);
-    }
-
-    // document.getElementById(`time${id}`).className += " active-button";
-  };
   return (
     <>
       {appointment ? (
@@ -352,6 +349,7 @@ export default function UpdateAppointment() {
                               onClick={() => {
                                 setTimeCome("Vui lòng chọn thời gian");
                                 setDoctorSelected(item);
+                                setIsActive("");
                               }}
                             >
                               {item.name}
@@ -403,6 +401,7 @@ export default function UpdateAppointment() {
                             month < 10 ? `0${month}` : `${month}`
                           }-${separator}${date}`;
                           setDate(dateBooking);
+                          setIsActive("");
                           // getSlot(e);
                         }
                       }}
@@ -459,6 +458,13 @@ export default function UpdateAppointment() {
                       );
                     })}
                   </Row>
+                  {!isActive ? (
+                    <Row>
+                      <p style={{ color: `red` }}>
+                        Vui lòng chọn lại thời gian
+                      </p>
+                    </Row>
+                  ) : null}
                 </div>
               </Col>
             </Row>

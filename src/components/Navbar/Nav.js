@@ -112,7 +112,7 @@ export default function Nav(props) {
               {/* Hiển thị khi màn hình < 950px */}
               <div id="service-type__950px">
                 <button type="button" onClick={() => clickButton()}>
-                  Dịch vụ 1
+                  Dịch vụ
                 </button>
                 <div
                   id="service-type"
