@@ -3,9 +3,9 @@
   border: 0;
   padding: 0;
   box-sizing: border-box;
-  vertical-align: middle;
+  /* vertical-align: middle; */
   cursor: context-menu;
-  user-select: none;
+  /* user-select: none; */
 }
 
 .App {
@@ -61,17 +61,38 @@ button {
 
 .chatBox {
   position: fixed;
-  right: 5%;
-  bottom: 10%;
-  font-size: 50px;
+  right: 100px;
+  bottom: 100px;
+  font-size: 60px;
   color: blue;
   cursor: pointer;
+  /* width: 70px;
+  height: 70px; */
 }
 
 .chatBox:hover {
-  font-size: 60px;
+  font-size: 70px;
 }
 
 .row {
   flex-direction: row !important;
+}
+
+.icon-messenger {
+  /* background-color: red; */
+  /* width: 70px;
+  height: 70px; */
+  /* border: 10px solid black; black*/
+  /* animation: boxShowOut 0.8s infinite; */
+  /* border-radius: 50%; */
+}
+
+@keyframes boxShowOut {
+  from {
+    box-shadow: 0 0 0 0 0 gray;
+  }
+
+  to {
+    box-shadow: 0 0 20px 20px gray;
+  }
 }

@@ -153,28 +153,37 @@ export default function UpdateProfile() {
       flag = false;
       setPasswordValidate(true);
     }
-    if (!Validate.validateLength(confirm, 8, 32)) {
-      flag = false;
-      setConfirmValidate(true);
-    } else if (!Validate.compare(newPassword, confirm)) {
-      setConfirmValidate(true);
-      flag = false;
+    if (newPassword.length > 0) {
+      if (!Validate.validateLength(newPassword, 8, 32)) {
+        flag = false;
+        setNewPasswordValidate(true);
+      } else {
+        setNewPasswordValidate(false);
+      }
+      if (!Validate.validateLength(confirm, 8, 32)) {
+        flag = false;
+        setConfirmValidate(true);
+      } else if (!Validate.compare(newPassword, confirm)) {
+        setConfirmValidate(true);
+        flag = false;
+      } else {
+        setConfirmValidate(false);
+      }
     }
-    if (!Validate.validateLength(newPassword, 8, 32)) {
-      flag = false;
-      setNewPasswordValidate(true);
-    }
+
     if (!Validate.validateLength(name, 8, 32)) {
       flag = false;
       setNameValidate(true);
     } else {
       setNameValidate(false);
     }
-    if (!validator.isEmail(email)) {
-      setEmailValidate(true);
-      flag = false;
-    } else {
-      setEmailValidate(false);
+    if (email.length > 0) {
+      if (!validator.isEmail(email)) {
+        setEmailValidate(true);
+        flag = false;
+      } else {
+        setEmailValidate(false);
+      }
     }
     var dob = new Date(dateOfBirth);
     var now = new Date();
@@ -238,7 +247,7 @@ export default function UpdateProfile() {
     const dataUpdate = {
       fullName: name,
       confirmPassword: password,
-      password: newPassword,
+      password: newPassword.length > 0 ? newPassword : password,
       dateOfBirth: dateOfBirth,
       gender: gender ? 1 : 2,
       districtId: district,

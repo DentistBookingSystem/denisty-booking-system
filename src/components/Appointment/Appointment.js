@@ -476,7 +476,8 @@ export default class Appointment extends Component {
                           Thời gian làm việc:
                         </p>
                         <p className="m-0" style={{ marginLeft: `10px` }}>
-                          {item.openTime}-{item.closeTime}
+                          {String(item.openTime).substring(0, 5)}-
+                          {String(item.closeTime).substring(0, 5)}
                         </p>
                       </div>
                     </div>

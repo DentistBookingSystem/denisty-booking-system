@@ -15,14 +15,13 @@ html {
 }
 
 #loginform {
-  min-width: 500px;
+  min-width: 600px;
   max-height: 700px;
   width: 30%;
   height: 60%;
   margin: 100px auto;
   background-color: #ffffff;
-  border-radius: 25px;
-  border: solid 1px;
+  border-radius: 0.3rem;
   padding: 0 100px;
 }
 

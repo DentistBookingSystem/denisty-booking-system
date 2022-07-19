@@ -104,6 +104,7 @@ export default function History() {
           },
         })
         .then((res) => {
+          // console.log("asdsa", res);
           setHistoryDetail(res.data);
         });
     }
@@ -198,7 +199,16 @@ export default function History() {
                 <tr>
                   <td>{item.service.name}</td>
                   <td>
-                    {item.service.minPrice}VNĐ ~ {item.service.maxPrice}VNĐ
+                    {Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(item.service.minPrice)}{" "}
+                    -{" "}
+                    {Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(item.service.maxPrice)}
+                    {/* {item.service.minPrice}VNĐ ~ {item.service.maxPrice}VNĐ */}
                   </td>
                   <td>
                     {item.discount
@@ -213,43 +223,65 @@ export default function History() {
 
         {listAppointment.map((item, key) => {
           if (item.id == appointmentID) {
-            if (!(item.status === 1 || item.status === 5)) {
-              return;
-            }
-            return (
-              <Row
-                xs="auto"
-                lg="auto"
-                className="justify-content-start ms-3 p-1"
-              >
-                <Col xs="auto" lg={2} className="text-start">
-                  <label
-                    style={{ textAlign: `left`, color: `black` }}
-                    className="p-0 fw-bold"
-                  >
-                    Ghi chú:
-                  </label>
-                </Col>
-                <Col xs="auto" lg={10}>
-                  {/* <p
+            if (item.status === 1 || item.status === 5) {
+              return (
+                <Row
+                  xs="auto"
+                  lg="auto"
+                  className="justify-content-start ms-3 p-1"
+                >
+                  <Col xs="auto" lg={2} className="text-start">
+                    <label
+                      style={{ textAlign: `left`, color: `black` }}
+                      className="p-0 fw-bold"
+                    >
+                      Ghi chú:
+                    </label>
+                  </Col>
+                  <Col xs="auto" lg={10}>
+                    {/* <p
                     className="m-0 text-start"
                     style={{ whiteSpace: `pre-line` }}
                   >
                     {item.note ? item.note : "Không có"}
                   </p> */}
-                  <textarea
-                    value={item.note ? item.note : "Không có"}
-                    disabled={true}
-                    style={{
-                      backgroundColor: `white`,
-                      width: `100%`,
-                      padding: `10px`,
-                      borderRadius: `6px`,
-                    }}
-                  ></textarea>
-                </Col>
-              </Row>
-            );
+                    <textarea
+                      value={item.note ? item.note : "Không có"}
+                      disabled={true}
+                      style={{
+                        backgroundColor: `white`,
+                        width: `100%`,
+                        padding: `10px`,
+                        borderRadius: `6px`,
+                      }}
+                    ></textarea>
+                  </Col>
+                </Row>
+              );
+            } else if (item.status === 0) {
+              return (
+                <Row className="justify-content-center">
+                  {" "}
+                  <Col lg={2} md={2} xs={3}>
+                    <Row>
+                      <button
+                        className="m-2"
+                        style={{ width: `100%` }}
+                        onClick={(e) => {
+                          if (checkAccount()) {
+                            navigate("/user/appointment/update", {
+                              state: { id: appointmentID },
+                            });
+                          }
+                        }}
+                      >
+                        Sửa
+                      </button>
+                    </Row>
+                  </Col>
+                </Row>
+              );
+            }
           }
         })}
       </>
@@ -264,14 +296,25 @@ export default function History() {
             <th>Chi nhánh</th>
             <th>Bác sĩ</th>
             <th>Trạng thái</th>
-            <th></th>
+            {/* <th></th> */}
           </tr>
         </thead>
         <tbody>
           {listAppointment.map((item) => {
             let val;
             return (
-              <tr key={item.id} style={{ alignItems: `center` }}>
+              <tr
+                key={item.id}
+                style={{ alignItems: `center` }}
+                value={item.id}
+                onClick={(e) => {
+                  if (item.status === 1) {
+                    AddFeedback(item.id);
+                  } else {
+                    show(item.id);
+                  }
+                }}
+              >
                 <td style={{ alignItems: `center` }}>
                   <Row className="p-0 ">
                     <p className="p-2">
@@ -351,7 +394,7 @@ export default function History() {
                     </Col>
                   </Row>
                 </td>
-                <td style={{ width: `17vw` }}>
+                {/* <td style={{ width: `17vw` }}>
                   <div
                     className="row-button d-flex justify-content-around flex-wrap p-0"
                     style={{ justifyContent: "flex-end" }}
@@ -423,7 +466,7 @@ export default function History() {
                       </button>
                     </Col>
                   </div>
-                </td>
+                </td> */}
               </tr>
             );
           })}
@@ -486,14 +529,16 @@ export default function History() {
     }
   };
 
-  const AddFeedback = (e) => {
+  const AddFeedback = (id) => {
     if (checkAccount()) {
-      setIDAppointmnet(e.target.value);
+      setIDAppointmnet(id);
+      // setIDAppointmnet(e.target.value);
+      console.log(id);
       document.getElementById("add-feeback-page").style.display = "block";
     }
   };
-  const show = (e) => {
-    setIDAppointmnet(e.target.value);
+  const show = (id) => {
+    setIDAppointmnet(id);
 
     document.getElementById("page-history-cover").style.display = "block";
   };

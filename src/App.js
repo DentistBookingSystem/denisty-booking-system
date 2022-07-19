@@ -36,7 +36,7 @@ const phone = localStorage.getItem("phone");
 const API_CHECK_ACCOUNT = "http://localhost:8080/rade/patient/account/";
 function App() {
   // const navigate = useNavigate();
-  const MINUTE_MS = 1000 * 60 * 20;
+  const MINUTE_MS = 1000 * 60 * 60 * 24;
   const [stateLogin, setStateLogin] = useState(false);
   useEffect(() => {
     if (localStorage.getItem("roleName")) {
@@ -142,8 +142,16 @@ function App() {
       </Router>
 
       <div className="chatBox">
-        <a href="https://l.messenger.com/l.php?u=http%3A%2F%2Fm.me%2F107337128652951&h=AT1R4u7pSoC4rdF5yHZ0e7myOVni1br5HBNiSsmK2Q_dUr9sNSEFQ8OmWGoFkVXMES6BM0nPWCzLh-JVLevAEg2xzp4WzOuFfUpW39WgQkILbTDH8jxEMSz9r2upi75kUed7uQ">
-          <FontAwesomeIcon icon={faFacebookMessenger} />
+        <a
+          className="p-0 m-0"
+          href="https://l.messenger.com/l.php?u=http%3A%2F%2Fm.me%2F107337128652951&h=AT1R4u7pSoC4rdF5yHZ0e7myOVni1br5HBNiSsmK2Q_dUr9sNSEFQ8OmWGoFkVXMES6BM0nPWCzLh-JVLevAEg2xzp4WzOuFfUpW39WgQkILbTDH8jxEMSz9r2upi75kUed7uQ"
+          target="_blank"
+        >
+          <FontAwesomeIcon
+            icon={faFacebookMessenger}
+            style={{ margin: `auto` }}
+            className="icon-messenger"
+          />
         </a>
       </div>
     </div>

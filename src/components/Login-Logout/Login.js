@@ -4,6 +4,7 @@ import AccountLogin from "../../service/loginService";
 import gmail_icon from "../../assets/images/google.jpg";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Col, Modal, ModalBody, Row } from "reactstrap";
 
 export default function LoginForm(props) {
   const [phone, setPhone] = useState("");
@@ -70,7 +71,10 @@ export default function LoginForm(props) {
     }
   };
   return (
-    <div id="loginform">
+    // <Modal isOpen={true}>
+
+    // </Modal>
+    <div id="loginform" className="m-0">
       <h2 id="headerTitle">Đăng nhập</h2>
       <div id="login">
         <form onSubmit={() => onSubmitHandle()}>
@@ -97,11 +101,28 @@ export default function LoginForm(props) {
             />
           </div>
           <div id="button" className="row justify-content-center">
-            <button type="button" onClick={() => onSubmitHandle()}>
-              Login
+            <button
+              type="button"
+              onClick={() => onSubmitHandle()}
+              style={{ maxWidth: `200px` }}
+            >
+              Đăng nhập
             </button>
           </div>
         </form>
+        <Row className="d-flex flex-row mb-5">
+          <Col lg="auto" md="auto" xs="auto">
+            <p className="m-0">Nếu bạn chưa có tài khoản</p>
+          </Col>
+          <Col lg="auto" md="auto" xs="auto">
+            <a
+              style={{ fontSize: `18px`, color: `blue`, cursor: `pointer` }}
+              href="/account/register"
+            >
+              Đăng ký
+            </a>
+          </Col>
+        </Row>
         {/* <div id="alternativeLogin">
           <label>Hoặc đăng nhập bằng:</label>
           <div id="iconGroup">

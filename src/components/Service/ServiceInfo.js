@@ -18,8 +18,8 @@ import "./style.css";
 import { height } from "@mui/system";
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
-const API_SEND_FEEDBACK = "http://localhost:8080/rade/patient/feedback/send/";
-const API_GET_FEEDBACK = "http://localhost:8080/rade/feedback";
+// const API_SEND_FEEDBACK = "http://localhost:8080/rade/patient/feedback/send/";
+// const API_GET_FEEDBACK = "http://localhost:8080/rade/feedback";
 const API_GET_DISCOUNT_FOLLOW_SERVICEID =
   "http://localhost:8080/rade/discount/";
 // var feedback = [];
@@ -49,10 +49,20 @@ export default function ServiceInfo() {
         setServiceList(tmp);
         setNameServiceType(tmp.at(0).serviceType.name);
         setServiceIDSelected(tmp.at(0).id);
+        setServiceSelected([res.at(0)]);
         // setServiceList(res.data);
       });
     }, 0);
   }, [id]);
+
+  // var formatMinPrice = Intl.NumberFormat("vi-VN", {
+  //   style: "currency",
+  //   currency: "VND",
+  // }).format(service.minPrice);
+  // var formatMaxPrice = Intl.NumberFormat("vi-VN", {
+  //   style: "currency",
+  //   currency: "VND",
+  // }).format(service.maxPrice);
 
   useEffect(() => {
     setTimeout(() => {
@@ -93,7 +103,7 @@ export default function ServiceInfo() {
                       // setDiscount({
                       if (res.data !== null) {
                         tmp.name = res.data.name;
-                        tmp.percentage = res.data.name;
+                        tmp.percentage = res.data.percentage + "%";
                         tmp.description = res.data.description;
                         tmp.start_date = res.data.startDate;
                         tmp.end_date = res.data.endDate;
@@ -238,13 +248,13 @@ export default function ServiceInfo() {
     if (lengthServiceSElected === 0) {
       if (typeof tmp !== "undefined" && tmp != null) {
         setServiceIDSelected(tmp.id);
-
+        console.log("tmp", tmp);
         return (
           <>
             <div>
-              <h2 style={{ textAlign: `left` }}>{serviceList.at(0).name}</h2>
+              <h2 style={{ textAlign: `left` }}>{tmp.name}</h2>
               <div className="d-flex flex-row p-1">
-                <h5>Thời gian: </h5>
+                <h5>Thời gian ước tính: </h5>
                 <p style={{ paddingLeft: `5px` }}>
                   ~{estimateTime(tmp.estimatedTime)}
                 </p>
@@ -252,7 +262,16 @@ export default function ServiceInfo() {
               <div className="d-flex flex-row p-1">
                 <h5>Giá: </h5>
                 <p style={{ paddingLeft: `5px` }}>
-                  {tmp.minPrice} (VNĐ) - {tmp.maxPrice} (VNĐ)
+                  {Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(tmp.minPrice)}{" "}
+                  -{" "}
+                  {Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(tmp.maxPrice)}
+                  {/* {tmp.minPrice} (VNĐ) - {tmp.maxPrice} (VNĐ) */}
                 </p>
               </div>
               {ShowDiscount(tmp.id)}
@@ -287,13 +306,13 @@ export default function ServiceInfo() {
                 <div className="d-flex flex-row p-1">
                   <h5>Thời gian ước tính:</h5>
                   <p style={{ paddingLeft: `5px` }}>
-                    {estimateTime(item.estimatedTime)}
+                    ~{estimateTime(item.estimatedTime)}
                   </p>
                 </div>
                 <div className="d-flex flex-row p-1">
                   <h5>Giá: </h5>
                   <p style={{ paddingLeft: `5px` }}>
-                    {tmp.minPrice} VNĐ - {tmp.maxPrice} VNĐ
+                    {tmp.minPrice} (VNĐ) - {tmp.maxPrice} (VNĐ)
                   </p>
                 </div>
                 {ShowDiscount(tmp.id)}

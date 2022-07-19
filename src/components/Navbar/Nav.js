@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import ServiceTypeList from "../../getData/ServiceTypeList";
+import { Modal } from "reactstrap";
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
 const API_POST_HISTORY =
@@ -29,6 +30,7 @@ const API_CHECK_ACCOUNT = "http://localhost:8080/rade/patient/account/";
 export default function Nav(props) {
   const [statusLogin, setStatusLogin] = useState(null);
   const [displayServiceType, setDisplayServiceType] = useState("none");
+  const [modalLogin, setModalLogin] = useState(false);
   let navigate = useNavigate();
   // let HistoryPage = useRoutes([{ path: "/history", element: <HistoryPage /> }]);
   const [serviceType, setServiceType] = useState([]);
@@ -217,7 +219,7 @@ export default function Nav(props) {
   );
   const SecondNav = () => (
     <ul id="show-second-nav" className="second-nav m-0 p-0">
-      <Popup
+      {/* <Popup
         modal
         trigger={
           <li className="nav-item">
@@ -226,7 +228,10 @@ export default function Nav(props) {
         }
       >
         <LoginForm />
-      </Popup>
+      </Popup> */}
+      <li className="nav-item">
+        <button onClick={() => setModalLogin(true)}>Đăng nhập</button>
+      </li>
       <li>
         <Link to="/account/register" className="nav-item">
           <button>Đăng ký</button>
@@ -237,6 +242,9 @@ export default function Nav(props) {
 
   return (
     <>
+      <Modal isOpen={modalLogin} toggle={() => setModalLogin(false)}>
+        <LoginForm />
+      </Modal>
       <nav>
         {/* Hiển thị khi màn hình > 950px */}
         <div id="display-nav__950px" className="nav">

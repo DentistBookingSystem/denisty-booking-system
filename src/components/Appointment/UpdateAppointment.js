@@ -258,7 +258,7 @@ export default function UpdateAppointment() {
           </div>
           <div>
             <Row className="justify-content-start p-0">
-              <Col className="p-0" sm={3} lg={3} md={3}>
+              <Col className="p-0" sm={3} lg={2} md={3}>
                 <h5 className="text-start ps-5" style={{ color: "gray" }}>
                   Địa chỉ:
                 </h5>
@@ -273,11 +273,11 @@ export default function UpdateAppointment() {
             </Row>
             <Row>
               <h5 className="text-start ps-5" style={{ color: "gray" }}>
-                Dịch vụ bạn đã chọn
+                Dịch vụ bạn đã chọn:
               </h5>
             </Row>
             <Row className="justify-content-center">
-              <Col lg={8}>
+              <Col lg={8} className="p-0">
                 {" "}
                 <Table bordered hover className="table-history bordered">
                   <thead>
@@ -323,7 +323,7 @@ export default function UpdateAppointment() {
                       Bác sĩ:
                     </h5>
                   </Col>
-                  <Col className="text-start" sm="auto" lg={6} md={9}>
+                  <Col className="text-start" sm="auto" lg={8} md={9}>
                     <Dropdown
                       isOpen={isOpen}
                       toggle={() => toggle()}
@@ -417,12 +417,14 @@ export default function UpdateAppointment() {
               </Col> */}
             </Row>
             <Row>
-              <Col className="p-0" sm="auto" lg={3} md={3}>
+              <Col className="p-0" sm="auto" lg={2} md={3}>
                 <h5 className="text-start ps-5" style={{ color: "gray" }}>
                   Chọn thời gian:
                 </h5>
               </Col>
-              <Col>
+            </Row>
+            <Row className="justify-content-center p-0">
+              <Col lg={8} className="p-0">
                 {" "}
                 <div className="slot" style={{ textAlign: `left` }}>
                   <Row lg="auto">
@@ -468,7 +470,6 @@ export default function UpdateAppointment() {
                 </div>
               </Col>
             </Row>
-
             <Row className="justify-content-between ms-5 me-5" lg={12}>
               <Col lg={3} md={3}>
                 <Row>
