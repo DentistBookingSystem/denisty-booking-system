@@ -294,9 +294,7 @@ export default function ServiceInfo() {
                   className="img-service"
                 ></img>
               </div>
-              <p style={{ whiteSpace: `pre-line`, textIndent: `30px` }}>
-                {ReactHtmlParser(serviceList.at(0).description)}
-              </p>
+              {ReactHtmlParser(serviceList.at(0).description)}
             </div>
           </>
         );
@@ -347,9 +345,7 @@ export default function ServiceInfo() {
                   ></img>
                 </div>
 
-                <p style={{ whiteSpace: `pre-line`, textIndent: `30px` }}>
-                  {ReactHtmlParser(item.description)}
-                </p>
+                {ReactHtmlParser(item.description)}
               </div>
             );
           })}
