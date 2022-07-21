@@ -254,13 +254,13 @@ export default function ServiceInfo() {
             <div>
               <h2 style={{ textAlign: `left` }}>{tmp.name}</h2>
               <div className="d-flex flex-row p-1">
-                <h5>Thời gian ước tính: </h5>
+                <h5>Thời gian làm việc ước tính: </h5>
                 <p style={{ paddingLeft: `5px` }}>
-                  ~{estimateTime(tmp.estimatedTime)}
+                  {estimateTime(tmp.estimatedTime)}
                 </p>
               </div>
               <div className="d-flex flex-row p-1">
-                <h5>Giá: </h5>
+                <h5>Tầm giá: </h5>
                 <p style={{ paddingLeft: `5px` }}>
                   {Intl.NumberFormat("vi-VN", {
                     style: "currency",
@@ -290,7 +290,9 @@ export default function ServiceInfo() {
                   className="img-service"
                 ></img>
               </div>
-              <p>{serviceList.at(0).description}</p>
+              <p style={{ whiteSpace: `pre-line`, textIndent: `30px` }}>
+                {serviceList.at(0).description}
+              </p>
             </div>
           </>
         );
@@ -304,16 +306,28 @@ export default function ServiceInfo() {
               <div>
                 <h2 style={{ textAlign: `left` }}>{item.name}</h2>
                 <div className="d-flex flex-row p-1">
-                  <h5>Thời gian ước tính:</h5>
+                  <h5>Thời gian làm việc ước tính:</h5>
                   <p style={{ paddingLeft: `5px` }}>
-                    ~{estimateTime(item.estimatedTime)}
+                    {estimateTime(item.estimatedTime)}
                   </p>
                 </div>
                 <div className="d-flex flex-row p-1">
-                  <h5>Giá: </h5>
+                  <h5>Tầm giá: </h5>
                   <p style={{ paddingLeft: `5px` }}>
-                    {tmp.minPrice} (VNĐ) - {tmp.maxPrice} (VNĐ)
+                    {Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(tmp.minPrice)}{" "}
+                    -{" "}
+                    {Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(tmp.maxPrice)}
+                    {/* {tmp.minPrice} (VNĐ) - {tmp.maxPrice} (VNĐ) */}
                   </p>
+                  {/* <p style={{ paddingLeft: `5px` }}>
+                    {tmp.minPrice} (VNĐ) - {tmp.maxPrice} (VNĐ)
+                  </p> */}
                 </div>
                 {ShowDiscount(tmp.id)}
                 <div
@@ -329,7 +343,9 @@ export default function ServiceInfo() {
                   ></img>
                 </div>
 
-                <p>{item.description}</p>
+                <p style={{ whiteSpace: `pre-line`, textIndent: `30px` }}>
+                  {item.description}
+                </p>
               </div>
             );
           })}

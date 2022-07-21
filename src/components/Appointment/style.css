@@ -306,6 +306,7 @@ select {
   flex-direction: column;
   justify-content: center;
   text-align: center;
+  animation: slideDown 0.5s ease-in;
 }
 
 .choose-branch-container {
@@ -408,13 +409,24 @@ select {
   position: fixed;
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0.5;
+    transform: translateY(calc(-100% - 20px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 #popup {
   position: absolute;
   height: 490px;
   top: 150px;
   left: 100px;
   right: 100px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 ul,
@@ -549,4 +561,14 @@ table {
 
 .active-button {
   background-color: #0b0b90;
+}
+
+.button-cancel-appointment {
+  background-color: rgb(255, 51, 0) !important;
+  border: 2px solid red !important;
+}
+
+.button-cancel-appointment:hover {
+  background-color: white !important;
+  color: red !important;
 }

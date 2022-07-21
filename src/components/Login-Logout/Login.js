@@ -35,7 +35,7 @@ export default function LoginForm(props) {
           localStorage.setItem("phone", response.data.phone);
           localStorage.setItem("accessToken", response.data.accessToken);
           localStorage.setItem("role", response.data.role);
-          localStorage.setItem("statusLogin", true);
+          sessionStorage.setItem("statusLogin", "true");
           localStorage.setItem("loginSuccess", true);
           localStorage.setItem("roleName", response.data.roleName);
           console.log(response.data);
@@ -55,7 +55,7 @@ export default function LoginForm(props) {
           }
         })
         .catch((e) => {
-          localStorage.setItem("statusLogin", false);
+          sessionStorage.setItem("statusLogin", "false");
           console.log(e);
           if (e.response.status === 406) {
             toast.error(

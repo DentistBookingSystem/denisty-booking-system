@@ -80,7 +80,7 @@ export default function Nav(props) {
       .catch((error) => {
         if (error.message.indexOf("401") > -1) {
           // toast.warn("Vui lòng đăng nhập lại!");
-          localStorage.setItem("statusLogin", "false");
+          sessionStorage.setItem("statusLogin", "false");
         }
       });
     // console.log(localStorage.getItem("statusLogin"));
@@ -260,7 +260,7 @@ export default function Nav(props) {
             </div>
           </div>
           <FirstNav />
-          {localStorage.getItem("statusLogin") === "true" ? (
+          {sessionStorage.getItem("statusLogin") === "true" ? (
             <SecondNavLogin />
           ) : (
             <SecondNav />
@@ -321,7 +321,7 @@ export default function Nav(props) {
             {/* ============ */}
             <div id="show" className="nav-side-bar">
               <FirstNav />
-              {localStorage.getItem("statusLogin") === "true" ? (
+              {sessionStorage.getItem("statusLogin") === "true" ? (
                 <SecondNavLogin />
               ) : (
                 <SecondNav />

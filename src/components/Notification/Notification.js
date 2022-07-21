@@ -21,6 +21,7 @@ const notification = [
 ];
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
+let render = false;
 const API_GET_NOTIFY_POST = "http://localhost:8080/rade/patient/notification";
 export default function Notification() {
   const [notificationList, setNotificationList] = useState([]);
@@ -28,6 +29,22 @@ export default function Notification() {
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(true);
   const [fullHeight, setFullHeight] = useState(false);
+
+  const getCurrentDate = (d) => {
+    let separator = "";
+    let newDate = new Date(d);
+    let date = newDate.getDate();
+    let month = newDate.getMonth() + 1;
+    let year = newDate.getFullYear();
+    // console.log(
+    //   `${year}${separator}-${month < 10 ? `0${month}` : `${month}`}-${
+    //     date < 10 ? `0${date}` : `${date}`
+    //   }`
+    // );
+    return `${year}${separator}-${month < 10 ? `0${month}` : `${month}`}-${
+      date < 10 ? `0${date}` : `${date}`
+    }`;
+  };
   const getNotification = async () => {
     const data = {
       phone: phone,
@@ -42,6 +59,7 @@ export default function Notification() {
         },
       });
       console.log("thông báo", result);
+      console.log("date");
       setNotificationList(result.data);
       setFullHeight(false);
     } catch (error) {
@@ -68,56 +86,13 @@ export default function Notification() {
     }
   };
 
-  const styles = {
-    tada: {
-      animation: "x 1s",
-      animationName: Radium.keyframes(tada),
-      animationDuration: "1s",
-    },
-  };
-
   useEffect(() => {
-    getNotification();
+    if (render) {
+      console.log("render lại thông báo");
+      getNotification();
+    }
   }, [currentPage]);
 
-  const [rotation, setRotation] = useState(-50);
-  const [direction, setDirection] = useState(true);
-  useEffect(() => {
-    // const interval = setInterval(() => {
-    //   let x = rotation;
-    //   if (direction) {
-    //     // console.log("vsfibid");
-    //     setRotation(x + 10);
-    //     // console.log("true", rotation);
-    //   } else {
-    //     setRotation(x - 10);
-    //     // console.log("false", rotation);
-    //   }
-    //   if (x === 50) {
-    //     setDirection(false);
-    //   } else if (x === -50) {
-    //     setDirection(true);
-    //   }
-    //   // console.log(rotation);
-    //   // console.log("dirextion", direction);
-    // }, 1000 * 5);
-    setTimeout(() => {
-      let x = rotation;
-      if (direction) {
-        // console.log("vsfibid");
-        setRotation(x + 10);
-        // console.log("true", rotation);
-      } else {
-        setRotation(x - 10);
-        // console.log("false", rotation);
-      }
-      if (x === 50) {
-        setDirection(false);
-      } else if (x === -50) {
-        setDirection(true);
-      }
-    }, 10000);
-  });
   return (
     <>
       <div>
@@ -125,34 +100,19 @@ export default function Notification() {
           onClick={() => {
             setShowNotification(true);
             getNotification();
+            render = true;
+            setCurrentPage(1);
           }}
         >
           <FontAwesomeIcon icon={faBell} className="bell" />
         </button>
-        {/* <div className="content-dropdown p-3">
-          {notificationList.map((item) => (
-            <div
-              key={item.id}
-              className="text-start"
-              style={{ color: `black` }}
-            >
-              <p className="p-0 m-0 text-notification">{item.description}</p>
-              <p
-                className="text-end"
-                style={{
-                  color: `gray`,
-                }}
-              >
-                {item.date}
-              </p>
-              <hr />
-            </div>
-          ))}
-        </div> */}
       </div>
       <Modal
         isOpen={showNotification}
-        toggle={() => setShowNotification(false)}
+        toggle={() => {
+          setShowNotification(false);
+          render = false;
+        }}
         size="lg"
       >
         <ModalHeader
@@ -184,7 +144,7 @@ export default function Notification() {
                   color: `gray`,
                 }}
               >
-                {item.date}
+                {getCurrentDate(item.date)}
               </p>
               <hr />
             </div>

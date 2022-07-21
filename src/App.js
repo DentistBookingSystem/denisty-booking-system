@@ -69,6 +69,7 @@ function App() {
     return () => {
       clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
       localStorage.clear();
+      sessionStorage.clear();
     };
   }, []);
 

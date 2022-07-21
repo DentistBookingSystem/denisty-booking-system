@@ -488,6 +488,7 @@ export default function UpdateAppointment() {
               <Col lg={3} md={3}>
                 <Row>
                   <Button
+                    className="button-cancel-appointment"
                     onClick={() => {
                       setModalOpen(true);
                     }}
@@ -503,20 +504,25 @@ export default function UpdateAppointment() {
               Nhắc nhở
             </ModalHeader>
             <ModalBody>
-              <p>Bạn có chắc chắn muốn xóa lịch hẹn này hay không?</p>
+              <p>Bạn có chắc chắn muốn hủy lịch hẹn này hay không?</p>
             </ModalBody>
             <ModalFooter>
               <Row className="justify-content-center">
-                <Col mg={3} className="me-5">
+                <Col mg={3} className="m2-5">
                   <Row>
                     <button
                       onClick={(e) => {
                         CancelAppointment(e);
                         setModalOpen(false);
                       }}
-                      style={{ fontSize: `18px`, padding: `5px` }}
+                      className="button-cancel-appointment"
+                      style={{
+                        fontSize: `18px`,
+                        padding: `5px`,
+                        width: `100px`,
+                      }}
                     >
-                      Xóa
+                      Có
                     </button>
                   </Row>
                 </Col>
@@ -524,9 +530,13 @@ export default function UpdateAppointment() {
                   <Row>
                     <button
                       onClick={() => setModalOpen(false)}
-                      style={{ fontSize: `18px`, padding: `5px` }}
+                      style={{
+                        fontSize: `18px`,
+                        padding: `5px`,
+                        width: `100px`,
+                      }}
                     >
-                      Hủy
+                      Không
                     </button>
                   </Row>
                 </Col>
