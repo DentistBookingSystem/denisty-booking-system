@@ -15,7 +15,11 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
-import { height } from "@mui/system";
+import ReactHtmlParser, {
+  processNodes,
+  convertNodeToElement,
+  htmlparser2,
+} from "react-html-parser";
 const token = localStorage.getItem("accessToken");
 const phone = localStorage.getItem("phone");
 // const API_SEND_FEEDBACK = "http://localhost:8080/rade/patient/feedback/send/";
@@ -291,7 +295,7 @@ export default function ServiceInfo() {
                 ></img>
               </div>
               <p style={{ whiteSpace: `pre-line`, textIndent: `30px` }}>
-                {serviceList.at(0).description}
+                {ReactHtmlParser(serviceList.at(0).description)}
               </p>
             </div>
           </>
@@ -344,7 +348,7 @@ export default function ServiceInfo() {
                 </div>
 
                 <p style={{ whiteSpace: `pre-line`, textIndent: `30px` }}>
-                  {item.description}
+                  {ReactHtmlParser(item.description)}
                 </p>
               </div>
             );

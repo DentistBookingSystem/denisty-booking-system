@@ -71,59 +71,57 @@ export default function LoginForm(props) {
     }
   };
   return (
-    // <Modal isOpen={true}>
-
-    // </Modal>
-    <div id="loginform" className="m-0">
-      <h2 id="headerTitle">Đăng nhập</h2>
-      <div id="login">
-        <form onSubmit={() => onSubmitHandle()}>
-          <div className="row">
-            <label>Số điện thoại</label>
-            <p style={{ color: `red` }}>{validMsg.phone}</p>
-            <input
-              maxLength={10}
-              type="text"
-              placeholder="Nhập số điện thoại"
-              name="phone"
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
-          <div className="row">
-            <label>Nhập mật khẩu</label>
-            <p style={{ color: `red` }}>{validMsg.password}</p>
-            <input
-              type="password"
-              placeholder="Nhập mật khẩu"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div id="button" className="row justify-content-center">
-            <button
-              type="button"
-              onClick={() => onSubmitHandle()}
-              style={{ maxWidth: `200px` }}
-            >
-              Đăng nhập
-            </button>
-          </div>
-        </form>
-        <Row className="d-flex flex-row mb-5">
-          <Col lg="auto" md="auto" xs="auto">
-            <p className="m-0">Nếu bạn chưa có tài khoản</p>
-          </Col>
-          <Col lg="auto" md="auto" xs="auto">
-            <a
-              style={{ fontSize: `18px`, color: `blue`, cursor: `pointer` }}
-              href="/account/register"
-            >
-              Đăng ký
-            </a>
-          </Col>
-        </Row>
-        {/* <div id="alternativeLogin">
+    <div style={{ display: `flex`, justifyContent: `center` }}>
+      <div id="loginform" className="m-0">
+        <h2 id="headerTitle">Đăng nhập</h2>
+        <div id="login">
+          <form onSubmit={() => onSubmitHandle()}>
+            <div className="row">
+              <label>Số điện thoại</label>
+              <p style={{ color: `red` }}>{validMsg.phone}</p>
+              <input
+                maxLength={10}
+                type="text"
+                placeholder="Nhập số điện thoại"
+                name="phone"
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+            <div className="row">
+              <label>Nhập mật khẩu</label>
+              <p style={{ color: `red` }}>{validMsg.password}</p>
+              <input
+                type="password"
+                placeholder="Nhập mật khẩu"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div id="button" className="row justify-content-center">
+              <button
+                type="button"
+                onClick={() => onSubmitHandle()}
+                style={{ maxWidth: `200px` }}
+              >
+                Đăng nhập
+              </button>
+            </div>
+          </form>
+          <Row className="d-flex flex-row mb-5">
+            <Col lg="auto" md="auto" xs="auto">
+              <p className="m-0">Nếu bạn chưa có tài khoản</p>
+            </Col>
+            <Col lg="auto" md="auto" xs="auto">
+              <a
+                style={{ fontSize: `18px`, color: `blue`, cursor: `pointer` }}
+                href="/account/register"
+              >
+                Đăng ký
+              </a>
+            </Col>
+          </Row>
+          {/* <div id="alternativeLogin">
           <label>Hoặc đăng nhập bằng:</label>
           <div id="iconGroup">
             <a
@@ -135,6 +133,7 @@ export default function LoginForm(props) {
             </a>
           </div>
         </div> */}
+        </div>
       </div>
     </div>
   );

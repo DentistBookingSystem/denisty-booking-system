@@ -35,6 +35,7 @@
     "react-day-picker": "^8.0.7",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.31.2",
+    "react-html-parser": "^2.0.2",
     "react-native-calendars": "^1.1284.0",
     "react-phone-number-input": "^3.2.3",
     "react-router": "^5.2.0",
