@@ -68,8 +68,8 @@ export default class Appointment extends Component {
 
   getCurrentDate(separator = "") {
     let newDate = new Date();
-    // newDate.setDate(newDate.getDate());
-    let date = newDate.getDate() + 1;
+    newDate.setDate(newDate.getDate() + 1);
+    let date = newDate.getDate();
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
     console.log(
@@ -90,6 +90,7 @@ export default class Appointment extends Component {
 
   getMaxDate(separator = "") {
     let newDate = new Date();
+
     newDate.setDate(newDate.getDate() + 7);
     let date = newDate.getDate();
     let month = newDate.getMonth() + 1;
@@ -100,6 +101,11 @@ export default class Appointment extends Component {
         date < 10 ? `0${date}` : `${date}`
       }`,
     });
+    console.log(
+      `${year}${separator}-${
+        month < 10 ? `0${month}` : `${month}`
+      }-${separator}${date}`
+    );
     return `${year}${separator}-${
       month < 10 ? `0${month}` : `${month}`
     }-${separator}${date}`;
