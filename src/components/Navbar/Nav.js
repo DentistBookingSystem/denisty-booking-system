@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./styleNav.css";
 import "../ServiceType/style.css";
-import logo from "../../logo/logo1.jpg";
 import logoDentist from "../../assets/images/logoDentist.png";
 import LoginForm from "../Login-Logout/Login";
 import { Link, useRoutes, useNavigate, Navigate } from "react-router-dom";

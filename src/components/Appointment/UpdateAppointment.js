@@ -51,14 +51,20 @@ export default function UpdateAppointment() {
   //
   const [slotSelected, setSlotSelected] = useState([]);
   const [isActive, setIsActive] = useState("");
+  const [today, setToday] = useState("");
+  const [maxdate, setMaxdate] = useState("");
 
-  const today = (separator = "") => {
+  const getToday = (separator = "") => {
     let newDate = new Date();
     newDate.setDate(newDate.getDate() + 1);
     let date = newDate.getDate();
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
-
+    setToday(
+      `${year}${separator}-${month < 10 ? `0${month}` : `${month}`}-${
+        date < 10 ? `0${date}` : `${date}`
+      }`
+    );
     return `${year}${separator}-${
       month < 10 ? `0${month}` : `${month}`
     }-${separator}${date}`;
@@ -70,7 +76,11 @@ export default function UpdateAppointment() {
     let date = newDate.getDate();
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
-
+    setMaxdate(
+      `${year}${separator}-${month < 10 ? `0${month}` : `${month}`}-${
+        date < 10 ? `0${date}` : `${date}`
+      }`
+    );
     return `${year}${separator}-${
       month < 10 ? `0${month}` : `${month}`
     }-${separator}${date}`;
@@ -118,6 +128,8 @@ export default function UpdateAppointment() {
 
   useEffect(() => {
     getAppointment();
+    getToday();
+    maxday();
   }, []);
 
   useEffect(() => {
@@ -379,8 +391,8 @@ export default function UpdateAppointment() {
                       type="date"
                       value={date}
                       pattern="\d{4}-\d{2}-\d{2}"
-                      min={today()}
-                      max={maxday()}
+                      min={today}
+                      max={maxdate}
                       onChange={(e) => {
                         setTimeCome("Vui lòng chọn thời gian");
                         // var day = new Date(e.currentTarget.valueAsDate).getUTCDay();
@@ -399,7 +411,8 @@ export default function UpdateAppointment() {
 
                           let dateBooking = `${year}${separator}-${
                             month < 10 ? `0${month}` : `${month}`
-                          }-${separator}${date}`;
+                          }-${date < 10 ? `0${date}` : `${date}`}`;
+                          console.log("date", dateBooking);
                           setDate(dateBooking);
                           setIsActive("");
                           // getSlot(e);
