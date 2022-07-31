@@ -271,9 +271,16 @@ export default function Home() {
               ></img>
             );
           })} */}
-          <div style={{ width: `100%`, height: `300px`, position: `relative` }}>
+          <div
+            style={{
+              width: `100%`,
+              height: `300px`,
+              position: `relative`,
+              borderRadius: `8px`,
+            }}
+          >
             <img
-              style={{ width: `100%`, height: `300px` }}
+              style={{ width: `100%`, height: `300px`, borderRadius: `8px` }}
               src={`https://drive.google.com/uc?id=${
                 urlImgBranchList.at(index)?.url
               }`}
@@ -288,6 +295,8 @@ export default function Home() {
                 backgroundColor: `rgba(0, 0, 0, 0.5)`,
                 color: `white`,
                 width: `100%`,
+                borderBottomLeftRadius: `8px`,
+                borderBottomRightRadius: `8px`,
               }}
               // className="m-1"
             >

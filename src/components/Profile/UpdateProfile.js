@@ -310,7 +310,8 @@ export default function UpdateProfile() {
         <Row className="justify-content-center">
           <Col md={2} className="text-start">
             <label style={{ color: `black`, textAlign: `left` }}>
-              Mật khẩu cũ:{" "}
+              Mật khẩu cũ{" "}
+              <span style={{ color: `red`, fontSize: `25px` }}>*</span>:
             </label>
           </Col>
           <Col md={5}>
@@ -419,7 +420,9 @@ export default function UpdateProfile() {
         {/* Tên  */}
         <Row className="justify-content-center">
           <Col md={2} className="text-start">
-            <label style={{ color: `black`, textAlign: `left` }}>Tên: </label>
+            <label style={{ color: `black`, textAlign: `left` }}>
+              Tên <span style={{ color: `red`, fontSize: `25px` }}>*</span>:{" "}
+            </label>
           </Col>
           <Col md={5}>
             <Input
@@ -488,7 +491,8 @@ export default function UpdateProfile() {
         <Row className="justify-content-center">
           <Col md={2} className="text-start">
             <label style={{ color: `black`, textAlign: `left` }}>
-              Ngày sinh:{" "}
+              Ngày sinh{" "}
+              <span style={{ color: `red`, fontSize: `25px` }}>*</span>:
             </label>
           </Col>
           <Col md={5}>
@@ -530,7 +534,8 @@ export default function UpdateProfile() {
         <Row className="justify-content-center">
           <Col md={2} className="text-start">
             <label style={{ color: `black`, textAlign: `left` }}>
-              Giới tính:{" "}
+              Giới tính{" "}
+              <span style={{ color: `red`, fontSize: `25px` }}>*</span>:
             </label>
           </Col>
           <Col md={5}>
@@ -574,7 +579,8 @@ export default function UpdateProfile() {
         <Row className="justify-content-center">
           <Col md={2} className="text-start">
             <label style={{ color: `black`, textAlign: `left` }}>
-              Tỉnh/thành phố:{" "}
+              Tỉnh/thành phố{" "}
+              <span style={{ color: `red`, fontSize: `25px` }}>*</span>:
             </label>
           </Col>
           <Col md={5}>
@@ -622,7 +628,8 @@ export default function UpdateProfile() {
         <Row className="justify-content-center">
           <Col md={2} className="text-start">
             <label style={{ color: `black`, textAlign: `left` }}>
-              Quận/huyện:{" "}
+              Quận/huyện{" "}
+              <span style={{ color: `red`, fontSize: `25px` }}>*</span>:
             </label>
           </Col>
           <Col md={5}>

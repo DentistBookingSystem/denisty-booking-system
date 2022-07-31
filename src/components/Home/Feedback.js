@@ -148,10 +148,10 @@ export default function Feedback() {
                 position: `relative`,
               }}
             >
-              <Row
+              <div
                 style={{
                   position: `absolute`,
-                  top: `0px`,
+                  top: `10px`,
                   left: `0`,
                   right: `0`,
                 }}
@@ -160,7 +160,7 @@ export default function Feedback() {
                   className="feedback-icon"
                   icon={faQuoteRight}
                 />
-              </Row>
+              </div>
               <div className="mt-3 mb-3 p-2 box-feedback">
                 <Row>
                   <h5 className="text-start m-0">

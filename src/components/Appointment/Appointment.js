@@ -411,8 +411,9 @@ export default class Appointment extends Component {
 
   ShowAddress() {
     return (
-      <div className="address">
+      <div className="address d-flex">
         <h4>Địa chỉ bạn chọn</h4>
+        <h4 style={{ color: "red", paddingLeft: 0 }}>*</h4>{" "}
         <p style={{ marginLeft: `20px` }}>
           {this.state.branch.name} : {this.state.address}
         </p>
@@ -743,8 +744,9 @@ export default class Appointment extends Component {
             </div>
 
             {/* dịch vụ đã chọn */}
-            <div className=" service">
-              <h4>Dịch vụ đã chọn</h4>
+            <div className=" service d-flex flex-row">
+              <h4>Dịch vụ đã chọn </h4>
+              <h4 style={{ color: "red", paddingLeft: 0 }}>*</h4>{" "}
             </div>
             <div className="service-selected">
               {/* <div id="border-bottom"></div> */}

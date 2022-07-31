@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../logo/logo1.jpg";
 import "./style.css";
-import isEmpty from "validator/lib/isEmpty";
 import axios from "axios";
 import {
   CardBody,
@@ -17,6 +16,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import Validate from "./Validate";
 import validator from "validator";
+// import logoDentist from "../../assets/images/logoDentist.svg";
 import { Navigate, useNavigate } from "react-router-dom";
 const API_REGIS = "http://localhost:8080/rade/account/registration";
 const API_GET_PROVINCE = "http://localhost:8080/rade/province";
@@ -322,7 +322,8 @@ export default function SignIn() {
         <div className="content-sign" style={{ maxWidth: `800px` }}>
           <Row className="justify-content-center d-flex flex-row mb-4">
             <Col lg={4} sm={5}>
-              Số điện thoại
+              Số điện thoại{" "}
+              <span style={{ color: `red`, fontSize: `25px` }}>*</span>
             </Col>
             <Col lg={5} sm={7}>
               {/* <PhoneInput */}
@@ -350,7 +351,7 @@ export default function SignIn() {
           {/* Mất khẩu */}
           <Row className="justify-content-center d-flex flex-row mb-4">
             <Col lg={4} sm={5}>
-              Mật khẩu
+              Mật khẩu <span style={{ color: `red`, fontSize: `25px` }}>*</span>
             </Col>
             <Col lg={5} sm={7}>
               <input
@@ -379,7 +380,8 @@ export default function SignIn() {
           {/* Nhập lại mật khẩu */}
           <Row className="justify-content-center d-flex flex-row mb-4">
             <Col lg={4} sm={5}>
-              Nhập lại mật khẩu
+              Nhập lại mật khẩu{" "}
+              <span style={{ color: `red`, fontSize: `25px` }}>*</span>
             </Col>
             <Col lg={5} sm={7}>
               <input
@@ -409,7 +411,7 @@ export default function SignIn() {
           {/* Nhập họ và tên */}
           <Row className="justify-content-center d-flex flex-row mb-4">
             <Col lg={4} sm={5}>
-              Tên
+              Tên <span style={{ color: `red`, fontSize: `25px` }}>*</span>
             </Col>
             <Col lg={5} sm={7}>
               <input
@@ -460,7 +462,8 @@ export default function SignIn() {
           </Row>
           <Row className="justify-content-center d-flex flex-row mb-4">
             <Col lg={4} sm={6}>
-              Ngày sinh
+              Ngày sinh{" "}
+              <span style={{ color: `red`, fontSize: `25px` }}>*</span>
             </Col>
             <Col lg={5} sm={6}>
               <input
@@ -484,7 +487,8 @@ export default function SignIn() {
 
           <Row className="justify-content-center d-flex flex-row mb-4">
             <Col lg={4} sm={5}>
-              Giới tính
+              Giới tính{" "}
+              <span style={{ color: `red`, fontSize: `25px` }}>*</span>
             </Col>
             <Col lg={5} sm={7}>
               <select
@@ -514,7 +518,8 @@ export default function SignIn() {
           {/* Tỉnh thành phố  */}
           <Row className="justify-content-center d-flex flex-row mb-4">
             <Col lg={4} sm={4}>
-              Tỉnh/Thành phố
+              Tỉnh/Thành phố{" "}
+              <span style={{ color: `red`, fontSize: `25px` }}>*</span>
             </Col>
             <Col lg={5} sm={8}>
               <select
@@ -538,7 +543,8 @@ export default function SignIn() {
           {/* Quận Huyện  */}
           <Row className="justify-content-center d-flex flex-row mb-4">
             <Col lg={4} sm={4}>
-              Quận/Huyện
+              Quận/Huyện{" "}
+              <span style={{ color: `red`, fontSize: `25px` }}>*</span>
             </Col>
             <Col lg={5} sm={8}>
               <select
